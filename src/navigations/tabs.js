@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/MaterialIcons';
-import 
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 import {Home, Transactions, Payments, Settings} from '../screens';
-import {COLORS, icons, images} from '../constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +29,9 @@ const Tabs = () => {
           }
 
           // return Icons component
-          return <Icons name={iconName} size={30} color={color} />;
+          return (
+            <Icons name={iconName} style={styles.iconStyles} color={color} />
+          );
         },
       })}
       tabBarOptions={{
@@ -42,12 +40,12 @@ const Tabs = () => {
         showLabel: true,
         showIcon: true,
         labelStyle: {
-          fontSize: 12,
-          marginBottom: 10,
-          marginTop: -10,
+          fontSize: hp('1.75%'),
+          marginBottom: hp('1.25%'),
+          marginTop: hp('-1.25%'),
         },
         style: {
-          height: 80,
+          height: hp('10%'),
         },
       }}>
       <Tab.Screen name="Home" component={Home} />
@@ -57,5 +55,11 @@ const Tabs = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  iconStyles: {
+    fontSize: hp('4.75%'),
+  },
+});
 
 export default Tabs;

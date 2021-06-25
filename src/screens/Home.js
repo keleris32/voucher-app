@@ -7,7 +7,7 @@ import {icons} from '../constants';
 const Home = () => {
   return (
     <View>
-      <Text>Hiiiiii from Homehhhhhh</Text>
+      <Text>Hiiiiii from Hoehh</Text>
       <Image
         accessibilityRole="image"
         source={require('../assets/icons/icons8-activity-history-48.png')}
