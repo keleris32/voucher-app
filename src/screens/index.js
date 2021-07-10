@@ -6,4 +6,4 @@ import Transactions from './Transactions';
 import SplashScreen from './SplashScreen';
 import Settings from './Settings';
 
-export {Home, Login, Payments, SignUp, Transactions, SplashScreen, Settings};
+export { Home, Login, Payments, SignUp, Transactions, SplashScreen, Settings };

@@ -1,21 +1,22 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import {Home, Transactions, Payments, Settings} from '../screens';
+import { Home, Transactions, Payments, Settings } from '../screens';
+import { COLORS } from '../constants';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const TabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({color}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
           let iconName;
 
           if (route.name === 'Home') {
@@ -35,8 +36,8 @@ const Tabs = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
+        activeTintColor: COLORS.red,
+        inactiveTintColor: COLORS.gray,
         showLabel: true,
         showIcon: true,
         labelStyle: {
@@ -62,4 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tabs;
+export default TabNavigator;

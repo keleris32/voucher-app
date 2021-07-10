@@ -12,19 +12,21 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import {images, icons, COLORS, FONTS} from '../constants';
+import { images, icons, COLORS, FONTS } from '../constants';
 
-const SplashScreen = ({navigation}) => {
+const SplashScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ImageBackground source={images.splashScreenBg} style={styles.bgImage}>
-        <TouchableOpacity onPress={() => navigation.replace('Login')}>
-          <View style={styles.logoWrap}>
-            <Image source={icons.whiteAcomart} style={styles.logo} />
-            <Text style={styles.logoTitle}>ACOMART</Text>
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.text}>www.myafrostream.tv</Text>
+        <View style={styles.imageBackDrop}>
+          <TouchableOpacity onPress={() => navigation.replace('Login')}>
+            <View style={styles.logoWrap}>
+              <Image source={icons.whiteAcomart} style={styles.logo} />
+              <Text style={styles.logoTitle}>ACOMART</Text>
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.text}>www.myafrostream.tv</Text>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -39,10 +41,14 @@ const styles = StyleSheet.create({
 
   bgImage: {
     flex: 1,
-    flexDirection: 'column',
     resizeMode: 'cover',
+  },
+
+  imageBackDrop: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.backDrop,
   },
 
   logoWrap: {
@@ -65,6 +71,7 @@ const styles = StyleSheet.create({
     bottom: hp('5%'),
     color: COLORS.white,
     opacity: 0.8,
+    letterSpacing: 2,
     ...FONTS.body4,
   },
 });

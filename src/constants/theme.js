@@ -1,5 +1,5 @@
-import {Dimensions} from 'react-native';
-const {width, height} = Dimensions.get('window');
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 import {
   widthPercentageToDP as wp,
@@ -11,11 +11,14 @@ export const COLORS = {
   white2: '#F9F9F9',
   black: '#020202',
   blue: '#4096FE',
+  acomartBlue: '#1b2e4b',
   red: '#F20012',
   gray: '#777777',
-  gray2: '#F8F8F8',
+  gray2: '#C8C4C4',
   lightGray: '#F5F6FB',
-  lightGray2: '#757575',
+  lightGray2: '#F8F8F8',
+  backDrop: 'rgba(0,0,0,0.4)',
+  lightBackDrop: 'rgba(0,0,0,0.1)',
 };
 export const SIZES = {
   // global sizes
@@ -42,18 +45,38 @@ export const SIZES = {
   height,
 };
 export const FONTS = {
-  largeTitle: {fontFamily: 'Raleway-Black', fontSize: SIZES.largeTitle},
-  h1: {fontFamily: 'Raleway-Black', fontSize: SIZES.h1, lineHeight: 36},
-  h2: {fontFamily: 'Raleway-Bold', fontSize: SIZES.h2, lineHeight: 30},
-  h3: {fontFamily: 'Raleway-Bold', fontSize: SIZES.h3, lineHeight: 22},
-  h4: {fontFamily: 'Raleway-Bold', fontSize: SIZES.h4, lineHeight: 22},
-  body1: {fontFamily: 'Raleway-Regular', fontSize: SIZES.body1, lineHeight: 36},
-  body2: {fontFamily: 'Raleway-Regular', fontSize: SIZES.body2, lineHeight: 30},
-  body3: {fontFamily: 'Raleway-Regular', fontSize: SIZES.body3, lineHeight: 22},
-  body4: {fontFamily: 'Raleway-Regular', fontSize: SIZES.body4, lineHeight: 22},
-  body5: {fontFamily: 'Raleway-Regular', fontSize: SIZES.body5, lineHeight: 22},
+  largeTitle: { fontFamily: 'Raleway-Black', fontSize: SIZES.largeTitle },
+  h1: { fontFamily: 'Raleway-Black', fontSize: SIZES.h1, lineHeight: 36 },
+  h2: { fontFamily: 'Raleway-Bold', fontSize: SIZES.h2, lineHeight: 30 },
+  h3: { fontFamily: 'Raleway-Bold', fontSize: SIZES.h3, lineHeight: 22 },
+  h4: { fontFamily: 'Raleway-Bold', fontSize: SIZES.h4, lineHeight: 22 },
+  body1: {
+    fontFamily: 'Raleway-Regular',
+    fontSize: SIZES.body1,
+    lineHeight: 36,
+  },
+  body2: {
+    fontFamily: 'Raleway-Regular',
+    fontSize: SIZES.body2,
+    lineHeight: 30,
+  },
+  body3: {
+    fontFamily: 'Raleway-Regular',
+    fontSize: SIZES.body3,
+    lineHeight: 22,
+  },
+  body4: {
+    fontFamily: 'Raleway-Regular',
+    fontSize: SIZES.body4,
+    lineHeight: 22,
+  },
+  body5: {
+    fontFamily: 'Raleway-Regular',
+    fontSize: SIZES.body5,
+    lineHeight: 22,
+  },
 };
 
-const appTheme = {COLORS, SIZES, FONTS};
+const appTheme = { COLORS, SIZES, FONTS };
 
 export default appTheme;

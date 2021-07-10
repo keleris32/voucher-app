@@ -36,3 +36,15 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
+// @react-native-picker fix
+subprojects {
+    if (project.name.contains('react-native-image-picker')) {
+        buildscript {
+            repositories {
+                jcenter()
+                maven { url "https://dl.bintray.com/android/android-tools/"  }
+            }
+        }
+    }
+}
