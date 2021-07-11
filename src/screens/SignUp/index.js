@@ -25,8 +25,9 @@ import CountryModal from '../../components/CountryModal';
 
 const SignUp = ({ navigation }) => {
   const [isInvalid, setIsInvalid] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [countryData, setCountryData] = useState('');
+  const [countryCode, setCountryCode] = useState('');
   const {
     authDispatch,
     authState: { error, loading, networkError, success },
@@ -95,7 +96,13 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <TouchableOpacity>
-                  <CountryModal />
+                  <CountryModal
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    countryCode={countryCode}
+                    setCountryCode={setCountryCode}
+                    countryData={countryData}
+                  />
                 </TouchableOpacity>
 
                 <CustomInput
