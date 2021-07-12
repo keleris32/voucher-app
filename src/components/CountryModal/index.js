@@ -5,10 +5,8 @@ import {
   View,
   Modal,
   TouchableOpacity,
-  FlatList,
   ScrollView,
 } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,6 +19,7 @@ import { COLORS, SIZES, FONTS } from '../../constants';
 const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
 
+  // Fetch data from the countries api and store in the countryData state variable
   useEffect(() => {
     const fetchCountryData = async () => {
       try {
@@ -35,14 +34,16 @@ const CountryModal = props => {
     };
     fetchCountryData();
   }, []);
-  // console.log('Modal>>>>>', JSON.stringify(countryData, null, 2));
 
   const selectedOption = optionData => {
+    // Update the state with the selected option
     props.setSelectedCountry({
       id: optionData.id,
       name: optionData.name,
       code: optionData.dialing_code,
     });
+
+    // Set isModalVisible to false to hide modal
     props.setIsModalVisible(!props.isModalVisible);
   };
 
