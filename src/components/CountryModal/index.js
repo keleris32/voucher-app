@@ -1,48 +1,90 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
+import { GlobalContext } from '../../context/Provider';
+import { GET_COUNTRY_DATA } from '../../constants/actionTypes';
 
-const CountryModal = ({
-  openModal,
-  setOpenModal,
-  countryCode,
-  setCountryCode,
-  countryData,
-}) => {
+const CountryModal = props => {
+  const { countryData, setCountryData } = useContext(GlobalContext);
+  const [fetchData, setFetchData] = useState([]);
+
+  useEffect(() => {
+    const fetchCountryData = async () => {
+      try {
+        const request = await axios.get('http://10.0.2.2:8000/api/countries');
+        setFetchData(request.data.data.countries);
+      } catch (err) {
+        return Alert.alert(
+          'Error',
+          'Please check your internet connection and try again later!',
+        );
+      }
+    };
+    fetchCountryData();
+  }, []);
+
+  const selectedOption = optionData => {
+    setCountryData({
+      type: GET_COUNTRY_DATA,
+      payloadId: optionData.id,
+      payloadName: optionData.name,
+      payloadCode: optionData.dialing_code,
+    });
+
+    props.setIsModalVisible(!props.isModalVisible);
+
+    console.log('Modal>>>>>>>', countryData.countryCode);
+  };
+
   return (
     <View>
       <View style={styles.countryBar}>
-        <Text style={styles.countryBarText}>Select your country</Text>
+        <Text style={styles.countryBarText}>{countryData.countryName}</Text>
         <Icons name="chevron-circle-down" style={styles.icon} />
       </View>
+
       <Modal
         animationType="slide"
         transparent={true}
-        visible={true}
-        onRequestClose={() => {
-          setIsModalVisible(!isModalVisible);
-        }}>
+        visible={props.isModalVisible}>
         <View style={styles.Container}>
-          <TouchableOpacity>
+          <View style={styles.modalContainer}>
+            <ScrollView>
+              {fetchData.map(option => {
+                return (
+                  <TouchableOpacity
+                    key={option.id}
+                    onPress={() => selectedOption(option)}>
+                    <View style={styles.optionContainer}>
+                      <Text style={styles.optionName}>{option.name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <TouchableOpacity
+            onPress={() => props.setIsModalVisible(!props.isModalVisible)}>
             <View style={styles.closeBtn}>
-              <Text style={styles.btnText}>X</Text>
+              <Text style={styles.btnText}>Cancel</Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.modalContainer}></View>
-          <Picker
-            selectedValue={countryCode}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) => setCountryCode(itemValue)}>
-            {/* <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" /> */}
-          </Picker>
         </View>
       </Modal>
     </View>
@@ -77,36 +119,41 @@ const styles = StyleSheet.create({
   Container: {
     flex: 1,
     alignItems: 'center',
+    paddingVertical: hp('5%'),
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
 
+  modalContainer: {
+    flex: 1,
+    width: wp('90%'),
+    borderRadius: SIZES.base,
+    backgroundColor: COLORS.white,
+  },
+
   closeBtn: {
-    // position: 'absolute',
-    top: hp('7%'),
-    height: wp('15%'),
-    width: wp('15%'),
+    height: wp('12.5%'),
+    width: wp('90%'),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: wp('50%'),
+    marginTop: hp('5%'),
+    borderRadius: SIZES.base,
     backgroundColor: COLORS.white,
   },
 
   btnText: {
-    color: COLORS.acomartBlue,
-    ...FONTS.h1,
+    color: COLORS.black,
+    ...FONTS.h2,
   },
 
-  modalContainer: {
-    position: 'absolute',
-    height: hp('70%'),
-    width: wp('100%'),
-    bottom: 0,
-    backgroundColor: COLORS.white,
+  optionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingHorizontal: SIZES.base,
+    paddingVertical: SIZES.font,
+    borderTopWidth: 1,
   },
 
-  picker: {
-    height: hp('40%'),
-    width: wp('100%'),
-    backgroundColor: COLORS.acomartBlue,
+  optionName: {
+    ...FONTS.h3,
   },
 });

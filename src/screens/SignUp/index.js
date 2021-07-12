@@ -25,15 +25,20 @@ import CountryModal from '../../components/CountryModal';
 
 const SignUp = ({ navigation }) => {
   const [isInvalid, setIsInvalid] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [countryData, setCountryData] = useState('');
-  const [countryCode, setCountryCode] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { countryData, setCountryData } = useContext(GlobalContext);
+
   const {
     authDispatch,
     authState: { error, loading, networkError, success },
   } = useContext(GlobalContext);
 
+  console.log(countryData);
+
   const submitRegistration = formData => {
+    // Update the country_id with data from the countryData global state variable
+    formData.country_id = countryData.countryId;
+
     // Set the isInvalid state to false onSubmit.
     setIsInvalid(false);
 
@@ -59,7 +64,7 @@ const SignUp = ({ navigation }) => {
         email: '',
         password: '',
         confirmPassword: '',
-        country_id: '2710a8bc-adea-4b47-93cf-eb875012702d',
+        country_id: '0',
         callbackUrl: 'http://localhost:3000/',
       }}
       validateOnMount={true}
@@ -95,13 +100,12 @@ const SignUp = ({ navigation }) => {
                   </View>
                 )}
 
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setIsModalVisible(!isModalVisible)}>
                   <CountryModal
-                    openModal={openModal}
-                    setOpenModal={setOpenModal}
-                    countryCode={countryCode}
-                    setCountryCode={setCountryCode}
-                    countryData={countryData}
+                    isModalVisible={isModalVisible}
+                    setIsModalVisible={setIsModalVisible}
+                    x
                   />
                 </TouchableOpacity>
 
@@ -121,6 +125,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Phone Number"
                   iconType="phone"
+                  // selectedCountry={selectedCountry}
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}

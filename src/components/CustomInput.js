@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, View, TextInput, Text } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { COLORS, FONTS, SIZES } from '../constants';
+import { GlobalContext } from '../context/Provider';
 
 const CustomInput = ({ iconType, placeholder, ...props }) => {
+  const { countryData, setCountryData } = useContext(GlobalContext);
+
   let icon;
 
   if (iconType === 'name') {
@@ -30,7 +30,13 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
             props.errors && props.touched ? COLORS.red : COLORS.black,
         },
       ]}>
-      <Icons name={icon} style={styles.icon} />
+      {iconType === 'phone' ? (
+        <View style={styles.phoneContainter}>
+          <Text style={styles.phoneText}>{countryData.countryCode}</Text>
+        </View>
+      ) : (
+        <Icons name={icon} style={styles.icon} />
+      )}
       <TextInput
         underlineColorAndroid="transparent"
         style={styles.inputField}
@@ -50,20 +56,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: SIZES.base,
-    paddingHorizontal: SIZES.base,
+    // paddingHorizontal: SIZES.base,
+    paddingRight: SIZES.base,
     marginVertical: SIZES.base,
   },
 
   icon: {
     flex: 0.1,
     fontSize: wp('5%'),
-    paddingHorizontal: SIZES.base,
+    paddingRight: SIZES.base,
+    paddingLeft: SIZES.base * 2,
     color: COLORS.black,
   },
 
   inputField: {
     flex: 1,
     color: COLORS.black,
+    ...FONTS.h3,
+  },
+
+  phoneContainter: {
+    height: '100%',
+    // alignItems: 'center',
+    marginRight: SIZES.base * 1.5,
+    borderTopLeftRadius: SIZES.base,
+    borderBottomLeftRadius: SIZES.base,
+    backgroundColor: COLORS.acomartBlue,
+  },
+
+  phoneText: {
+    position: 'relative',
+    marginTop: '20%',
+    paddingHorizontal: SIZES.base * 1.5,
+    color: COLORS.white,
     ...FONTS.h3,
   },
 });
