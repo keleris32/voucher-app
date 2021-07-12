@@ -1,14 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View, TextInput, Text } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { COLORS, FONTS, SIZES } from '../constants';
-import { GlobalContext } from '../context/Provider';
 
 const CustomInput = ({ iconType, placeholder, ...props }) => {
-  const { countryData, setCountryData } = useContext(GlobalContext);
-
   let icon;
 
   if (iconType === 'name') {
@@ -32,7 +29,7 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
       ]}>
       {iconType === 'phone' ? (
         <View style={styles.phoneContainter}>
-          <Text style={styles.phoneText}>{countryData.countryCode}</Text>
+          <Text style={styles.phoneText}>{props.selectedCountry.code}</Text>
         </View>
       ) : (
         <Icons name={icon} style={styles.icon} />

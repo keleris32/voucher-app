@@ -26,21 +26,25 @@ import CountryModal from '../../components/CountryModal';
 const SignUp = ({ navigation }) => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { countryData, setCountryData } = useContext(GlobalContext);
+  const [selectedCountry, setSelectedCountry] = useState({
+    id: '',
+    name: 'Select your country',
+    code: '0',
+  });
 
   const {
     authDispatch,
     authState: { error, loading, networkError, success },
   } = useContext(GlobalContext);
 
-  console.log(countryData);
-
   const submitRegistration = formData => {
-    // Update the country_id with data from the countryData global state variable
-    formData.country_id = countryData.countryId;
+    // Update the country_id with data from the selectedCountry state variable
+    formData.country_id = selectedCountry.id;
 
     // Set the isInvalid state to false onSubmit.
     setIsInvalid(false);
+
+    console.log(formData);
 
     // If the form is valid, then the form's values are dispatched to the server
     register(formData)(authDispatch);
@@ -64,7 +68,7 @@ const SignUp = ({ navigation }) => {
         email: '',
         password: '',
         confirmPassword: '',
-        country_id: '0',
+        country_id: '',
         callbackUrl: 'http://localhost:3000/',
       }}
       validateOnMount={true}
@@ -105,7 +109,8 @@ const SignUp = ({ navigation }) => {
                   <CountryModal
                     isModalVisible={isModalVisible}
                     setIsModalVisible={setIsModalVisible}
-                    x
+                    selectedCountry={selectedCountry}
+                    setSelectedCountry={setSelectedCountry}
                   />
                 </TouchableOpacity>
 
@@ -125,7 +130,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Phone Number"
                   iconType="phone"
-                  // selectedCountry={selectedCountry}
+                  selectedCountry={selectedCountry}
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}

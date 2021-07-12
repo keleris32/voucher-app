@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,18 +17,15 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
-import { GlobalContext } from '../../context/Provider';
-import { GET_COUNTRY_DATA } from '../../constants/actionTypes';
 
 const CountryModal = props => {
-  const { countryData, setCountryData } = useContext(GlobalContext);
-  const [fetchData, setFetchData] = useState([]);
+  const [countryData, setCountryData] = useState([]);
 
   useEffect(() => {
     const fetchCountryData = async () => {
       try {
         const request = await axios.get('http://10.0.2.2:8000/api/countries');
-        setFetchData(request.data.data.countries);
+        setCountryData(request.data.data.countries);
       } catch (err) {
         return Alert.alert(
           'Error',
@@ -38,24 +35,21 @@ const CountryModal = props => {
     };
     fetchCountryData();
   }, []);
+  // console.log('Modal>>>>>', JSON.stringify(countryData, null, 2));
 
   const selectedOption = optionData => {
-    setCountryData({
-      type: GET_COUNTRY_DATA,
-      payloadId: optionData.id,
-      payloadName: optionData.name,
-      payloadCode: optionData.dialing_code,
+    props.setSelectedCountry({
+      id: optionData.id,
+      name: optionData.name,
+      code: optionData.dialing_code,
     });
-
     props.setIsModalVisible(!props.isModalVisible);
-
-    console.log('Modal>>>>>>>', countryData.countryCode);
   };
 
   return (
     <View>
       <View style={styles.countryBar}>
-        <Text style={styles.countryBarText}>{countryData.countryName}</Text>
+        <Text style={styles.countryBarText}>{props.selectedCountry.name}</Text>
         <Icons name="chevron-circle-down" style={styles.icon} />
       </View>
 
@@ -66,7 +60,7 @@ const CountryModal = props => {
         <View style={styles.Container}>
           <View style={styles.modalContainer}>
             <ScrollView>
-              {fetchData.map(option => {
+              {countryData.map(option => {
                 return (
                   <TouchableOpacity
                     key={option.id}
