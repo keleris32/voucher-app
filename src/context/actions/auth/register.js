@@ -35,6 +35,7 @@ export default ({
         });
       })
       .catch(err => {
+        console.log(err.response.data);
         dispatch({
           type: REGISTER_FAIL,
           payload: err.response

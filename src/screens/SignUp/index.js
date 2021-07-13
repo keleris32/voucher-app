@@ -120,7 +120,9 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.fullName && touched.fullName && (
-                  <Text style={styles.errors}>{errors.fullName}</Text>
+                  <Text style={styles.errors}>
+                    {errors.fullName || error?.errors?.name[0]}
+                  </Text>
                 )}
 
                 <CustomInput
@@ -130,13 +132,16 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}
-                  errors={errors.phoneNumber}
+                  errors={errors.phoneNumber || error?.errors?.phone_number[0]}
                   touched={touched.phoneNumber}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.phoneNumber && touched.phoneNumber && (
-                  <Text style={styles.errors}>{errors.phoneNumber}</Text>
-                )}
+                {(errors.phoneNumber && touched.phoneNumber) ||
+                  (error.errors?.phone_number[0] && (
+                    <Text style={styles.errors}>
+                      {errors.phoneNumber || error?.errors?.phone_number[0]}
+                    </Text>
+                  ))}
 
                 <CustomInput
                   placeholder="Email"
@@ -148,9 +153,12 @@ const SignUp = ({ navigation }) => {
                   touched={touched.email}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.email && touched.email && (
-                  <Text style={styles.errors}>{errors.email}</Text>
-                )}
+                {(errors.email && touched.email) ||
+                  (error.errors?.email[0] && (
+                    <Text style={styles.errors}>
+                      {errors.email || error.errors?.email[0]}
+                    </Text>
+                  ))}
 
                 <CustomInput
                   placeholder="Password"
@@ -164,7 +172,9 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.password && touched.password && (
-                  <Text style={styles.errors}>{errors.password}</Text>
+                  <Text style={styles.errors}>
+                    {errors.password || error?.errors?.password[0]}
+                  </Text>
                 )}
 
                 <CustomInput
@@ -179,7 +189,9 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.confirmPassword && touched.confirmPassword && (
-                  <Text style={styles.errors}>{errors.confirmPassword}</Text>
+                  <Text style={styles.errors}>
+                    {errors.confirmPassword || error?.errors?.password[0]}
+                  </Text>
                 )}
 
                 <CustomButton

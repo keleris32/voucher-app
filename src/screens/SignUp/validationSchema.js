@@ -17,11 +17,11 @@ export const signUpValidationSchema = yup.object().shape({
     .required('Email Address is required'),
   password: yup
     .string()
-    // .min(8, ({ min }) => `Password must be at least ${min} characters long`)
+    .min(8, ({ min }) => `Password must be at least ${min} characters long`)
     .required('Passowrd is required'),
   confirmPassword: yup
     .string()
-    // .min(8, ({ min }) => `Password must be at least ${min} characters long`)
+    .min(8, ({ min }) => `Password must be at least ${min} characters long`)
     .required('Passowrd is required'),
 });
 
