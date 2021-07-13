@@ -2,7 +2,6 @@ import {
   REGISTER_LOADING,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-  NETWORK_ERROR,
 } from '../../../constants/actionTypes';
 import axiosInstance from '../../../helpers/axiosInterceptor';
 
@@ -36,16 +35,14 @@ export default ({
         });
       })
       .catch(err => {
-        if (err.response) {
-          dispatch({
-            type: REGISTER_FAIL,
-            payload: err.response.data,
-          });
-        } else {
-          dispatch({
-            type: NETWORK_ERROR,
-            payload: err,
-          });
-        }
+        dispatch({
+          type: REGISTER_FAIL,
+          payload: err.response
+            ? err.response.data
+            : {
+                networkError:
+                  'Please check your internet connection and try again later.',
+              },
+        });
       });
   };

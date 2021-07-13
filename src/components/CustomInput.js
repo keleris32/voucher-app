@@ -29,7 +29,18 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
       ]}>
       {iconType === 'phone' ? (
         <View style={styles.phoneContainter}>
-          <Text style={styles.phoneText}>{props.selectedCountry.code}</Text>
+          <Text
+            style={[
+              styles.phoneText,
+              {
+                marginTop:
+                  props.selectedCountry.name === 'Select your country'
+                    ? '30%'
+                    : '20%',
+              },
+            ]}>
+            {props.selectedCountry.code}
+          </Text>
         </View>
       ) : (
         <Icons name={icon} style={styles.icon} />
@@ -53,7 +64,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: SIZES.base,
-    // paddingHorizontal: SIZES.base,
     paddingRight: SIZES.base,
     marginVertical: SIZES.base,
   },
@@ -74,7 +84,6 @@ const styles = StyleSheet.create({
 
   phoneContainter: {
     height: '100%',
-    // alignItems: 'center',
     marginRight: SIZES.base * 1.5,
     borderTopLeftRadius: SIZES.base,
     borderBottomLeftRadius: SIZES.base,
@@ -83,7 +92,6 @@ const styles = StyleSheet.create({
 
   phoneText: {
     position: 'relative',
-    marginTop: '20%',
     paddingHorizontal: SIZES.base * 1.5,
     color: COLORS.white,
     ...FONTS.h3,

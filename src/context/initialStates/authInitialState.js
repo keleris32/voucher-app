@@ -3,6 +3,4 @@ export default {
   data: {},
   loading: false,
   error: '',
-  networkError: '',
-  success: false,
 };

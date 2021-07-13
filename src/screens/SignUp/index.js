@@ -7,7 +7,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -24,8 +23,8 @@ import { GlobalContext } from '../../context/Provider';
 import CountryModal from '../../components/CountryModal';
 
 const SignUp = ({ navigation }) => {
-  const [isInvalid, setIsInvalid] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     id: '',
     name: 'Select your country',
@@ -34,30 +33,15 @@ const SignUp = ({ navigation }) => {
 
   const {
     authDispatch,
-    authState: { error, loading, networkError, success },
+    authState: { error, loading },
   } = useContext(GlobalContext);
 
   const submitRegistration = formData => {
     // Update the country_id with data from the selectedCountry state variable
     formData.country_id = selectedCountry.id;
 
-    // Set the isInvalid state to false onSubmit.
-    setIsInvalid(false);
-
-    console.log(formData);
-
     // If the form is valid, then the form's values are dispatched to the server
     register(formData)(authDispatch);
-
-    // If the form is valid, but the client gets an error response from the server, set isInvalid state to true.
-    error && setIsInvalid(true);
-
-    // If the form is valid, but the client fails to communicate with the server, then an alert is displayed to the User
-    networkError &&
-      Alert.alert(
-        'Error.',
-        'Please check your internet connection and try again later!',
-      );
   };
 
   return (
@@ -86,7 +70,6 @@ const SignUp = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            {/* <View style={styles.imageBackDrop}> */}
             <ScrollView
               showsVerticalScrollIndicator={false}
               alwaysBounceVertical={true}>
@@ -96,7 +79,7 @@ const SignUp = ({ navigation }) => {
               </TouchableOpacity>
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
-                {isInvalid && (
+                {error.errors && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Invalid credentials provided!
@@ -104,13 +87,25 @@ const SignUp = ({ navigation }) => {
                   </View>
                 )}
 
+                {/* If the app fails to fetch data from the server, then this error message will be displayed */}
+                {(fetchError || error.networkError) && (
+                  <View style={styles.invalidErrorMessage}>
+                    <Text style={styles.invalidErrorText}>
+                      Please check your internet connection
+                    </Text>
+                  </View>
+                )}
+
                 <TouchableOpacity
-                  onPress={() => setIsModalVisible(!isModalVisible)}>
+                  disabled={fetchError}
+                  onPress={() => setIsModalVisible(true)}>
                   <CountryModal
-                    isModalVisible={isModalVisible}
+                    isModalVisible={fetchError ? false : isModalVisible}
                     setIsModalVisible={setIsModalVisible}
                     selectedCountry={selectedCountry}
                     setSelectedCountry={setSelectedCountry}
+                    fetchError={fetchError}
+                    setFetchError={setFetchError}
                   />
                 </TouchableOpacity>
 
@@ -127,6 +122,7 @@ const SignUp = ({ navigation }) => {
                 {errors.fullName && touched.fullName && (
                   <Text style={styles.errors}>{errors.fullName}</Text>
                 )}
+
                 <CustomInput
                   placeholder="Phone Number"
                   iconType="phone"
@@ -141,6 +137,7 @@ const SignUp = ({ navigation }) => {
                 {errors.phoneNumber && touched.phoneNumber && (
                   <Text style={styles.errors}>{errors.phoneNumber}</Text>
                 )}
+
                 <CustomInput
                   placeholder="Email"
                   iconType="email"
@@ -154,6 +151,7 @@ const SignUp = ({ navigation }) => {
                 {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
                 )}
+
                 <CustomInput
                   placeholder="Password"
                   iconType="password"
@@ -168,6 +166,7 @@ const SignUp = ({ navigation }) => {
                 {errors.password && touched.password && (
                   <Text style={styles.errors}>{errors.password}</Text>
                 )}
+
                 <CustomInput
                   placeholder="Confirm Password"
                   iconType="password"
@@ -182,6 +181,7 @@ const SignUp = ({ navigation }) => {
                 {errors.confirmPassword && touched.confirmPassword && (
                   <Text style={styles.errors}>{errors.confirmPassword}</Text>
                 )}
+
                 <CustomButton
                   buttonText="Sign Up"
                   disabled={loading}
@@ -197,7 +197,6 @@ const SignUp = ({ navigation }) => {
                 </View>
               </View>
             </ScrollView>
-            {/* </View> */}
           </ImageBackground>
         </View>
       )}
@@ -218,13 +217,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     resizeMode: 'cover',
   },
-
-  // imageBackDrop: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: COLORS.lightBackDrop,
-  // },
 
   logo: {
     resizeMode: 'contain',

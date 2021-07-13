@@ -25,11 +25,9 @@ const CountryModal = props => {
       try {
         const request = await axios.get('http://10.0.2.2:8000/api/countries');
         setCountryData(request.data.data.countries);
+        props.setFetchError(false);
       } catch (err) {
-        return Alert.alert(
-          'Error',
-          'Please check your internet connection and try again later!',
-        );
+        props.setFetchError(true);
       }
     };
     fetchCountryData();
