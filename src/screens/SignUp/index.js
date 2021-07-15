@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -18,7 +19,9 @@ import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
 import { LOGIN } from '../../constants/routeNames';
 import { signUpValidationSchema } from './validationSchema';
-import register from '../../context/actions/auth/register';
+import registerRetailer, {
+  clearAuthState,
+} from '../../context/actions/auth/registerRetailer';
 import { GlobalContext } from '../../context/Provider';
 import CountryModal from '../../components/CountryModal';
 
@@ -30,18 +33,28 @@ const SignUp = ({ navigation }) => {
     name: 'Select your country',
     code: '0',
   });
-
   const {
     authDispatch,
-    authState: { error, loading },
+    authState: { error, loading, data },
   } = useContext(GlobalContext);
+
+  // Return a callback dispatch function to clear the authentication state
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (data || error) {
+          clearAuthState()(authDispatch);
+        }
+      };
+    }, [data, error]),
+  );
 
   const submitRegistration = formData => {
     // Update the country_id with data from the selectedCountry state variable
     formData.country_id = selectedCountry.id;
 
     // If the form is valid, then the form's values are dispatched to the server
-    register(formData)(authDispatch);
+    registerRetailer(formData)(authDispatch);
   };
 
   return (
@@ -79,7 +92,7 @@ const SignUp = ({ navigation }) => {
               </TouchableOpacity>
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
-                {error.errors && (
+                {error?.errors && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Invalid credentials provided!
@@ -88,7 +101,7 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
-                {(fetchError || error.networkError) && (
+                {(fetchError || error?.networkError) && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Please check your internet connection
@@ -120,9 +133,7 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.fullName && touched.fullName && (
-                  <Text style={styles.errors}>
-                    {errors.fullName || error?.errors?.name[0]}
-                  </Text>
+                  <Text style={styles.errors}>{errors.fullName}</Text>
                 )}
 
                 <CustomInput
@@ -132,16 +143,13 @@ const SignUp = ({ navigation }) => {
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}
-                  errors={errors.phoneNumber || error?.errors?.phone_number[0]}
+                  errors={errors.phoneNumber}
                   touched={touched.phoneNumber}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {(errors.phoneNumber && touched.phoneNumber) ||
-                  (error.errors?.phone_number[0] && (
-                    <Text style={styles.errors}>
-                      {errors.phoneNumber || error?.errors?.phone_number[0]}
-                    </Text>
-                  ))}
+                {errors.phoneNumber && touched.phoneNumber && (
+                  <Text style={styles.errors}>{errors.phoneNumber}</Text>
+                )}
 
                 <CustomInput
                   placeholder="Email"
@@ -153,12 +161,9 @@ const SignUp = ({ navigation }) => {
                   touched={touched.email}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {(errors.email && touched.email) ||
-                  (error.errors?.email[0] && (
-                    <Text style={styles.errors}>
-                      {errors.email || error.errors?.email[0]}
-                    </Text>
-                  ))}
+                {errors.email && touched.email && (
+                  <Text style={styles.errors}>{errors.email}</Text>
+                )}
 
                 <CustomInput
                   placeholder="Password"
@@ -172,9 +177,7 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.password && touched.password && (
-                  <Text style={styles.errors}>
-                    {errors.password || error?.errors?.password[0]}
-                  </Text>
+                  <Text style={styles.errors}>{errors.password}</Text>
                 )}
 
                 <CustomInput
@@ -189,9 +192,7 @@ const SignUp = ({ navigation }) => {
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.confirmPassword && touched.confirmPassword && (
-                  <Text style={styles.errors}>
-                    {errors.confirmPassword || error?.errors?.password[0]}
-                  </Text>
+                  <Text style={styles.errors}>{errors.confirmPassword}</Text>
                 )}
 
                 <CustomButton

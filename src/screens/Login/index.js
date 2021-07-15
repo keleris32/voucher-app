@@ -19,7 +19,7 @@ import { CustomInput, CustomButton } from '../../components';
 import { HOME, SIGN_UP } from '../../constants/routeNames';
 import { loginValidationSchema } from './validationSchema';
 import { GlobalContext } from '../../context/Provider';
-import axios from 'axios';
+import loginRetailer from '../../context/actions/auth/loginRetailer';
 
 const Login = ({ navigation }) => {
   const {
@@ -27,42 +27,18 @@ const Login = ({ navigation }) => {
     authState: { error, loading, data },
   } = useContext(GlobalContext);
 
-  const submitForm = values => {
-    axios({
-      method: 'post',
-      url: 'http://10.0.2.2:8000/api/retailer/auth/login/',
-      data: values,
-    })
-      .then(res => {
-        console.log('Response >>>>>', res);
-      })
-      .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log('ERROR.RESPONSE.DATA >>>>', error.response.data);
-          console.log('ERROR.RESPONSE.STATUS >>>>>', error.response.status);
-          console.log('ERROR.RESPONSE.HEADERS >>>>>>', error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(
-            'ERROR.REQUEST >>>>>>',
-            JSON.stringify(error.request, null, 2),
-          );
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error >>>>>>', error.message);
-        }
-      });
+  const submitForm = formData => {
+    // If the form is valid, then the form's values are dispatched to the server
+    loginRetailer(formData)(authDispatch);
   };
+
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
       validateOnMount={true}
-      // onSubmit={() => navigation.replace(HOME)}
-      onSubmit={values => submitForm(values)}
+      onSubmit={values => {
+        submitForm(values);
+      }}
       validationSchema={loginValidationSchema}>
       {({
         handleChange,

@@ -59,7 +59,7 @@ const CountryModal = props => {
         <View style={styles.Container}>
           <View style={styles.modalContainer}>
             <ScrollView>
-              {countryData.map(option => {
+              {countryData?.map(option => {
                 return (
                   <TouchableOpacity
                     key={option.id}

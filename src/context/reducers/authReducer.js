@@ -1,12 +1,18 @@
 import {
+  CLEAR_AUTH_STATE,
+  LOGIN_LOADING,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
   REGISTER_FAIL,
   REGISTER_LOADING,
   REGISTER_SUCCESS,
+  LOGOUT_RETAILER,
 } from '../../constants/actionTypes';
 
 const authReducer = (state, { type, payload }) => {
   switch (type) {
     case REGISTER_LOADING:
+    case LOGIN_LOADING:
       return {
         ...state,
         loading: true,
@@ -16,15 +22,41 @@ const authReducer = (state, { type, payload }) => {
     case REGISTER_SUCCESS:
       return {
         ...state,
+        isLoggedIn: true,
         loading: false,
         data: payload,
       };
 
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: payload,
+        isLoggedIn: true,
+      };
+
     case REGISTER_FAIL:
+    case LOGIN_FAIL:
       return {
         ...state,
         loading: false,
         error: payload,
+      };
+
+    case CLEAR_AUTH_STATE:
+      return {
+        ...state,
+        loading: false,
+        data: null,
+        error: null,
+      };
+
+    case LOGOUT_RETAILER:
+      return {
+        ...state,
+        loading: false,
+        data: null,
+        isLoggedIn: false,
       };
 
     default:

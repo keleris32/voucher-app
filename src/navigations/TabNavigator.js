@@ -8,6 +8,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import { Home, Transactions, Payments, Settings } from '../screens';
+import { HOME, TRANSACTIONS, PAYMENTS } from '../constants/routeNames';
 import { COLORS } from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -19,11 +20,11 @@ const TabNavigator = () => {
         tabBarIcon: ({ color }) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === HOME) {
             iconName = 'home-filled';
-          } else if (route.name === 'Transactions') {
+          } else if (route.name === TRANSACTIONS) {
             iconName = 'history-toggle-off';
-          } else if (route.name === 'Payments') {
+          } else if (route.name === PAYMENTS) {
             iconName = 'payment';
           } else if (route.name === 'Settings') {
             iconName = 'settings';
@@ -49,9 +50,9 @@ const TabNavigator = () => {
           height: hp('10%'),
         },
       }}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Transactions" component={Transactions} />
-      <Tab.Screen name="Payments" component={Payments} />
+      <Tab.Screen name={HOME} component={Home} />
+      <Tab.Screen name={TRANSACTIONS} component={Transactions} />
+      <Tab.Screen name={PAYMENTS} component={Payments} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
   );

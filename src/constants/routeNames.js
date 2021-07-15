@@ -1,7 +1,7 @@
 // HomeNavigator route names
 export const HOME = 'Home';
 export const TRANSACTIONS = 'Transactions';
-export const PAYMENT = 'Payments';
+export const PAYMENTS = 'Payments';
 
 // AuthNavigator route names
 export const SPLASH_SCREEN = 'SplashScreen';
