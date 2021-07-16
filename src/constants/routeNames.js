@@ -7,3 +7,4 @@ export const PAYMENTS = 'Payments';
 export const SPLASH_SCREEN = 'SplashScreen';
 export const LOGIN = 'Login';
 export const SIGN_UP = 'SignUp';
+export const FORGOT_PASSWORD = 'ForgotPassword';

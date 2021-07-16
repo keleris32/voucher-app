@@ -24,6 +24,7 @@ import registerRetailer, {
 } from '../../context/actions/auth/registerRetailer';
 import { GlobalContext } from '../../context/Provider';
 import CountryModal from '../../components/CountryModal';
+import EnvironmentVariables from '../../config/env';
 
 const SignUp = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -66,7 +67,7 @@ const SignUp = ({ navigation }) => {
         password: '',
         confirmPassword: '',
         country_id: '',
-        callbackUrl: 'http://localhost:3000/',
+        callbackUrl: EnvironmentVariables.CALLBACK_URL,
       }}
       validateOnMount={true}
       onSubmit={values => {

@@ -16,7 +16,7 @@ import { Formik } from 'formik';
 
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
-import { HOME, SIGN_UP } from '../../constants/routeNames';
+import { FORGOT_PASSWORD, SIGN_UP } from '../../constants/routeNames';
 import { loginValidationSchema } from './validationSchema';
 import { GlobalContext } from '../../context/Provider';
 import loginRetailer from '../../context/actions/auth/loginRetailer';
@@ -50,53 +50,52 @@ const Login = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <View style={styles.imageBackDrop}>
+            <TouchableOpacity
+              onPress={() => navigation.replace('SplashScreen')}>
+              <Image source={icons.redAcomart} style={styles.logo} />
+            </TouchableOpacity>
+            <View style={styles.formContainer}>
+              <CustomInput
+                placeholder="Email"
+                iconType="email"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                errors={errors.email}
+                touched={touched.email}
+              />
+              {/* If this field contains an error and it has been touched, then display the error message */}
+              {errors.email && touched.email && (
+                <Text style={styles.errors}>{errors.email}</Text>
+              )}
+              <CustomInput
+                placeholder="Password"
+                iconType="password"
+                secureTextEntry={true}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                errors={errors.password}
+                touched={touched.password}
+              />
+              {/* If this field contains an error and it has been touched, then display the error message */}
+              {errors.password && touched.password && (
+                <Text style={styles.errors}>{errors.password}</Text>
+              )}
               <TouchableOpacity
-                onPress={() => navigation.replace('SplashScreen')}>
-                <Image source={icons.redAcomart} style={styles.logo} />
+                onPress={() => navigation.navigate(FORGOT_PASSWORD)}>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
               </TouchableOpacity>
-              <View style={styles.formContainer}>
-                <CustomInput
-                  placeholder="Email"
-                  iconType="email"
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                  errors={errors.email}
-                  touched={touched.email}
-                />
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {errors.email && touched.email && (
-                  <Text style={styles.errors}>{errors.email}</Text>
-                )}
-                <CustomInput
-                  placeholder="Password"
-                  iconType="password"
-                  secureTextEntry={true}
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                  errors={errors.password}
-                  touched={touched.password}
-                />
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {errors.password && touched.password && (
-                  <Text style={styles.errors}>{errors.password}</Text>
-                )}
-                <TouchableOpacity>
-                  <Text style={styles.forgotText}>Forgot Password?</Text>
+              <CustomButton
+                buttonText="Log In"
+                disabled={loading}
+                onPress={handleSubmit}
+              />
+              <View style={styles.registerContainer}>
+                <Text style={styles.registerText}>Not Registered?</Text>
+                <TouchableOpacity onPress={() => navigation.replace(SIGN_UP)}>
+                  <Text style={styles.signUpText}>Sign Up!</Text>
                 </TouchableOpacity>
-                <CustomButton
-                  buttonText="Log In"
-                  disabled={loading}
-                  onPress={handleSubmit}
-                />
-                <View style={styles.registerContainer}>
-                  <Text style={styles.registerText}>Not Registered?</Text>
-                  <TouchableOpacity onPress={() => navigation.replace(SIGN_UP)}>
-                    <Text style={styles.signUpText}>Sign Up!</Text>
-                  </TouchableOpacity>
-                </View>
               </View>
             </View>
           </ImageBackground>
@@ -115,14 +114,9 @@ const styles = StyleSheet.create({
 
   bgImage: {
     flex: 1,
-    resizeMode: 'cover',
-  },
-
-  imageBackDrop: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: COLORS.lightBackDrop,
+    resizeMode: 'cover',
   },
 
   logo: {

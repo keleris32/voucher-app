@@ -5,5 +5,15 @@ import SignUp from './SignUp';
 import Transactions from './Transactions';
 import SplashScreen from './SplashScreen';
 import Settings from './Settings';
+import ForgotPassword from './ForgotPassword';
 
-export { Home, Login, Payments, SignUp, Transactions, SplashScreen, Settings };
+export {
+  Home,
+  Login,
+  Payments,
+  SignUp,
+  Transactions,
+  SplashScreen,
+  Settings,
+  ForgotPassword,
+};
