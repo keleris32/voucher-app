@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
-import { LOGIN } from '../../constants/routeNames';
+import { LOGIN, DOCUMENTS } from '../../constants/routeNames';
 import { validationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
 import axiosInstance from '../../helpers/axiosInterceptor';
@@ -83,8 +83,7 @@ const ForgotPassword = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <TouchableOpacity
-              onPress={() => navigation.replace('SplashScreen')}>
+            <TouchableOpacity onPress={() => navigation.replace(DOCUMENTS)}>
               <Image source={icons.redAcomart} style={styles.logo} />
             </TouchableOpacity>
             <View style={styles.screenTitleCon}>

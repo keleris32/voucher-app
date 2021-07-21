@@ -6,6 +6,7 @@ import Transactions from './Transactions';
 import SplashScreen from './SplashScreen';
 import Settings from './Settings';
 import ForgotPassword from './ForgotPassword';
+import Documents from './Documents';
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   SplashScreen,
   Settings,
   ForgotPassword,
+  Documents,
 };
