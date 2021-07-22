@@ -67,7 +67,7 @@ const SignUp = ({ navigation }) => {
         password: '',
         confirmPassword: '',
         country_id: '',
-        callbackUrl: EnvironmentVariables.CALLBACK_URL,
+        callbackUrl: EnvironmentVariables.EMAIL_CALLBACK_URL,
       }}
       validateOnMount={true}
       onSubmit={values => {

@@ -6,7 +6,6 @@ export default () => dispatch => {
   axiosInstance
     .get('retailer/auth/logout')
     .then(res => {
-      console.log(res.data);
       // If the Logout operation is successfully, remove the jwtToken from local storage
       AsyncStorage.removeItem('token');
 

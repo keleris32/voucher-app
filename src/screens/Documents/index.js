@@ -16,21 +16,31 @@ import {
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import DocumentPicker from 'react-native-document-picker';
 import { Formik } from 'formik';
-import axios from 'axios';
 
 import { images, COLORS, SIZES, FONTS } from '../../constants';
 import { CustomButton } from '../../components';
 import { validationSchema } from './validationSchema';
 import axiosInstance from '../../helpers/axiosInterceptor';
+import EnvironmentVariables from '../../config/env';
 
 const Documents = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Initiate Verification process
+  const initiateVerification = async () => {
+    // FormData to send callback url with request.
+    const data = new FormData();
+    data.append('callbackUrl', EnvironmentVariables.VERIFICATION_CALLBACK_URL);
+
+    // Send request to initiate verification
+    await axiosInstance
+      .post('retailer/initiate-verification', data)
+      .then(res => console.log(JSON.stringify(res.data, null, 2)))
+      .catch(err => console.log(err));
+  };
+
   // Upload selected file to server
   const uploadFile = async (documentData, resetForm) => {
-    const token =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZXRhaWxlclwvYXV0aFwvcmVnaXN0ZXIiLCJpYXQiOjE2MjY5MDA1MzAsImV4cCI6MTYyNjk4NjkzMCwibmJmIjoxNjI2OTAwNTMwLCJqdGkiOiJuWFNSdU4zNkd1TjhLWEZyIiwic3ViIjoiNDE3NTJjYzItZDdkNS00Njk1LTlmM2YtYTY2MGIwOWRmMmM1IiwicHJ2IjoiNzI1NmUzOTk1YTZlNzk2NmVlNDI3MTQ3NzEwOTY5NDk5MGY2ZTEwMSJ9.aqGrhCGDQPZiJWV3zJaOWC9Re4if1jYPXnNqeMDXvic';
-
     // Check if any file has been selected
     if (selectedFile !== null) {
       // If a file has been selected, then create FormData
@@ -39,11 +49,10 @@ const Documents = () => {
       data.append('documents', fileToUpload, documentData.documentName);
 
       // Upload file to server
-      await axios
+      await axiosInstance
         .post('http://10.0.2.2:8000/api/retailer/documents', data, {
           headers: {
             'Content-Type': 'multipart/form-data; ',
-            Authorization: `Bearer ${token}`,
           },
         })
         .then(res => {
@@ -149,7 +158,10 @@ const Documents = () => {
                   onPress={props.handleSubmit}
                 />
               </View>
-              <CustomButton buttonText="Initiate Verification" />
+              <CustomButton
+                buttonText="Initiate Verification"
+                onPress={initiateVerification}
+              />
             </View>
           </ImageBackground>
         </SafeAreaView>

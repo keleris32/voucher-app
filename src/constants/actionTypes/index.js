@@ -6,3 +6,4 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGIN_LOADING = 'LOGIN_LOADING';
 export const CLEAR_AUTH_STATE = 'CLEAR_AUTH_STATE';
 export const LOGOUT_RETAILER = 'LOGOUT_RETAILER';
+export const GET_RETAILER = 'GET_RETAILER';
