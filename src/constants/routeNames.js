@@ -11,3 +11,4 @@ export const FORGOT_PASSWORD = 'ForgotPassword';
 
 // DocumentNavigator route name
 export const DOCUMENTS = 'Documents';
+export const PENDING_VERIFICATION = 'PENDING_VERIFICATION';

@@ -6,7 +6,6 @@ import TabNavigator from './TabNavigator';
 import AuthNavigator from './AuthNavigator';
 import { GlobalContext } from '../context/Provider';
 import { ActivityIndicator } from 'react-native';
-import getRetailer from '../context/actions/getRetailer/getRetailer';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
 import VerificationNavigator from './VerificationNavigator';
@@ -34,22 +33,26 @@ const AppNavContainer = () => {
       // If the object is present, set the authenication state variable to true, else false
       if (retailer) {
         setIsAuthLoading(true);
-        // getRetailer()(getRetailerDispatch);
 
-        await axiosInstance
-          .get('retailer/')
-          .then(res => {
-            getRetailerDispatch({
-              type: GET_RETAILER,
-              payload: res.data.data.retailer,
-            });
-          })
-          .catch(err => console.log(err));
+        // If there's retailer data, then fetch it from the server
+        if (!retailerData) {
+          await axiosInstance
+            .get('retailer/')
+            .then(res => {
+              getRetailerDispatch({
+                type: GET_RETAILER,
+                payload: res.data.data.retailer,
+              });
+            })
+            .catch(err => console.log(err));
+        }
 
+        // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
       } else {
         setIsAuthLoading(true);
 
+        // if the retailer isn't logged in, set authentication state to false
         setIsAuthenticated(false);
       }
     } catch (error) {}
@@ -73,7 +76,6 @@ const AppNavContainer = () => {
           ) : (
             <AuthNavigator />
           )}
-          {/* {isLoggedIn || isAuthenticated ? <TabNavigator /> : <AuthNavigator />} */}
         </NavigationContainer>
       ) : (
         <ActivityIndicator />

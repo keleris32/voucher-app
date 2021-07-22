@@ -7,6 +7,7 @@ import SplashScreen from './SplashScreen';
 import Settings from './Settings';
 import ForgotPassword from './ForgotPassword';
 import Documents from './Documents';
+import PendingVerification from './PendingVerification';
 
 export {
   Home,
@@ -18,4 +19,5 @@ export {
   Settings,
   ForgotPassword,
   Documents,
+  PendingVerification,
 };
