@@ -73,7 +73,7 @@ const AppNavContainer = () => {
           {/* Else redirect the retailer to the AuthNavigator to be authenticated. */}
           {isAuthenticated &&
           retailerData.verification_status !== 'approved' ? (
-            <VerificationNavigator />
+            <TabNavigator />
           ) : isAuthenticated &&
             retailerData.verification_status === 'approved' ? (
             <TabNavigator />

@@ -6,7 +6,6 @@ import {
 } from '../../../constants/actionTypes';
 import axiosInstance from '../../../helpers/axiosInterceptor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DOCUMENTS } from '../../../constants/routeNames';
 
 export const clearAuthState = () => dispatch => {
   dispatch({
@@ -14,18 +13,15 @@ export const clearAuthState = () => dispatch => {
   });
 };
 
-export default (
-    {
-      fullName: name,
-      email,
-      password,
-      confirmPassword: password_confirmation,
-      phoneNumber: phone_number,
-      country_id,
-      callbackUrl,
-    },
-    navigation,
-  ) =>
+export default ({
+    fullName: name,
+    email,
+    password,
+    confirmPassword: password_confirmation,
+    phoneNumber: phone_number,
+    country_id,
+    callbackUrl,
+  }) =>
   dispatch => {
     dispatch({
       type: REGISTER_LOADING,
@@ -54,10 +50,9 @@ export default (
           type: REGISTER_SUCCESS,
           payload: res.data,
         });
-
-        navigation.replace(DOCUMENTS);
       })
       .catch(err => {
+        console.log(err.response.data);
         dispatch({
           type: REGISTER_FAIL,
           payload: err.response

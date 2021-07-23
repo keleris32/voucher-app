@@ -55,7 +55,7 @@ const SignUp = ({ navigation }) => {
     formData.country_id = selectedCountry.id;
 
     // If the form is valid, then the form's values are dispatched to the server
-    registerRetailer(formData, navigation)(authDispatch);
+    registerRetailer(formData)(authDispatch);
   };
 
   return (

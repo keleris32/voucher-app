@@ -23,12 +23,24 @@ const VerificationNavigator = () => {
           : Documents
       }
       screenOptions={{ headerShown: false }}>
-      {console.log('Inside stack', retailerData.verification_status)}
-      <Stack.Screen name={DOCUMENTS} component={Documents} />
-      <Stack.Screen
-        name={PENDING_VERIFICATION}
-        component={PendingVerification}
-      />
+      {/* {console.log('Inside stack', retailerData.verification_status)} */}
+      {retailerData.verification_status === 'pending' ? (
+        <>
+          <Stack.Screen
+            name={PENDING_VERIFICATION}
+            component={PendingVerification}
+          />
+          <Stack.Screen name={DOCUMENTS} component={Documents} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name={DOCUMENTS} component={Documents} />
+          <Stack.Screen
+            name={PENDING_VERIFICATION}
+            component={PendingVerification}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };
