@@ -11,13 +11,14 @@ import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
 
 const AppNavContainer = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthLoading, setIsAuthLoading] = useState(false);
-
   // Auth global state
   const {
     authState: { isLoggedIn },
   } = useContext(GlobalContext);
+
+  // Auth state management
+  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn);
+  const [isAuthLoaded, setIsAuthLoaded] = useState(false);
 
   // getRetailer global state
   const {
@@ -32,7 +33,7 @@ const AppNavContainer = () => {
 
       // If the object is present, set the authenication state variable to true, else false
       if (retailer) {
-        setIsAuthLoading(true);
+        setIsAuthLoaded(true);
 
         await axiosInstance
           .get('retailer/')
@@ -47,7 +48,7 @@ const AppNavContainer = () => {
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
       } else {
-        setIsAuthLoading(true);
+        setIsAuthLoaded(true);
 
         // if the retailer isn't logged in, set authentication state to false
         setIsAuthenticated(false);
@@ -63,9 +64,9 @@ const AppNavContainer = () => {
 
   return (
     <>
-      {console.log(isAuthenticated, isLoggedIn)}
+      {/* {console.log(isAuthenticated, isLoggedIn)} */}
       {/* {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))} */}
-      {isAuthLoading ? (
+      {isAuthLoaded ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
           {/* If the retailer has been authenticated but not verified, then redirect to the Verification Navigator to be verified */}
