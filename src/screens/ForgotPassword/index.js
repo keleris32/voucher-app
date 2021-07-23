@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
-import { LOGIN, PENDING_VERIFICATION } from '../../constants/routeNames';
+import { LOGIN } from '../../constants/routeNames';
 import { validationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
 import axiosInstance from '../../helpers/axiosInterceptor';
@@ -83,10 +83,8 @@ const ForgotPassword = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <TouchableOpacity
-              onPress={() => navigation.replace(PENDING_VERIFICATION)}>
-              <Image source={icons.redAcomart} style={styles.logo} />
-            </TouchableOpacity>
+            <Image source={icons.redAcomart} style={styles.logo} />
+
             <View style={styles.screenTitleCon}>
               <Text style={styles.screenTitle}>Password Recovery</Text>
               <Text style={styles.screenSubTitle}>

@@ -26,7 +26,7 @@ const AppNavContainer = () => {
   } = useContext(GlobalContext);
 
   // An asynchronous function that checks the local storage for the retailer object
-  const getRetailer = async () => {
+  const getRetailerData = async () => {
     try {
       const retailer = await AsyncStorage.getItem('retailer');
 
@@ -34,18 +34,15 @@ const AppNavContainer = () => {
       if (retailer) {
         setIsAuthLoading(true);
 
-        // If there's no retailer data stored in the global state, then fetch it from the server
-        if (!retailerData) {
-          await axiosInstance
-            .get('retailer/')
-            .then(res => {
-              getRetailerDispatch({
-                type: GET_RETAILER,
-                payload: res.data.data.retailer,
-              });
-            })
-            .catch(err => console.log(err));
-        }
+        await axiosInstance
+          .get('retailer/')
+          .then(res => {
+            getRetailerDispatch({
+              type: GET_RETAILER,
+              payload: res.data.data.retailer,
+            });
+          })
+          .catch(err => console.log(err));
 
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
@@ -61,13 +58,13 @@ const AppNavContainer = () => {
   // Call the getRetailer fn on component mount when the authState, isLoggedIn, changes.
   // If the authState changes, the useEffect hook will call the getRetailer fn to check local storage inorder find out if the retailer is still authenticated.
   useEffect(() => {
-    getRetailer();
+    getRetailerData();
   }, [isLoggedIn]);
 
   return (
     <>
       {console.log(isAuthenticated, isLoggedIn)}
-      {/* {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))} */}
+      {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))}
       {isAuthLoading ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
