@@ -64,7 +64,7 @@ const AppNavContainer = () => {
   return (
     <>
       {console.log(isAuthenticated, isLoggedIn)}
-      {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))}
+      {/* {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))} */}
       {isAuthLoading ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>

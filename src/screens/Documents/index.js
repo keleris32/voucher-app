@@ -50,6 +50,7 @@ const Documents = ({ navigation }) => {
         .post('retailer/initiate-verification', data)
         .then(res => navigation.replace(PENDING_VERIFICATION))
         // Navigate to the Pending verifcation screen on successful request
+
         .catch(err => console.log(err));
     } else {
       Alert.alert(
