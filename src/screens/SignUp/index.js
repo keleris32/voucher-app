@@ -39,7 +39,7 @@ const SignUp = ({ navigation }) => {
     authState: { error, loading, data },
   } = useContext(GlobalContext);
 
-  // Return a callback dispatch function to clear the authentication state
+  // Return a callback dispatch function to clear the authentication state on component unMount
   useFocusEffect(
     useCallback(() => {
       return () => {

@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TabNavigator from './TabNavigator';
 import AuthNavigator from './AuthNavigator';
+import VerificationNavigator from './VerificationNavigator';
 import { GlobalContext } from '../context/Provider';
 import { ActivityIndicator } from 'react-native';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
-import VerificationNavigator from './VerificationNavigator';
 
 const AppNavContainer = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,7 +34,7 @@ const AppNavContainer = () => {
       if (retailer) {
         setIsAuthLoading(true);
 
-        // If there's retailer data, then fetch it from the server
+        // If there's no retailer data stored in the global state, then fetch it from the server
         if (!retailerData) {
           await axiosInstance
             .get('retailer/')
@@ -58,8 +58,8 @@ const AppNavContainer = () => {
     } catch (error) {}
   };
 
-  // Call the getRetailer fn on component mount and when the authState, isLoggedIn, changes.
-  // If the authState changes, the useEffect hook will call the getRetailer fn to check local storage to find out if the retailer is still authenticated.
+  // Call the getRetailer fn on component mount when the authState, isLoggedIn, changes.
+  // If the authState changes, the useEffect hook will call the getRetailer fn to check local storage inorder find out if the retailer is still authenticated.
   useEffect(() => {
     getRetailer();
   }, [isLoggedIn]);
@@ -67,11 +67,18 @@ const AppNavContainer = () => {
   return (
     <>
       {console.log(isAuthenticated, isLoggedIn)}
-      {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))}
+      {/* {console.log('retailerData>>', JSON.stringify(retailerData, null, 2))} */}
       {isAuthLoading ? (
+        // Navigation Container to house all the navigator components
         <NavigationContainer>
+          {/* If the retailer has been authenticated but not verified, then redirect to the Verification Navigator to be verified */}
+          {/* Else-if the retailer has been authenticated and also verified, then redirect to the Tab Navigator (Home) */}
+          {/* Else redirect the retailer to the AuthNavigator to be authenticated. */}
           {isAuthenticated &&
-          retailerData.verification_status === 'approved' ? (
+          retailerData.verification_status !== 'approved' ? (
+            <VerificationNavigator />
+          ) : isAuthenticated &&
+            retailerData.verification_status === 'approved' ? (
             <TabNavigator />
           ) : (
             <AuthNavigator />

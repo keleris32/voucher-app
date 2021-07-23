@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,53 +22,112 @@ import { CustomButton } from '../../components';
 import { validationSchema } from './validationSchema';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import EnvironmentVariables from '../../config/env';
+import { PENDING_VERIFICATION } from '../../constants/routeNames';
+import { GlobalContext } from '../../context/Provider';
 
-const Documents = () => {
+const Documents = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [hasUploaded, setHasUploaded] = useState(false);
+
+  // Retailer global state
+  const {
+    getRetailerState: { retailerData },
+  } = useContext(GlobalContext);
 
   // Initiate Verification process
   const initiateVerification = async () => {
-    // FormData to send callback url with request.
-    const data = new FormData();
-    data.append('callbackUrl', EnvironmentVariables.VERIFICATION_CALLBACK_URL);
+    // If a file has been uploaded, then proceed else don't
+    if (hasUploaded) {
+      // FormData to send callback url with request.
+      const data = new FormData();
+      data.append(
+        'callbackUrl',
+        EnvironmentVariables.VERIFICATION_CALLBACK_URL,
+      );
 
-    // Send request to initiate verification
-    await axiosInstance
-      .post('retailer/initiate-verification', data)
-      .then(res => console.log(JSON.stringify(res.data, null, 2)))
-      .catch(err => console.log(err));
+      // Send request to initiate verification
+      await axiosInstance
+        .post('retailer/initiate-verification', data)
+        .then(res => navigation.replace(PENDING_VERIFICATION))
+        // Navigate to the Pending verifcation screen on successful request
+        .catch(err => console.log(err));
+    } else {
+      Alert.alert(
+        '',
+        'Please upload a means of identification before proceeding!',
+      );
+    }
+  };
+
+  // Resend email verification
+  const resendEmailVerification = () => {
+    axiosInstance
+      .get('retailer/auth/email/resend-verification', {
+        params: {
+          callbackUrl: EnvironmentVariables.EMAIL_CALLBACK_URL,
+        },
+      })
+      .then(res => Alert.alert('', 'Email verification was sent successfully!'))
+      .catch(err =>
+        Alert.alert(
+          'Error',
+          'Please check your internet connection and try again!',
+        ),
+      );
   };
 
   // Upload selected file to server
   const uploadFile = async (documentData, resetForm) => {
-    // Check if any file has been selected
-    if (selectedFile !== null) {
-      // If a file has been selected, then create FormData
-      const fileToUpload = selectedFile;
-      const data = new FormData();
-      data.append('documents', fileToUpload, documentData.documentName);
+    if (retailerData?.email_verified_at) {
+      // Check if any file has been selected
+      if (selectedFile !== null) {
+        // If a file has been selected, then create FormData
+        const fileToUpload = selectedFile;
+        const data = new FormData();
+        data.append('documents', fileToUpload, documentData.documentName);
 
-      // Upload file to server
-      await axiosInstance
-        .post('http://10.0.2.2:8000/api/retailer/documents', data, {
-          headers: {
-            'Content-Type': 'multipart/form-data; ',
+        // Upload file to server
+        await axiosInstance
+          .post('retailer/documents', data, {
+            headers: {
+              'Content-Type': 'multipart/form-data; ',
+            },
+          })
+          .then(res => {
+            Alert.alert('Success', 'Your file was successfully uploaded!');
+
+            // set hasUploaded state to true
+            setHasUploaded(true);
+
+            // reset state and form
+            setSelectedFile(null);
+            resetForm();
+          })
+          .catch(err => {
+            Alert.alert(
+              'Error',
+              'Please check your internet connection and try again!',
+            );
+          });
+      }
+    } else {
+      // Alert pop-up with email verification link
+      Alert.alert(
+        'Verify your email',
+        'Please verify your email before proceeding!',
+        [
+          {
+            text: 'Resend email verification',
+            onPress: () => {
+              resendEmailVerification();
+            },
           },
-        })
-        .then(res => {
-          //   console.log(JSON.stringify(res.data, null, 2));
-          Alert.alert('Success', 'Your file was successfully uploaded!');
-
-          // reset state and form
-          setSelectedFile(null);
-          resetForm();
-        })
-        .catch(err => {
-          Alert.alert(
-            'Error.',
-            'Please check your internet connection and try again!',
-          );
-        });
+          {
+            text: 'Ok',
+            onPress: () => {},
+          },
+        ],
+      );
     }
   };
 

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
   title: {
     position: 'absolute',
-    top: hp('5%'),
+    top: hp('10%'),
     alignSelf: 'center',
     ...FONTS.h2,
   },
