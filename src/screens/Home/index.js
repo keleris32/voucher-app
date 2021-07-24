@@ -14,12 +14,20 @@ import {
 } from 'react-native-responsive-screen';
 
 import { images, COLORS, FONTS, SIZES } from '../../constants';
+import AfrocinemaComponent from '../../components/AfrocinemaComponent';
+import AfrostreamComponent from '../../components/AfrostreamComponent';
+import axiosInstance from '../../helpers/axiosInterceptor';
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState({
     afrocinema: true,
     afrostream: false,
   });
+
+  axiosInstance
+    .get('retailer/videos')
+    .then(res => console.log(JSON.stringify(res.data.data.videos, null, 2)))
+    .catch(err => console.log(err.response));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,6 +73,8 @@ const Home = () => {
             </View>
           </TouchableOpacity>
         </View>
+        {activeTab.afrocinema && <AfrocinemaComponent />}
+        {activeTab.afrostream && <AfrostreamComponent />}
       </ImageBackground>
     </SafeAreaView>
   );
