@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { GlobalContext } from '../../context/Provider';
 import MovieCard from './MovieCard';
+import { SELECTED_CARD } from '../../constants/actionTypes';
 
 const AfrocinemaComponent = () => {
   // Afrocinema global state variable
@@ -11,13 +12,27 @@ const AfrocinemaComponent = () => {
     getAfrocinemaState: { afrocinemaData },
   } = useContext(GlobalContext);
 
+  // Selected card global state variable
+  const {
+    selectedCardDispatch,
+    selectedCardState: { selectedCardData },
+  } = useContext(GlobalContext);
+
+  const selectedOption = optionData => {
+    // store the selected card data in the global state
+    selectedCardDispatch({
+      type: SELECTED_CARD,
+      payload: optionData,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item => item.id}
         data={afrocinemaData}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => selectedOption(item)}>
             <MovieCard
               title={item.title}
               image={item.featured_image}

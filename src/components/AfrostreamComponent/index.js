@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { GlobalContext } from '../../context/Provider';
 import SubscriptionCard from './SubscriptionCard';
+import { SELECTED_CARD } from '../../constants/actionTypes';
 
 const AfrostreamComponent = () => {
   // Afrostream global state variable
@@ -11,13 +12,27 @@ const AfrostreamComponent = () => {
     getAfrostreamState: { afrostreamData },
   } = useContext(GlobalContext);
 
+  // Selected card global state variable
+  const {
+    selectedCardDispatch,
+    selectedCardState: { selectedCardData },
+  } = useContext(GlobalContext);
+
+  const selectedOption = optionData => {
+    // store the selected card data in the global state
+    selectedCardDispatch({
+      type: SELECTED_CARD,
+      payload: optionData,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item => item.id}
         data={afrostreamData}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => selectedOption(item)}>
             <SubscriptionCard
               name={item.name}
               duration={item.duration_in_days}
