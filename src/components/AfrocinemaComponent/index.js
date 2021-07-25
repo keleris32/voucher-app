@@ -21,8 +21,6 @@ const AfrocinemaComponent = () => {
     getAfrocinemaState: { afrocinemaData },
   } = useContext(GlobalContext);
 
-  console.log(JSON.stringify(afrocinemaData[0].featured_image, null, 2));
-
   return (
     <View style={styles.container}>
       <FlatList

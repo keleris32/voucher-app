@@ -70,51 +70,47 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={images.mainBg} style={styles.bgImage}>
-        <ImageBackground
-          source={images.splashScreenBg}
-          style={styles.headerImgBg}>
-          <View style={styles.headerBar}>
-            <View>
-              <Text style={styles.headerText}>Welcome,</Text>
-              <Text style={styles.headerUsername}>Charles</Text>
-            </View>
-            <View>
-              <Icon name="user-circle" style={styles.userIcon} />
-            </View>
+      {/* <ImageBackground source={images.mainBg} style={styles.bgImage}> */}
+      <ImageBackground
+        source={images.splashScreenBg}
+        style={styles.headerImgBg}>
+        <View style={styles.headerBar}>
+          <View>
+            <Text style={styles.headerText}>Welcome,</Text>
+            <Text style={styles.headerUsername}>Charles</Text>
           </View>
-        </ImageBackground>
-        <View style={styles.subcriptionTab}>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() =>
-              setActiveTab({ afrocinema: true, afrostream: false })
-            }>
-            <View
-              style={[
-                styles.Tab,
-                activeTab.afrocinema === true ? styles.activeTab : '',
-              ]}>
-              <Text style={styles.tabText}>Afrocinema</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() =>
-              setActiveTab({ afrocinema: false, afrostream: true })
-            }>
-            <View
-              style={[
-                styles.Tab,
-                activeTab.afrostream === true ? styles.activeTab : '',
-              ]}>
-              <Text style={styles.tabText}>Afrostream</Text>
-            </View>
-          </TouchableOpacity>
+          <View>
+            <Icon name="user-circle" style={styles.userIcon} />
+          </View>
         </View>
-        {activeTab.afrocinema && <AfrocinemaComponent />}
-        {activeTab.afrostream && <AfrostreamComponent />}
       </ImageBackground>
+      <View style={styles.subcriptionTab}>
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => setActiveTab({ afrocinema: true, afrostream: false })}>
+          <View
+            style={[
+              styles.Tab,
+              activeTab.afrocinema === true ? styles.activeTab : '',
+            ]}>
+            <Text style={styles.tabText}>Afrocinema</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => setActiveTab({ afrocinema: false, afrostream: true })}>
+          <View
+            style={[
+              styles.Tab,
+              activeTab.afrostream === true ? styles.activeTab : '',
+            ]}>
+            <Text style={styles.tabText}>Afrostream</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      {activeTab.afrocinema && <AfrocinemaComponent />}
+      {activeTab.afrostream && <AfrostreamComponent />}
+      {/* </ImageBackground> */}
     </SafeAreaView>
   );
 };
@@ -126,10 +122,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  bgImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
+  // bgImage: {
+  //   flex: 1,
+  //   resizeMode: 'cover',
+  // },
 
   headerImgBg: {
     height: hp('15%'),

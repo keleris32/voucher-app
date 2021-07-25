@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
 import { FONTS, SIZES, COLORS } from '../../constants';
 
 const MovieCard = props => {
@@ -21,7 +22,10 @@ const MovieCard = props => {
           <Text style={styles.pg}>PG: {props.parentalGuidance}</Text>
         </View>
       </View>
-      <Text style={styles.price}>{props.price}</Text>
+      <Text style={styles.price}>
+        {'\u0024 '}
+        {props.price}
+      </Text>
     </View>
   );
 };
