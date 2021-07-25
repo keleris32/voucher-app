@@ -5,11 +5,16 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
 
-const SearchBar = () => {
+const SearchBar = ({ searchValue, searchFilterFunction }) => {
   return (
     <View style={styles.container}>
       <Icons name="search" style={styles.icon} />
-      <TextInput placeholder="Search Movies" style={styles.input} />
+      <TextInput
+        placeholder="Search Movies"
+        style={styles.input}
+        value={searchValue}
+        onChangeText={text => searchFilterFunction(text)}
+      />
     </View>
   );
 };

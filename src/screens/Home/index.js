@@ -24,11 +24,14 @@ import {
 } from '../../constants/actionTypes';
 
 const Home = () => {
-  // State management for the dashboard tabs
+  // State variable for the dashboard tabs
   const [activeTab, setActiveTab] = useState({
     afrocinema: true,
     afrostream: false,
   });
+
+  // State variable for filtered search data
+  const [filteredData, setFilteredData] = useState({});
 
   // Global state for Afrocinema and Afrostream
   const { getAfrocinemaDispatch, getAfrostreamDispatch } =
@@ -44,6 +47,7 @@ const Home = () => {
           type: GET_AFROCINEMA_DATA,
           payload: res.data.data.videos,
         });
+        setFilteredData(res.data.data.videos);
       })
       .catch(err => console.log(err.response));
   };
@@ -108,7 +112,12 @@ const Home = () => {
           </View>
         </TouchableOpacity>
       </View>
-      {activeTab.afrocinema && <AfrocinemaComponent />}
+      {activeTab.afrocinema && (
+        <AfrocinemaComponent
+          filteredData={filteredData}
+          setFilteredData={setFilteredData}
+        />
+      )}
       {activeTab.afrostream && <AfrostreamComponent />}
       {/* </ImageBackground> */}
     </SafeAreaView>

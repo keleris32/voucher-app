@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
@@ -7,7 +7,9 @@ import MovieCard from './MovieCard';
 import { SELECTED_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 
-const AfrocinemaComponent = () => {
+const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
+  const [searchValue, setSearchValue] = useState('');
+
   // Afrocinema global state variable
   const {
     getAfrocinemaState: { afrocinemaData },
@@ -24,11 +26,34 @@ const AfrocinemaComponent = () => {
     });
   };
 
+  const searchFilterFunction = text => {
+    // Check if inserted text is not empty
+    if (text) {
+      // If it isn't empty, filter afrocinemaData and update filteredData
+      const newData = afrocinemaData.filter(item => {
+        const itemData = item.title
+          ? item.title.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearchValue(text);
+    } else {
+      // if it is empty, update filteredData with afrocinemaData
+      setFilteredData(afrocinemaData);
+      setSearchValue(text);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <SearchBar />
+      <SearchBar
+        searchValue={searchValue}
+        searchFilterFunction={searchFilterFunction}
+      />
       <FlatList
-        data={afrocinemaData}
+        data={filteredData}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
