@@ -1,22 +1,12 @@
 import React, { useContext } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import { COLORS } from '../../constants';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { GlobalContext } from '../../context/Provider';
 import MovieCard from './MovieCard';
 
 const AfrocinemaComponent = () => {
+  // Afrocinema global state variable
   const {
     getAfrocinemaState: { afrocinemaData },
   } = useContext(GlobalContext);

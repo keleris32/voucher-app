@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     paddingVertical: wp('2.5%'),
     paddingLeft: wp('1.25%'),
     paddingRight: wp('2.5%'),
-    marginBottom: wp('5%'),
+    marginBottom: wp('7.5%'),
     borderWidth: 1,
     borderColor: COLORS.gray,
     borderRadius: SIZES.base,
@@ -63,6 +63,10 @@ const styles = StyleSheet.create({
 
   title: {
     ...FONTS.h4,
+  },
+
+  pg: {
+    ...FONTS.body4,
   },
 
   price: {
