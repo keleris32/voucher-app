@@ -37,7 +37,7 @@ const Home = () => {
   // Get afrocinema's data from server and store in Global state
   const getAfrocinemaData = async () => {
     await axiosInstance
-      .get('retailer/videos')
+      .get('videos')
       .then(res => {
         // console.log(JSON.stringify(res.data.data.videos, null, 2));
         getAfrocinemaDispatch({

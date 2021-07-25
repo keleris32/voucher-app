@@ -13,10 +13,7 @@ const AfrostreamComponent = () => {
   } = useContext(GlobalContext);
 
   // Selected card global state variable
-  const {
-    selectedCardDispatch,
-    selectedCardState: { selectedCardData },
-  } = useContext(GlobalContext);
+  const { selectedCardDispatch } = useContext(GlobalContext);
 
   const selectedOption = optionData => {
     // store the selected card data in the global state
