@@ -1,12 +1,7 @@
-import React, { useContext, useState, useRef, createRef } from 'react';
+import React, { useContext, useState, createRef } from 'react';
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import BottomSheet from 'reanimated-bottom-sheet';
-import { TapGestureHandler } from 'react-native-gesture-handler';
-import Animated, { Value } from 'react-native-reanimated';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Value } from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
 import MovieCard from './MovieCard';
@@ -14,7 +9,7 @@ import { SELECTED_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 
-const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
+const AfrocinemaComponent = ({ filteredData, setFilteredData, activeTab }) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Afrocinema global state variable
@@ -88,7 +83,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
           )}
         />
       </View>
-      <AnimatedBottomSheet bs={bs} fall={fall} />
+      <AnimatedBottomSheet bs={bs} fall={fall} activeTab />
     </>
   );
 };

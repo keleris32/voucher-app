@@ -2,15 +2,11 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/MaterialIcons';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { Home, Transactions, Payments, Settings } from '../screens';
 import { HOME, TRANSACTIONS, PAYMENTS } from '../constants/routeNames';
 import { COLORS } from '../constants';
-import AnimatedBottomSheet from '../components/AnimatedBottomSheet';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +33,6 @@ const TabNavigator = () => {
               <Icons name={iconName} style={styles.iconStyles} color={color} />
             );
           },
-          // tabBarVisible: false,
         })}
         tabBarOptions={{
           activeTintColor: COLORS.red,
@@ -58,7 +53,6 @@ const TabNavigator = () => {
         <Tab.Screen name={PAYMENTS} component={Payments} />
         <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
-      {/* <AnimatedBottomSheet /> */}
     </>
   );
 };

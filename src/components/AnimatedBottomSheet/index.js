@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 import {
@@ -9,38 +8,31 @@ import {
 } from 'react-native-responsive-screen';
 
 import { COLORS, SIZES } from '../../constants';
+import AfrocinemaPanelData from '../PanelData/AfrocinemaPanelData';
+import AfrostreamPanelData from '../PanelData/AfrostreamPanelData';
 
-const AnimatedBottomSheet = ({ bs, fall }) => {
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle} />
-      </View>
-    </View>
-  );
-
+const AnimatedBottomSheet = ({ bs, fall, activeTab }) => {
+  // Rendered component for reanimated-bottom-sheet
   const renderContent = () => (
-    <View style={styles.panel}>
+    <>
       <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
-        <Text>Animated Bottom!!!</Text>
+        <View style={styles.panel} />
       </TouchableOpacity>
-    </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.panelHeader}>
+          <View style={styles.panelHandle} />
+        </View>
+
+        {activeTab ? <AfrocinemaPanelData /> : <AfrostreamPanelData />}
+      </View>
+    </>
   );
 
   return (
     <>
-      <View
-        style={{
-          //   ...StyleSheet.absoluteFill,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          zIndex: -1,
-        }}
-      />
-
       <BottomSheet
         ref={bs}
-        snapPoints={[hp('70%'), 0]}
-        renderHeader={renderHeader}
+        snapPoints={[hp('100%'), 0]}
         renderContent={renderContent}
         initialSnap={1}
         callbackNode={fall}
@@ -53,42 +45,31 @@ const AnimatedBottomSheet = ({ bs, fall }) => {
 export default AnimatedBottomSheet;
 
 const styles = StyleSheet.create({
-  container: {
+  panel: {
+    height: hp('100%'),
+    backgroundColor: COLORS.backDrop,
+  },
+
+  contentContainer: {
     position: 'absolute',
     bottom: 0,
     width: wp('100%'),
-    height: hp('100%'),
-    //   borderTopStartRadius: SIZES.largeTitle,
-    //   borderTopEndRadius: SIZES.largeTitle,
-    //   backgroundColor: 'red',
-  },
-
-  header: {
+    height: hp('70%'),
     backgroundColor: COLORS.white,
-    shadowColor: '#333',
-    shadowOffset: { width: -1, height: -3 },
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
-    paddingTop: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopStartRadius: SIZES.largeTitle,
+    borderTopEndRadius: SIZES.largeTitle,
   },
 
   panelHeader: {
     alignItems: 'center',
+    backgroundColor: 'red',
   },
 
   panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
+    width: wp('15%'),
+    height: SIZES.base,
+    borderRadius: SIZES.base,
     backgroundColor: '#00000040',
-    marginBottom: 10,
-  },
-
-  panel: {
-    height: hp('100%'),
-    alignItems: 'center',
-    backgroundColor: 'red',
+    marginVertical: SIZES.radius,
   },
 });
