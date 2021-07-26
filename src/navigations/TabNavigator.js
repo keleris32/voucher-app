@@ -37,7 +37,7 @@ const TabNavigator = () => {
               <Icons name={iconName} style={styles.iconStyles} color={color} />
             );
           },
-          tabBarVisible: false,
+          // tabBarVisible: false,
         })}
         tabBarOptions={{
           activeTintColor: COLORS.red,

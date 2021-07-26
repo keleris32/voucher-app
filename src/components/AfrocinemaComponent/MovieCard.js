@@ -57,12 +57,13 @@ const styles = StyleSheet.create({
   descriptionWrapper: {
     flex: 0.8125,
     justifyContent: 'space-between',
-    paddingVertical: wp('1.25%'),
+    paddingVertical: wp('2.5%'),
     marginHorizontal: wp('2.5%'),
   },
 
   title: {
-    ...FONTS.h4,
+    color: COLORS.acomartBlue,
+    ...FONTS.h3,
   },
 
   pg: {
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
   },
 
   price: {
+    color: COLORS.acomartBlue,
     ...FONTS.h3,
   },
 });
