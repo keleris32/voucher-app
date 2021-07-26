@@ -18,7 +18,9 @@ const MovieCard = props => {
           style={styles.image}
         />
         <View style={styles.descriptionWrapper}>
-          <Text style={styles.title}>{props.title}</Text>
+          <Text style={styles.title} numberOfLines={1}>
+            {props.title}
+          </Text>
           <Text style={styles.pg}>PG: {props.parentalGuidance}</Text>
         </View>
       </View>
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionWrapper: {
+    flex: 0.8125,
     justifyContent: 'space-between',
     paddingVertical: wp('1.25%'),
     marginHorizontal: wp('2.5%'),
