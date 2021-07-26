@@ -12,14 +12,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Animated, {
-  useCode,
-  cond,
-  Value,
-  set,
-  eq,
-} from 'react-native-reanimated';
-import { State } from 'react-native-gesture-handler';
 
 // Components, Functions and Hooks
 import { images, COLORS, FONTS, SIZES } from '../../constants';
@@ -85,22 +77,6 @@ const Home = () => {
   // ------------------------------------------------------- >
   // Animations
 
-  const translateY = new Value(hp('70%'));
-  const state = new Value(State.UNDETERMINED);
-  useCode(() =>
-    cond(
-      eq(state, State.End),
-      cond(
-        eq(
-          translateY,
-          hp('70%'),
-          set(translateY, 0),
-          set(translateY, hp('70%')),
-        ),
-      ),
-    ),
-  );
-
   // ------------------------------------------------------- >
 
   return (
@@ -151,27 +127,11 @@ const Home = () => {
           <AfrocinemaComponent
             filteredData={filteredData}
             setFilteredData={setFilteredData}
-            gestureHandler={{
-              onHandlerStateChange: Animated.event([
-                {
-                  nativeEvent: { state },
-                },
-              ]),
-            }}
           />
         )}
         {activeTab.afrostream && <AfrostreamComponent />}
       </ImageBackground>
-      <AnimatedBottomSheet
-        translateY={translateY}
-        gestureHandler={{
-          onHandlerStateChange: Animated.event([
-            {
-              nativeEvent: { state },
-            },
-          ]),
-        }}
-      />
+      <AnimatedBottomSheet />
     </SafeAreaView>
   );
 };

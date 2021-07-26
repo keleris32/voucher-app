@@ -1,33 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
 import { SIZES } from '../../constants';
 
-const AnimatedBottomSheet = ({ translateY, gestureHandler }) => {
+const AnimatedBottomSheet = () => {
   return (
     <>
-      <TapGestureHandler {...gestureHandler}>
-        <Animated.View
-          style={{
-            ...StyleSheet.absoluteFill,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            zIndex: -1,
-          }}
-        />
-      </TapGestureHandler>
-      <Animated.View
+      <View
         style={{
-          ...styles.container,
-          transform: [{ translateY: translateY }],
-        }}>
+          ...StyleSheet.absoluteFill,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          zIndex: -1,
+        }}
+      />
+      <View>
         <Text></Text>
-      </Animated.View>
+      </View>
     </>
   );
 };

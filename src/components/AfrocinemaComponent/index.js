@@ -9,11 +9,7 @@ import MovieCard from './MovieCard';
 import { SELECTED_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 
-const AfrocinemaComponent = ({
-  filteredData,
-  setFilteredData,
-  gestureHandler,
-}) => {
+const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Afrocinema global state variable
@@ -63,20 +59,16 @@ const AfrocinemaComponent = ({
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <TapGestureHandler {...gestureHandler}>
-            <Animated.View>
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => selectedOption(item)}>
-                <MovieCard
-                  title={item.title}
-                  image={item.featured_image}
-                  parentalGuidance={item.parental_guidance_age}
-                  price={item.starting_price}
-                />
-              </TouchableOpacity>
-            </Animated.View>
-          </TapGestureHandler>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => selectedOption(item)}>
+            <MovieCard
+              title={item.title}
+              image={item.featured_image}
+              parentalGuidance={item.parental_guidance_age}
+              price={item.starting_price}
+            />
+          </TouchableOpacity>
         )}
       />
     </View>
