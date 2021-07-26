@@ -12,7 +12,16 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Animated, {
+  useCode,
+  cond,
+  Value,
+  set,
+  eq,
+} from 'react-native-reanimated';
+import { State } from 'react-native-gesture-handler';
 
+// Components, Functions and Hooks
 import { images, COLORS, FONTS, SIZES } from '../../constants';
 import AfrocinemaComponent from '../../components/AfrocinemaComponent';
 import AfrostreamComponent from '../../components/AfrostreamComponent';
@@ -22,6 +31,7 @@ import {
   GET_AFROCINEMA_DATA,
   GET_AFROSTREAM_DATA,
 } from '../../constants/actionTypes';
+import AnimatedBottomSheet from '../../components/AnimatedBottomSheet';
 
 const Home = () => {
   // State variable for the dashboard tabs
@@ -72,54 +82,96 @@ const Home = () => {
     getAfrostreamData();
   }, []);
 
+  // ------------------------------------------------------- >
+  // Animations
+
+  const translateY = new Value(hp('70%'));
+  const state = new Value(State.UNDETERMINED);
+  useCode(() =>
+    cond(
+      eq(state, State.End),
+      cond(
+        eq(
+          translateY,
+          hp('70%'),
+          set(translateY, 0),
+          set(translateY, hp('70%')),
+        ),
+      ),
+    ),
+  );
+
+  // ------------------------------------------------------- >
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ImageBackground source={images.mainBg} style={styles.bgImage}> */}
-      <ImageBackground
-        source={images.splashScreenBg}
-        style={styles.headerImgBg}>
-        <View style={styles.headerBar}>
-          <View>
-            <Text style={styles.headerText}>Welcome,</Text>
-            <Text style={styles.headerUsername}>Charles</Text>
+      <ImageBackground source={images.mainBg} style={styles.bgImage}>
+        <ImageBackground
+          source={images.splashScreenBg}
+          style={styles.headerImgBg}>
+          <View style={styles.headerBar}>
+            <View>
+              <Text style={styles.headerText}>Welcome,</Text>
+              <Text style={styles.headerUsername}>Charles</Text>
+            </View>
+            <View>
+              <Icon name="user-circle" style={styles.userIcon} />
+            </View>
           </View>
-          <View>
-            <Icon name="user-circle" style={styles.userIcon} />
-          </View>
+        </ImageBackground>
+        <View style={styles.subcriptionTab}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() =>
+              setActiveTab({ afrocinema: true, afrostream: false })
+            }>
+            <View
+              style={[
+                styles.Tab,
+                activeTab.afrocinema === true ? styles.activeTab : '',
+              ]}>
+              <Text style={styles.tabText}>Afrocinema</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() =>
+              setActiveTab({ afrocinema: false, afrostream: true })
+            }>
+            <View
+              style={[
+                styles.Tab,
+                activeTab.afrostream === true ? styles.activeTab : '',
+              ]}>
+              <Text style={styles.tabText}>Afrostream</Text>
+            </View>
+          </TouchableOpacity>
         </View>
+        {activeTab.afrocinema && (
+          <AfrocinemaComponent
+            filteredData={filteredData}
+            setFilteredData={setFilteredData}
+            gestureHandler={{
+              onHandlerStateChange: Animated.event([
+                {
+                  nativeEvent: { state },
+                },
+              ]),
+            }}
+          />
+        )}
+        {activeTab.afrostream && <AfrostreamComponent />}
       </ImageBackground>
-      <View style={styles.subcriptionTab}>
-        <TouchableOpacity
-          style={{ flex: 1 }}
-          onPress={() => setActiveTab({ afrocinema: true, afrostream: false })}>
-          <View
-            style={[
-              styles.Tab,
-              activeTab.afrocinema === true ? styles.activeTab : '',
-            ]}>
-            <Text style={styles.tabText}>Afrocinema</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flex: 1 }}
-          onPress={() => setActiveTab({ afrocinema: false, afrostream: true })}>
-          <View
-            style={[
-              styles.Tab,
-              activeTab.afrostream === true ? styles.activeTab : '',
-            ]}>
-            <Text style={styles.tabText}>Afrostream</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      {activeTab.afrocinema && (
-        <AfrocinemaComponent
-          filteredData={filteredData}
-          setFilteredData={setFilteredData}
-        />
-      )}
-      {activeTab.afrostream && <AfrostreamComponent />}
-      {/* </ImageBackground> */}
+      <AnimatedBottomSheet
+        translateY={translateY}
+        gestureHandler={{
+          onHandlerStateChange: Animated.event([
+            {
+              nativeEvent: { state },
+            },
+          ]),
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -131,10 +183,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // bgImage: {
-  //   flex: 1,
-  //   resizeMode: 'cover',
-  // },
+  bgImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
 
   headerImgBg: {
     height: hp('15%'),

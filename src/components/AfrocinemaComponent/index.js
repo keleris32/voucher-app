@@ -1,13 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { TapGestureHandler } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
 import MovieCard from './MovieCard';
 import { SELECTED_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 
-const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
+const AfrocinemaComponent = ({
+  filteredData,
+  setFilteredData,
+  gestureHandler,
+}) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Afrocinema global state variable
@@ -57,14 +63,20 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => selectedOption(item)}>
-            <MovieCard
-              title={item.title}
-              image={item.featured_image}
-              parentalGuidance={item.parental_guidance_age}
-              price={item.starting_price}
-            />
-          </TouchableOpacity>
+          <TapGestureHandler {...gestureHandler}>
+            <Animated.View>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => selectedOption(item)}>
+                <MovieCard
+                  title={item.title}
+                  image={item.featured_image}
+                  parentalGuidance={item.parental_guidance_age}
+                  price={item.starting_price}
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          </TapGestureHandler>
         )}
       />
     </View>
