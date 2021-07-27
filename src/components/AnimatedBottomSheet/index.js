@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -10,8 +9,16 @@ import {
 import { COLORS, SIZES } from '../../constants';
 import AfrocinemaPanelData from '../PanelData/AfrocinemaPanelData';
 import AfrostreamPanelData from '../PanelData/AfrostreamPanelData';
+import { GlobalContext } from '../../context/Provider';
 
-const AnimatedBottomSheet = ({ bs, fall, activeTab }) => {
+const AnimatedBottomSheet = ({ bs, fall }) => {
+  const {
+    selectedCardState: { isAfrocinemaActive, isAfrostreamActive },
+  } = useContext(GlobalContext);
+
+  console.log('isAfrocinemaActive>>', isAfrocinemaActive);
+  console.log('isAfrostreamActive>>', isAfrostreamActive);
+
   // Rendered component for reanimated-bottom-sheet
   const renderContent = () => (
     <>
@@ -22,8 +29,7 @@ const AnimatedBottomSheet = ({ bs, fall, activeTab }) => {
         <View style={styles.panelHeader}>
           <View style={styles.panelHandle} />
         </View>
-
-        {activeTab ? <AfrocinemaPanelData /> : <AfrostreamPanelData />}
+        {isAfrocinemaActive ? <AfrocinemaPanelData /> : <AfrostreamPanelData />}
       </View>
     </>
   );

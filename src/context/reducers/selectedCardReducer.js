@@ -1,11 +1,24 @@
-import { SELECTED_CARD } from '../../constants/actionTypes';
+import {
+  SELECTED_AFROCINEMA_CARD,
+  SELECTED_AFROSTREAM_CARD,
+} from '../../constants/actionTypes';
 
 const selectedCardReducer = (state, { type, payload }) => {
   switch (type) {
-    case SELECTED_CARD:
+    case SELECTED_AFROCINEMA_CARD:
       return {
         ...state,
-        selectedCardData: payload,
+        selectedAfrocinemaData: payload,
+        isAfrocinemaActive: true,
+        isAfrostreamActive: false,
+      };
+
+    case SELECTED_AFROSTREAM_CARD:
+      return {
+        ...state,
+        selectedAfrostreamData: payload,
+        isAfrocinemaActive: false,
+        isAfrostreamActive: true,
       };
 
     default:

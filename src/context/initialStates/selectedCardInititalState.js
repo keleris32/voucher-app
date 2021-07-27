@@ -1,4 +1,7 @@
 export default {
-  selectedCardData: {},
+  selectedAfrocinemaData: {},
+  selectedAfrostreamData: {},
+  isAfrocinemaActive: true,
+  isAfrostreamActive: false,
   error: '',
 };

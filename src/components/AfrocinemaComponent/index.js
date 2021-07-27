@@ -5,11 +5,11 @@ import { Value } from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
 import MovieCard from './MovieCard';
-import { SELECTED_CARD } from '../../constants/actionTypes';
+import { SELECTED_AFROCINEMA_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 
-const AfrocinemaComponent = ({ filteredData, setFilteredData, activeTab }) => {
+const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Afrocinema global state variable
@@ -23,7 +23,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData, activeTab }) => {
   const selectedOption = optionData => {
     // store the selected card data in the global state
     selectedCardDispatch({
-      type: SELECTED_CARD,
+      type: SELECTED_AFROCINEMA_CARD,
       payload: optionData,
     });
   };
@@ -83,7 +83,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData, activeTab }) => {
           )}
         />
       </View>
-      <AnimatedBottomSheet bs={bs} fall={fall} activeTab />
+      <AnimatedBottomSheet bs={bs} fall={fall} />
     </>
   );
 };
