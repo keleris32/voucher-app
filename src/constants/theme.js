@@ -12,6 +12,7 @@ export const COLORS = {
   black: '#020202',
   blue: '#4096FE',
   acomartBlue: '#1b2e4b',
+  acomartBlue2: '#1b55e2',
   red: '#F20012',
   gray: '#777777',
   gray2: '#C8C4C4',
