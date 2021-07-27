@@ -98,7 +98,13 @@ const Home = () => {
               styles.Tab,
               activeTab.afrocinema === true ? styles.activeTab : '',
             ]}>
-            <Text style={styles.tabText}>Afrocinema</Text>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab.afrocinema === true ? styles.activeText : '',
+              ]}>
+              Afrocinema
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -109,7 +115,13 @@ const Home = () => {
               styles.Tab,
               activeTab.afrostream === true ? styles.activeTab : '',
             ]}>
-            <Text style={styles.tabText}>Afrostream</Text>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab.afrostream === true ? styles.activeText : '',
+              ]}>
+              Afrostream
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -189,5 +201,10 @@ const styles = StyleSheet.create({
   tabText: {
     ...FONTS.h4,
     letterSpacing: 1,
+    color: COLORS.black,
+  },
+
+  activeText: {
+    color: COLORS.acomartBlue,
   },
 });

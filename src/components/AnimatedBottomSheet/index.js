@@ -13,11 +13,8 @@ import { GlobalContext } from '../../context/Provider';
 
 const AnimatedBottomSheet = ({ bs, fall }) => {
   const {
-    selectedCardState: { isAfrocinemaActive, isAfrostreamActive },
+    selectedCardState: { isAfrocinemaActive },
   } = useContext(GlobalContext);
-
-  console.log('isAfrocinemaActive>>', isAfrocinemaActive);
-  console.log('isAfrostreamActive>>', isAfrostreamActive);
 
   // Rendered component for reanimated-bottom-sheet
   const renderContent = () => (
@@ -68,7 +65,6 @@ const styles = StyleSheet.create({
 
   panelHeader: {
     alignItems: 'center',
-    backgroundColor: 'red',
   },
 
   panelHandle: {

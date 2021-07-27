@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   title: {
     ...FONTS.h2,
     marginBottom: wp('1.25%'),
+    color: COLORS.acomartBlue,
   },
 
   device: {
@@ -44,5 +45,6 @@ const styles = StyleSheet.create({
 
   price: {
     ...FONTS.h3,
+    color: COLORS.acomartBlue,
   },
 });
