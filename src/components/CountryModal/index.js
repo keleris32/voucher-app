@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.base / 2,
     paddingHorizontal: SIZES.base,
     marginVertical: SIZES.base,
-    backgroundColor: COLORS.acomartBlue,
+    backgroundColor: COLORS.acomartBlue2,
   },
 
   countryBarText: {

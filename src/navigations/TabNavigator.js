@@ -35,7 +35,7 @@ const TabNavigator = () => {
           },
         })}
         tabBarOptions={{
-          activeTintColor: COLORS.red,
+          activeTintColor: COLORS.acomartBlue2,
           inactiveTintColor: COLORS.gray,
           showLabel: true,
           showIcon: true,

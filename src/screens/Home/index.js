@@ -31,6 +31,11 @@ const Home = () => {
     afrostream: false,
   });
 
+  // Global state variable for the retailer's data
+  const {
+    getRetailerState: { retailerData },
+  } = useContext(GlobalContext);
+
   // State variable for filtered search data
   const [filteredData, setFilteredData] = useState({});
 
@@ -73,16 +78,18 @@ const Home = () => {
     getAfrostreamData();
   }, []);
 
+  // To separate Retailer's first name and last name, and return both names in an array
+  const name = retailerData.name.split(' ');
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ImageBackground source={images.mainBg} style={styles.bgImage}> */}
       <ImageBackground
-        source={images.splashScreenBg}
+        source={images.splashScreenBg2}
         style={styles.headerImgBg}>
         <View style={styles.headerBar}>
           <View>
             <Text style={styles.headerText}>Welcome,</Text>
-            <Text style={styles.headerUsername}>Charles</Text>
+            <Text style={styles.headerUsername}>{name[0]}</Text>
           </View>
           <View>
             <Icon name="user-circle" style={styles.userIcon} />
@@ -132,7 +139,6 @@ const Home = () => {
         />
       )}
       {activeTab.afrostream && <AfrostreamComponent />}
-      {/* </ImageBackground> */}
     </SafeAreaView>
   );
 };
@@ -143,11 +149,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
-  // bgImage: {
-  //   flex: 1,
-  //   resizeMode: 'cover',
-  // },
 
   headerImgBg: {
     height: hp('15%'),
@@ -189,7 +190,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0.5,
     backgroundColor: COLORS.lightGray2,
-    // borderBottomRightRadius: SIZES.base,
   },
 
   activeTab: {
@@ -204,6 +204,6 @@ const styles = StyleSheet.create({
   },
 
   activeText: {
-    color: COLORS.acomartBlue,
+    color: COLORS.acomartBlue2,
   },
 });

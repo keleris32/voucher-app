@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
             <TouchableOpacity
               onPress={() => navigation.replace('SplashScreen')}>
-              <Image source={icons.redAcomart} style={styles.logo} />
+              <Image source={icons.fullAcomart} style={styles.logo} />
             </TouchableOpacity>
             <View style={styles.formContainer}>
               <CustomInput
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
 
   logo: {
     resizeMode: 'contain',
-    width: wp('25%'),
+    width: wp('200%'),
     height: hp('12.5%'),
   },
 

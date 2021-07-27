@@ -49,7 +49,7 @@ const AfrocinemaPanelData = ({ bs }) => {
                 <Text style={{ ...FONTS.h4 }}>Release year: </Text>
                 <Text style={{ color: COLORS.black, ...FONTS.body4 }}>
                   {data.year_of_release} (
-                  <Text style={{ color: COLORS.acomartBlue }}>
+                  <Text style={{ color: COLORS.acomartBlue2 }}>
                     {data.territory_of_origin}
                   </Text>
                   )
@@ -57,19 +57,19 @@ const AfrocinemaPanelData = ({ bs }) => {
               </View>
               <View style={styles.description}>
                 <Text style={{ ...FONTS.h4 }}>Director: </Text>
-                <Text style={{ color: COLORS.acomartBlue, ...FONTS.body4 }}>
+                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
                   {data.director}
                 </Text>
               </View>
               <View style={styles.description}>
                 <Text style={{ ...FONTS.h4 }}>Language: </Text>
-                <Text style={{ color: COLORS.acomartBlue, ...FONTS.body4 }}>
+                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
                   {data.language}
                 </Text>
               </View>
               <View style={styles.description}>
                 <Text style={{ ...FONTS.h4 }}>PG: </Text>
-                <Text style={{ color: COLORS.acomartBlue, ...FONTS.body4 }}>
+                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
                   {data.parental_guidance_age}
                 </Text>
               </View>

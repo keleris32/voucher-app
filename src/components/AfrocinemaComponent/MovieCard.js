@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLORS.acomartBlue,
+    color: COLORS.acomartBlue2,
     ...FONTS.h3,
   },
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    color: COLORS.acomartBlue,
+    color: COLORS.acomartBlue2,
     ...FONTS.h3,
   },
 });

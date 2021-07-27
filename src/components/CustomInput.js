@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginRight: SIZES.base * 1.5,
     borderTopLeftRadius: SIZES.base,
     borderBottomLeftRadius: SIZES.base,
-    backgroundColor: COLORS.acomartBlue,
+    backgroundColor: COLORS.acomartBlue2,
   },
 
   phoneText: {

@@ -200,7 +200,7 @@ const Documents = ({ navigation }) => {
                       styles.pickerBtn,
                       {
                         borderWidth: selectedFile ? 4 : 0,
-                        borderColor: selectedFile ? COLORS.red : '',
+                        borderColor: selectedFile ? COLORS.acomartBlue2 : '',
                       },
                     ]}
                     onPress={selectDocument}>

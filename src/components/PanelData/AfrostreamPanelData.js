@@ -40,13 +40,13 @@ const AfrostreamPanelData = ({ bs }) => {
           <View style={styles.detailsWrapper}>
             <View style={styles.description}>
               <Text style={{ ...FONTS.h4 }}>Device Limit: </Text>
-              <Text style={{ color: COLORS.acomartBlue, ...FONTS.body4 }}>
+              <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
                 {data.device_limit}
               </Text>
             </View>
             <View style={styles.description}>
               <Text style={{ ...FONTS.h4 }}>Duration: </Text>
-              <Text style={{ color: COLORS.acomartBlue, ...FONTS.body4 }}>
+              <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
                 {data.duration_in_days} {no_of_days}
               </Text>
             </View>

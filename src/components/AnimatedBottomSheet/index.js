@@ -24,7 +24,9 @@ const AnimatedBottomSheet = ({ bs, fall }) => {
       </TouchableOpacity>
       <View style={styles.contentContainer}>
         <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
+          <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+            <View style={styles.panelHandle} />
+          </TouchableOpacity>
         </View>
         {isAfrocinemaActive ? (
           <AfrocinemaPanelData bs={bs} />

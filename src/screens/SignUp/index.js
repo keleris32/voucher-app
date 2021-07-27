@@ -83,13 +83,13 @@ const SignUp = ({ navigation }) => {
         errors,
       }) => (
         <View style={styles.container}>
-          <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              alwaysBounceVertical={true}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={true}>
+            <ImageBackground source={images.loginBg} style={styles.bgImage}>
               <TouchableOpacity
                 onPress={() => navigation.replace('SplashScreen')}>
-                <Image source={icons.redAcomart} style={styles.logo} />
+                <Image source={icons.fullAcomart} style={styles.logo} />
               </TouchableOpacity>
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
@@ -210,8 +210,8 @@ const SignUp = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
-            </ScrollView>
-          </ImageBackground>
+            </ImageBackground>
+          </ScrollView>
         </View>
       )}
     </Formik>
@@ -230,11 +230,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover',
+    // paddingVertical: wp('1.25%'),
   },
 
   logo: {
     resizeMode: 'contain',
-    width: wp('25%'),
+    width: wp('200%'),
     height: hp('12.5%'),
     alignSelf: 'center',
     marginTop: SIZES.padding,
@@ -242,7 +243,8 @@ const styles = StyleSheet.create({
 
   formContainer: {
     width: wp('80%'),
-    marginVertical: SIZES.largeTitle,
+    marginTop: SIZES.largeTitle,
+    marginBottom: wp('25%'),
   },
 
   input: {

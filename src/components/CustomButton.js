@@ -16,9 +16,11 @@ const CustomButton = ({ buttonText, onPress, disabled }) => {
       disabled={disabled}
       style={[
         styles.button,
-        { backgroundColor: disabled ? COLORS.gray2 : COLORS.red },
+        { backgroundColor: disabled ? COLORS.gray2 : COLORS.acomartBlue2 },
       ]}>
-      {disabled && <ActivityIndicator color={COLORS.red} size="large" />}
+      {disabled && (
+        <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
+      )}
       <Text style={[styles.text, { marginLeft: disabled ? wp('2.5%') : null }]}>
         {buttonText}
       </Text>
