@@ -129,7 +129,6 @@ const Home = () => {
         <AfrocinemaComponent
           filteredData={filteredData}
           setFilteredData={setFilteredData}
-          activeTab={activeTab}
         />
       )}
       {activeTab.afrostream && <AfrostreamComponent />}

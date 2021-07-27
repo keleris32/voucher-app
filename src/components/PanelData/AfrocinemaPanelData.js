@@ -4,12 +4,16 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { useNavigation } from '@react-navigation/native';
 
 import { GlobalContext } from '../../context/Provider';
-import { COLORS, SIZES, FONTS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import CustomButton from '../CustomButton';
+import { PAYMENTS } from '../../constants/routeNames';
 
-const AfrocinemaPanelData = () => {
+const AfrocinemaPanelData = ({ bs }) => {
+  let navigation = useNavigation();
+
   // Global state variable for selectedCardData (selectedAfrocinemaData)
   const {
     selectedCardState: { selectedAfrocinemaData },
@@ -71,7 +75,12 @@ const AfrocinemaPanelData = () => {
               </View>
             </View>
             <View style={{ marginBottom: wp('10%') }}>
-              <CustomButton buttonText={['\u0024 ', data.starting_price]} />
+              <CustomButton
+                buttonText={['\u0024 ', data.starting_price]}
+                onPress={() => {
+                  navigation.navigate(PAYMENTS), bs.current.snapTo(1);
+                }}
+              />
             </View>
           </View>
         </View>

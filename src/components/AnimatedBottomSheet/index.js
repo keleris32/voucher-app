@@ -26,7 +26,11 @@ const AnimatedBottomSheet = ({ bs, fall }) => {
         <View style={styles.panelHeader}>
           <View style={styles.panelHandle} />
         </View>
-        {isAfrocinemaActive ? <AfrocinemaPanelData /> : <AfrostreamPanelData />}
+        {isAfrocinemaActive ? (
+          <AfrocinemaPanelData bs={bs} />
+        ) : (
+          <AfrostreamPanelData bs={bs} />
+        )}
       </View>
     </>
   );
