@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionWrapper: {
-    flex: 0.8125,
+    flex: 0.775,
     justifyContent: 'space-between',
     paddingVertical: wp('2.5%'),
     marginHorizontal: wp('2.5%'),
