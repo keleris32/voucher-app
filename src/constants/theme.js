@@ -8,7 +8,8 @@ import {
 
 export const COLORS = {
   white: '#fff',
-  white2: '#F9F9F9',
+  white2: '#fcfcfc',
+  offWhite: '#f8f8ff',
   black: '#020202',
   blue: '#4096FE',
   acomartBlue: '#1b2e4b',
