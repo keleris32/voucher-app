@@ -2,12 +2,16 @@ import {
   BACKEND_URL,
   EMAIL_CALLBACK_URL,
   VERIFICATION_CALLBACK_URL,
+  STRIPE_PUBLIC_KEY,
+  FLUTTERWAVE_PUBLIC_KEY,
 } from '@env';
 
 const EnvironmentVariables = {
   BACKEND_URL,
   EMAIL_CALLBACK_URL,
   VERIFICATION_CALLBACK_URL,
+  STRIPE_PUBLIC_KEY,
+  FLUTTERWAVE_PUBLIC_KEY,
 };
 
 export default EnvironmentVariables;
