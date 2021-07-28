@@ -48,6 +48,8 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
     }
   };
 
+  // console.log('afrocinemaData>>', JSON.stringify(afrocinemaData, null, 2));
+
   // ------------------------------------------------------- >
   // Animations
 
@@ -75,7 +77,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
               }}>
               <MovieCard
                 title={item.title}
-                image={item.featured_image}
+                image={item.landscape_image}
                 parentalGuidance={item.parental_guidance_age}
                 price={item.starting_price}
               />

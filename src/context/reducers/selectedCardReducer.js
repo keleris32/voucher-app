@@ -1,4 +1,7 @@
 import {
+  GET_PAYMENT_DATA,
+  PROCEEDED_AFROCINEMA_PAYMENT,
+  PROCEEDED_AFROSTREAM_PAYMENT,
   SELECTED_AFROCINEMA_CARD,
   SELECTED_AFROSTREAM_CARD,
 } from '../../constants/actionTypes';
@@ -19,6 +22,12 @@ const selectedCardReducer = (state, { type, payload }) => {
         selectedAfrostreamData: payload,
         isAfrocinemaActive: false,
         isAfrostreamActive: true,
+      };
+
+    case GET_PAYMENT_DATA:
+      return {
+        ...state,
+        paymentData: payload,
       };
 
     default:

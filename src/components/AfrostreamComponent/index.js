@@ -25,6 +25,8 @@ const AfrostreamComponent = () => {
     });
   };
 
+  // console.log('afrostreamData>>', JSON.stringify(afrostreamData, null, 2));
+
   // ------------------------------------------------------- >
   // Animations
 

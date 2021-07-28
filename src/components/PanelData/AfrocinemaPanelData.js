@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Alert } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -10,6 +10,8 @@ import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
+import { GET_PAYMENT_DATA } from '../../constants/actionTypes';
+import axiosInstance from '../../helpers/axiosInterceptor';
 
 const AfrocinemaPanelData = ({ bs }) => {
   let navigation = useNavigation();
@@ -22,13 +24,21 @@ const AfrocinemaPanelData = ({ bs }) => {
   // Initialize a variable and store Global state
   const data = selectedAfrocinemaData;
 
+  const proceedToPaymentScreen = async () => {
+    // Close bottom sheet
+    bs.current.snapTo(1);
+
+    // Navigate to Payment Screen
+    navigation.navigate(PAYMENTS);
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <Image
             source={{
-              uri: data.featured_image,
+              uri: data.landscape_image,
             }}
             style={styles.image}
           />
@@ -77,9 +87,7 @@ const AfrocinemaPanelData = ({ bs }) => {
             <View style={{ marginBottom: wp('10%') }}>
               <CustomButton
                 buttonText={['\u0024 ', data.starting_price]}
-                onPress={() => {
-                  navigation.navigate(PAYMENTS), bs.current.snapTo(1);
-                }}
+                onPress={() => proceedToPaymentScreen(bs)}
               />
             </View>
           </View>

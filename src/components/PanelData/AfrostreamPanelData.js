@@ -10,6 +10,11 @@ import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS, SIZES } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
+import {
+  GET_PAYMENT_DATA,
+  PROCEEDED_AFROSTREAM_PAYMENT,
+} from '../../constants/actionTypes';
+import axiosInstance from '../../helpers/axiosInterceptor';
 
 const AfrostreamPanelData = ({ bs }) => {
   let navigation = useNavigation();
@@ -29,6 +34,14 @@ const AfrostreamPanelData = ({ bs }) => {
   } else {
     no_of_days = 'day';
   }
+
+  const proceedToPaymentScreen = async () => {
+    // Close bottom sheet
+    bs.current.snapTo(1);
+
+    // Navigate to Payment Screen
+    navigation.navigate(PAYMENTS);
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -53,9 +66,7 @@ const AfrostreamPanelData = ({ bs }) => {
             <View style={{ marginTop: wp('15%') }}>
               <CustomButton
                 buttonText={['\u0024 ', data.charging_price]}
-                onPress={() => {
-                  navigation.navigate(PAYMENTS), bs.current.snapTo(1);
-                }}
+                onPress={() => proceedToPaymentScreen()}
               />
             </View>
           </View>

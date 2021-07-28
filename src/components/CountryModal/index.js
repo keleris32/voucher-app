@@ -12,26 +12,23 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
+import axiosInstance from '../../helpers/axiosInterceptor';
 
 const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
 
   // Fetch data from the countries api and store in the countryData state variable
-  useEffect(() => {
-    const fetchCountryData = async () => {
-      try {
-        const request = await axios.get('http://10.0.2.2:8000/api/countries');
-        setCountryData(request.data.data.countries);
-        props.setFetchError(false);
-      } catch (err) {
-        props.setFetchError(true);
-      }
-    };
-    fetchCountryData();
-  }, []);
+  const fetchCountryData = async () => {
+    try {
+      const request = await axiosInstance.get('countries');
+      setCountryData(request.data.data.countries);
+      props.setFetchError(false);
+    } catch (err) {
+      props.setFetchError(true);
+    }
+  };
 
   const selectedOption = optionData => {
     // Update the state with the selected option
@@ -44,6 +41,10 @@ const CountryModal = props => {
     // Set isModalVisible to false to hide modal
     props.setIsModalVisible(!props.isModalVisible);
   };
+
+  useEffect(() => {
+    fetchCountryData();
+  }, []);
 
   return (
     <View>
@@ -88,7 +89,7 @@ export default CountryModal;
 
 const styles = StyleSheet.create({
   countryBar: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
