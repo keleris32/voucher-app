@@ -165,7 +165,7 @@ const PaymentScreenComponent = () => {
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.container}>
             <View style={styles.wrapper}>
-              <Text>Hiiiiii from Payments</Text>
+              <Text style={styles.title}>Customer's Details</Text>
               <TouchableOpacity
                 disabled={fetchError}
                 onPress={() => setIsModalVisible(true)}>
@@ -178,27 +178,29 @@ const PaymentScreenComponent = () => {
                   setFetchError={setFetchError}
                 />
               </TouchableOpacity>
-              <CustomInput
-                placeholder="Phone Number"
-                iconType="phone"
-                selectedCountry={selectedCountry}
-                onChangeText={props.handleChange('phoneNumber')}
-                onBlur={props.handleBlur('phoneNumber')}
-                value={props.values.phoneNumber}
-                errors={props.errors.phoneNumber}
-                touched={props.touched.phoneNumber}
-              />
+              <View style={{ marginVertical: wp('7.5%') }}>
+                <CustomInput
+                  placeholder="Phone Number"
+                  iconType="phone"
+                  selectedCountry={selectedCountry}
+                  onChangeText={props.handleChange('phoneNumber')}
+                  onBlur={props.handleBlur('phoneNumber')}
+                  value={props.values.phoneNumber}
+                  errors={props.errors.phoneNumber}
+                  touched={props.touched.phoneNumber}
+                />
 
-              {/* If this field contains an error and it has been touched, then display the error message */}
-              {props.errors.phoneNumber && props.touched.phoneNumber && (
-                <Text style={styles.errors}>{props.errors.phoneNumber}</Text>
-              )}
+                {/* If this field contains an error and it has been touched, then display the error message */}
+                {props.errors.phoneNumber && props.touched.phoneNumber && (
+                  <Text style={styles.errors}>{props.errors.phoneNumber}</Text>
+                )}
 
-              <CustomButton
-                disabled={loading}
-                buttonText="Proceed to Checkout"
-                onPress={props.handleSubmit}
-              />
+                <CustomButton
+                  disabled={loading}
+                  buttonText="Proceed to Checkout"
+                  onPress={props.handleSubmit}
+                />
+              </View>
             </View>
           </View>
         </SafeAreaView>
@@ -219,6 +221,12 @@ const styles = StyleSheet.create({
 
   wrapper: {
     width: wp('85%'),
+  },
+
+  title: {
+    textAlign: 'center',
+    marginBottom: wp('15%'),
+    ...FONTS.h2,
   },
 
   errors: {

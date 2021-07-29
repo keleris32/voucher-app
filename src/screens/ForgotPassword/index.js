@@ -83,7 +83,7 @@ const ForgotPassword = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <Image source={icons.redAcomart} style={styles.logo} />
+            {/* <Image source={icons.fullAcomart} style={styles.logo} /> */}
 
             <View style={styles.screenTitleCon}>
               <Text style={styles.screenTitle}>Password Recovery</Text>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 
   logo: {
     resizeMode: 'contain',
-    width: wp('25%'),
+    width: wp('200%'),
     height: hp('12.5%'),
   },
 
