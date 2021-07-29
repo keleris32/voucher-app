@@ -1,5 +1,12 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  SafeAreaView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   widthPercentageToDP as wp,
@@ -29,17 +36,19 @@ const Settings = () => {
   };
 
   return (
-    <View style={{ padding: wp('5%') }}>
-      <TouchableOpacity onPress={handleLogOut}>
-        <View style={styles.container}>
-          <View style={styles.logOutContainer}>
-            <Icon name="logout" style={styles.logOutIcon} />
-            <Text style={styles.logOutText}>Log Out</Text>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleLogOut}>
+          <View style={styles.logOutWrapper}>
+            <View style={styles.logOutContainer}>
+              <Icon name="logout" style={styles.logOutIcon} />
+              <Text style={styles.logOutText}>Log Out</Text>
+            </View>
+            <Icon name="chevron-right" style={styles.rightArrowIcon} />
           </View>
-          <Icon name="chevron-right" style={styles.rightArrowIcon} />
-        </View>
-      </TouchableOpacity>
-    </View>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -47,12 +56,19 @@ export default Settings;
 
 const styles = StyleSheet.create({
   container: {
+    height: hp('100%'),
+    padding: wp('5%'),
+    backgroundColor: COLORS.offWhite,
+  },
+
+  logOutWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: wp('3%'),
     borderWidth: 1,
     borderRadius: SIZES.base,
+    borderColor: COLORS.gray,
   },
 
   logOutContainer: {
