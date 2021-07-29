@@ -5,7 +5,7 @@ import EnvironmentVariables from '../config/env';
 let headers = {};
 
 const axiosInstance = axios.create({
-  baseURL: EnvironmentVariables.TEST_SERVER_URL,
+  baseURL: EnvironmentVariables.BACKEND_URL,
 });
 
 axiosInstance.interceptors.request.use(

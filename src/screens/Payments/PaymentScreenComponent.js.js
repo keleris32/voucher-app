@@ -30,7 +30,6 @@ const PaymentScreenComponent = () => {
   const [card, setCard] = useState(CardFieldInput.Details | null);
   const { confirmPayment, handleCardAction } = useStripe();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { paymentDetails, setPaymentDetails } = useState({});
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -130,21 +129,6 @@ const PaymentScreenComponent = () => {
       // ---------------- End of Else ------------------>
     }
   };
-
-  // const initializePaymentSheet = async () => {
-  //   await getClientSecret();
-
-  //   const { error } = await initPaymentSheet({
-  //     customerId: paymentDetails.customer,
-  //     paymentIntentClientSecret: paymentDetails.client_secret,
-  //   });
-
-  //   if (!error) {
-  //     setLoading(true);
-  //   } else {
-  //     console.log('initPayment error>>', error);
-  //   }
-  // };
 
   const openPaymentSheet = async () => {
     await getClientSecret();

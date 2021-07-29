@@ -6,6 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -15,15 +16,21 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
+import SearchBar from '../AfrocinemaComponent/SearchBar';
 
 const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+
+  // State variable for filtered search data
+  const [filteredData, setFilteredData] = useState({});
 
   // Fetch data from the countries api and store in the countryData state variable
   const fetchCountryData = async () => {
     try {
       const request = await axiosInstance.get('countries');
       setCountryData(request.data.data.countries);
+      setFilteredData(request.data.data.countries);
       props.setFetchError(false);
     } catch (err) {
       props.setFetchError(true);
@@ -42,6 +49,24 @@ const CountryModal = props => {
     props.setIsModalVisible(!props.isModalVisible);
   };
 
+  const searchFilterFunction = text => {
+    // Check if inserted text is not empty
+    if (text) {
+      // If it isn't empty, filter afrocinemaData and update filteredData
+      const newData = countryData.filter(item => {
+        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearchValue(text);
+    } else {
+      // if it is empty, update filteredData with afrocinemaData
+      setFilteredData(countryData);
+      setSearchValue(text);
+    }
+  };
+
   useEffect(() => {
     fetchCountryData();
   }, []);
@@ -58,8 +83,26 @@ const CountryModal = props => {
         transparent={true}
         visible={props.isModalVisible}>
         <View style={styles.Container}>
+          <View style={{ width: '100%', paddingHorizontal: wp('5%') }}>
+            <SearchBar
+              searchValue={searchValue}
+              searchFilterFunction={searchFilterFunction}
+            />
+          </View>
           <View style={styles.modalContainer}>
-            <ScrollView>
+            <FlatList
+              data={filteredData}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => selectedOption(item)}>
+                  <View style={styles.optionContainer}>
+                    <Text style={styles.optionName}>{item.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+            {/* <ScrollView>
               {countryData?.map(option => {
                 return (
                   <TouchableOpacity
@@ -71,7 +114,7 @@ const CountryModal = props => {
                   </TouchableOpacity>
                 );
               })}
-            </ScrollView>
+            </ScrollView> */}
           </View>
           <TouchableOpacity
             onPress={() => props.setIsModalVisible(!props.isModalVisible)}>
@@ -144,7 +187,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: SIZES.base,
     paddingVertical: SIZES.font,
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
 
   optionName: {
