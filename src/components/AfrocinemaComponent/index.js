@@ -57,7 +57,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   const fall = new Value(1);
 
   // ------------------------------------------------------- >
-
+  console.log(JSON.stringify(afrocinemaData, null, 2));
   return (
     <>
       <View style={styles.container}>

@@ -5,8 +5,16 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { Home, Transactions, Payments, Settings } from '../screens';
-import { HOME, TRANSACTIONS, PAYMENTS } from '../constants/routeNames';
+import {
+  HOME,
+  TRANSACTIONS,
+  PAYMENTS,
+  SETTINGS,
+} from '../constants/routeNames';
 import { COLORS } from '../constants';
+import HomeStack from '../ScreenStacks/HomeStack';
+import TransactionsStack from '../ScreenStacks/TransactionsStack';
+import SettingsStack from '../ScreenStacks/SettingsStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +32,7 @@ const TabNavigator = () => {
               iconName = 'history-toggle-off';
             } else if (route.name === PAYMENTS) {
               iconName = 'payment';
-            } else if (route.name === 'Settings') {
+            } else if (route.name === SETTINGS) {
               iconName = 'settings';
             }
 
@@ -48,10 +56,10 @@ const TabNavigator = () => {
             height: hp('10%'),
           },
         }}>
-        <Tab.Screen name={HOME} component={Home} />
-        <Tab.Screen name={TRANSACTIONS} component={Transactions} />
-        <Tab.Screen name={PAYMENTS} component={Payments} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen name={HOME} component={HomeStack} />
+        {/* <Tab.Screen name={TRANSACTIONS} component={TransactionsStack} /> */}
+        {/* <Tab.Screen name={PAYMENTS} component={Payments} /> */}
+        <Tab.Screen name={SETTINGS} component={SettingsStack} />
       </Tab.Navigator>
     </>
   );

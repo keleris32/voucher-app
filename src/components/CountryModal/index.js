@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,12 +15,15 @@ import {
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
+import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import SearchBar from '../AfrocinemaComponent/SearchBar';
 
 const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+
+  const { getRetailerDispatch } = useContext(GlobalContext);
 
   // State variable for filtered search data
   const [filteredData, setFilteredData] = useState({});

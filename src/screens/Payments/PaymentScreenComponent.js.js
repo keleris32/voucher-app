@@ -138,7 +138,7 @@ const PaymentScreenComponent = () => {
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
-      Alert.alert('Success', 'Your order is confirmed!', [
+      Alert.alert('Success', 'Your order has been confirmed!', [
         {
           text: 'OK',
           onPress: () => {

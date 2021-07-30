@@ -12,7 +12,7 @@ const SubscriptionCard = props => {
         <Text style={styles.device}>Device limit: {props.deviceLimit}</Text>
       </View>
       <Text style={styles.price}>
-        {'\u0024 '}
+        {'\u20A6 '}
         {props.price}
       </Text>
     </View>

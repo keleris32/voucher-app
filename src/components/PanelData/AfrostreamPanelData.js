@@ -10,11 +10,6 @@ import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS, SIZES } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
-import {
-  GET_PAYMENT_DATA,
-  PROCEEDED_AFROSTREAM_PAYMENT,
-} from '../../constants/actionTypes';
-import axiosInstance from '../../helpers/axiosInterceptor';
 
 const AfrostreamPanelData = ({ bs }) => {
   let navigation = useNavigation();
@@ -65,7 +60,7 @@ const AfrostreamPanelData = ({ bs }) => {
             </View>
             <View style={{ marginTop: wp('15%') }}>
               <CustomButton
-                buttonText={['\u0024 ', data.charging_price]}
+                buttonText={['\u20A6 ', data.charging_price]}
                 onPress={() => proceedToPaymentScreen()}
               />
             </View>

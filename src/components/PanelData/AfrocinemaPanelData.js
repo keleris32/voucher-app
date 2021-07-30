@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -10,8 +11,6 @@ import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
-import { GET_PAYMENT_DATA } from '../../constants/actionTypes';
-import axiosInstance from '../../helpers/axiosInterceptor';
 
 const AfrocinemaPanelData = ({ bs }) => {
   let navigation = useNavigation();

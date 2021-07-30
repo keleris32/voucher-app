@@ -8,6 +8,11 @@ const getRetailerReducer = (state, { type, payload }) => {
         retailerData: payload,
       };
 
+    case 'GET_RETAILER_COUNTRY_DATA':
+      return {
+        ...state,
+        retailerCountryData: payload,
+      };
     default:
       return state;
   }

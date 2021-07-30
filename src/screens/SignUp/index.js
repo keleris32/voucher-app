@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -56,6 +57,15 @@ const SignUp = ({ navigation }) => {
 
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
+
+    Alert.alert('Success', 'Your registration was Successful', [
+      {
+        text: 'OK',
+        onPress: () => {
+          navigation.replace(LOGIN);
+        },
+      },
+    ]);
   };
 
   return (

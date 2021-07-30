@@ -10,7 +10,7 @@ const SearchBar = ({ searchValue, searchFilterFunction }) => {
     <View style={styles.container}>
       <Icons name="search" style={styles.icon} />
       <TextInput
-        placeholder="Search Movies"
+        placeholder="Search"
         style={styles.input}
         value={searchValue}
         onChangeText={text => searchFilterFunction(text)}

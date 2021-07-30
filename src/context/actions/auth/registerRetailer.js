@@ -41,10 +41,10 @@ export default ({
         AsyncStorage.setItem('token', res.data.data.jwtToken);
 
         // If the Login operation is successfully, store the retailer object in local storage
-        AsyncStorage.setItem(
-          'retailer',
-          JSON.stringify(res.data.data.retailer),
-        );
+        // AsyncStorage.setItem(
+        //   'retailer',
+        //   JSON.stringify(res.data.data.retailer),
+        // );
 
         dispatch({
           type: REGISTER_SUCCESS,
