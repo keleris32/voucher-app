@@ -1,0 +1,6 @@
+module Pods_VoucherApp {
+  umbrella header "Pods-VoucherApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

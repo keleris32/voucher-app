@@ -8,6 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/Feather';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -38,11 +39,36 @@ const Settings = () => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
+        <View>
+          <TouchableOpacity onPress={handleLogOut}>
+            <View style={[styles.logOutWrapper, { marginBottom: wp('7.5%') }]}>
+              <View style={styles.logOutContainer}>
+                <Icons name="user" style={styles.logOutIcon} />
+                <Text style={styles.logOutText}>Account Settings</Text>
+              </View>
+              <Icon name="chevron-right" style={styles.rightArrowIcon} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogOut}>
+            <View style={styles.logOutWrapper}>
+              <View style={styles.logOutContainer}>
+                <Icons name="lock" style={styles.logOutIcon} />
+                <Text style={styles.logOutText}>Change Password</Text>
+              </View>
+              <Icon name="chevron-right" style={styles.rightArrowIcon} />
+            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={handleLogOut}>
           <View style={styles.logOutWrapper}>
             <View style={styles.logOutContainer}>
-              <Icon name="logout" style={styles.logOutIcon} />
-              <Text style={styles.logOutText}>Log Out</Text>
+              <Icon
+                name="logout"
+                style={[styles.logOutIcon, { color: COLORS.red }]}
+              />
+              <Text style={[styles.logOutText, { color: COLORS.red }]}>
+                Log Out
+              </Text>
             </View>
             <Icon name="chevron-right" style={styles.rightArrowIcon} />
           </View>
@@ -56,8 +82,10 @@ export default Settings;
 
 const styles = StyleSheet.create({
   container: {
-    height: hp('100%'),
-    padding: wp('5%'),
+    height: '100%',
+    paddingHorizontal: wp('5%'),
+    paddingVertical: wp('10%'),
+    justifyContent: 'space-between',
     backgroundColor: COLORS.offWhite,
   },
 
@@ -78,13 +106,13 @@ const styles = StyleSheet.create({
   },
 
   logOutIcon: {
-    fontSize: hp('4.75%'),
-    color: COLORS.red,
+    fontSize: hp('4%'),
+    color: COLORS.acomartBlue2,
   },
 
   logOutText: {
     marginHorizontal: wp('2%'),
-    color: COLORS.red,
+    color: COLORS.black,
     ...FONTS.h4,
   },
 

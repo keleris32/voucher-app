@@ -8,6 +8,8 @@ import Settings from './Settings';
 import ForgotPassword from './ForgotPassword';
 import Documents from './Documents';
 import PendingVerification from './PendingVerification';
+import AccountSettings from './AccountSettings';
+import ChangePassword from './ChangePassword';
 
 export {
   Home,
@@ -20,4 +22,6 @@ export {
   ForgotPassword,
   Documents,
   PendingVerification,
+  AccountSettings,
+  ChangePassword,
 };
