@@ -136,7 +136,7 @@ const Documents = ({ navigation }) => {
   const selectDocument = async () => {
     try {
       // Document Picker to select a file
-      const file = await DocumentPicker.pick({
+      const file = await DocumentPicker.pickMultiple({
         // The type of file eligible for selection
         type: [
           DocumentPicker.types.pdf,
@@ -186,7 +186,11 @@ const Documents = ({ navigation }) => {
                   Indicate your means of identification and select a file.
                 </Text>
                 <View style={styles.inputWrapper}>
-                  <TextInput
+                  <Text style={{ flex: 1, ...FONTS.body4 }}>
+                    Driver's License, International Passport, Social Security
+                    Number, Voter's card, National Identification Number etc.
+                  </Text>
+                  {/* <TextInput
                     style={styles.input}
                     onChangeText={props.handleChange('documentName')}
                     value={props.values.documentName}
@@ -194,7 +198,7 @@ const Documents = ({ navigation }) => {
                     errors={props.errors.documentName}
                     touched={props.touched.documentName}
                     placeholder="Driver's License etc.."
-                  />
+                  /> */}
                   <TouchableOpacity
                     style={[
                       styles.pickerBtn,
@@ -264,6 +268,7 @@ const styles = StyleSheet.create({
 
   inputWrapper: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginTop: SIZES.padding,
   },
 
@@ -281,7 +286,8 @@ const styles = StyleSheet.create({
   },
 
   pickerBtn: {
-    width: wp('10%'),
+    height: hp('7.5%'),
+    width: wp('12.5%'),
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: SIZES.base * 2,

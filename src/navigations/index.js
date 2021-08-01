@@ -76,7 +76,7 @@ const AppNavContainer = () => {
           {isLoggedIn && retailerData?.verification_status !== 'approved' ? (
             <VerificationNavigator />
           ) : isLoggedIn && retailerData?.verification_status === 'approved' ? (
-            <TabNavigator />
+            <VerificationNavigator />
           ) : (
             <AuthNavigator />
           )}
