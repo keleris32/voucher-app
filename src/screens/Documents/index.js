@@ -212,11 +212,6 @@ const Documents = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
 
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.documentName && props.touched.documentName && (
-                  <Text style={styles.errors}>{props.errors.documentName}</Text>
-                )}
-
                 <CustomButton
                   buttonText="Upload"
                   onPress={props.handleSubmit}

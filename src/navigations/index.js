@@ -73,9 +73,11 @@ const AppNavContainer = () => {
           {/* If the retailer has been authenticated but not verified, then redirect to the Verification Navigator to be verified */}
           {/* Else-if the retailer has been authenticated and also verified, then redirect to the Tab Navigator (Home) */}
           {/* Else redirect the retailer to the AuthNavigator to be authenticated. */}
-          {isLoggedIn && retailerData?.verification_status !== 'approved' ? (
+          {isAuthenticated &&
+          retailerData?.verification_status !== 'approved' ? (
             <VerificationNavigator />
-          ) : isLoggedIn && retailerData?.verification_status === 'approved' ? (
+          ) : isAuthenticated &&
+            retailerData?.verification_status === 'approved' ? (
             <VerificationNavigator />
           ) : (
             <AuthNavigator />
