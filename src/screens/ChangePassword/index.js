@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,19 +12,26 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { CustomButton, CustomInput } from '../../components';
-import CountryModal from '../../components/CountryModal';
+import { CustomButton } from '../../components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import PasswordIcon from 'react-native-vector-icons/Ionicons';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import { validationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
+import ErrorMessage from '../../components/ErrorMessage';
 
-const ChangePassword = () => {
+const ChangePassword = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  const [errorComponent, setErrorComponent] = useState(false);
+  const [invalidPassword, setInvalidPassword] = useState(false);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isNewPasswordHidden, setIsNewPasswordHidden] = useState(true);
+  const [isNewPasswordConfirmHidden, setIsNewPasswordConfirmHidden] =
+    useState(true);
 
-  const updateRetailerProfile = formData => {
+  const updateRetailerPassword = formData => {
     setLoading(true);
 
     const data = new FormData();
@@ -34,7 +41,7 @@ const ChangePassword = () => {
     data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
 
     axiosInstance
-      .post('retailer', data)
+      .post('retailer/change-password', data)
       .then(res =>
         Alert.alert('Success', 'Your Profile was updated successfully', [
           {
@@ -45,31 +52,34 @@ const ChangePassword = () => {
           },
         ]),
       )
-      .catch(
-        err => {
-          console.log(JSON.stringify(err, null, 2));
-          Alert.alert('Success', 'Your Profile was updated successfully', [
-            {
-              text: 'OK',
-              onPress: () => {
-                setLoading(false);
+      .catch(err => {
+        console.log(JSON.stringify(err, null, 2));
+        if (err.message === 'Network Error') {
+          Alert.alert(
+            'Error',
+            'Please check your internet connection and try again later',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  setLoading(false);
+                },
               },
-            },
-          ]);
-        },
-        // Alert.alert(
-        //   'Error',
-        //   'Please check your internet connection and try again later',
-        //   [
-        //     {
-        //       text: 'OK',
-        //       onPress: () => {
-        //         setLoading(false);
-        //       },
-        //     },
-        //   ],
-        // ),
-      );
+            ],
+          );
+        } else {
+          setInvalidPassword(true);
+          setLoading(false);
+        }
+      });
+  };
+
+  const checkForPassword = formProp => {
+    if (formProp.newPassword !== formProp.newPasswordConfirmation) {
+      setErrorComponent(true);
+    } else {
+      updateRetailerPassword(formProp);
+    }
   };
 
   return (
@@ -80,17 +90,34 @@ const ChangePassword = () => {
         newPasswordConfirmation: '',
       }}
       validateOnMount={true}
-      onSubmit={values => updateRetailerProfile(values)}
+      onSubmit={values => checkForPassword(values)}
       validationSchema={validationSchema}>
       {props => (
         <View style={styles.container}>
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="chevron-left" style={styles.rightArrowIcon} />
-          </TouchableOpacity> */}
-
-          <Text style={styles.title}>Change Password</Text>
+          <View style={styles.headerWrapper}>
+            <TouchableOpacity
+              style={styles.iconCon}
+              onPress={() => navigation.goBack()}>
+              <Icon name="chevron-left" style={styles.leftArrowIcon} />
+            </TouchableOpacity>
+            <Text style={styles.title}>Change Password</Text>
+          </View>
 
           <View style={styles.wrapper}>
+            {invalidPassword && (
+              <ErrorMessage
+                errorMessage="Your current password is incorrect"
+                setErrorComponent={setInvalidPassword}
+              />
+            )}
+
+            {errorComponent && (
+              <ErrorMessage
+                errorMessage="Your new password does not match!"
+                setErrorComponent={setErrorComponent}
+              />
+            )}
+
             <View style={styles.formContainer}>
               <View style={{ marginBottom: SIZES.radius }}>
                 <Text style={styles.label}>Current Password</Text>
@@ -98,6 +125,7 @@ const ChangePassword = () => {
                   <TextInput
                     style={styles.inputField}
                     placeholder="Current Password"
+                    secureTextEntry={isNewPasswordHidden}
                     underlineColorAndroid="transparent"
                     placeholderTextColor={COLORS.gray}
                     onChangeText={props.handleChange('currentPassword')}
@@ -106,6 +134,15 @@ const ChangePassword = () => {
                     errors={props.errors.currentPassword}
                     touched={props.touched.currentPassword}
                   />
+                  <TouchableOpacity
+                    onPress={() =>
+                      setIsNewPasswordHidden(!isNewPasswordHidden)
+                    }>
+                    <PasswordIcon
+                      name={isNewPasswordHidden ? 'eye' : 'eye-off'}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                 </View>
                 {/* If this field contains an error and it has been touched, then display the error message */}
                 {props.errors.currentPassword &&
@@ -121,6 +158,7 @@ const ChangePassword = () => {
                   <TextInput
                     style={styles.inputField}
                     placeholder="New Password"
+                    secureTextEntry={isNewPasswordConfirmHidden}
                     underlineColorAndroid="transparent"
                     placeholderTextColor={COLORS.gray}
                     onChangeText={props.handleChange('newPassword')}
@@ -129,6 +167,15 @@ const ChangePassword = () => {
                     errors={props.errors.newPassword}
                     touched={props.touched.newPassword}
                   />
+                  <TouchableOpacity
+                    onPress={() =>
+                      setIsNewPasswordConfirmHidden(!isNewPasswordConfirmHidden)
+                    }>
+                    <PasswordIcon
+                      name={isNewPasswordConfirmHidden ? 'eye' : 'eye-off'}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                 </View>
                 {/* If this field contains an error and it has been touched, then display the error message */}
                 {props.errors.newPassword && props.touched.newPassword && (
@@ -141,6 +188,7 @@ const ChangePassword = () => {
                   <TextInput
                     style={styles.inputField}
                     placeholder="New Password Confirmation"
+                    secureTextEntry={isPasswordHidden}
                     underlineColorAndroid="transparent"
                     placeholderTextColor={COLORS.gray}
                     onChangeText={props.handleChange('newPasswordConfirmation')}
@@ -149,6 +197,13 @@ const ChangePassword = () => {
                     errors={props.errors.newPasswordConfirmation}
                     touched={props.touched.newPasswordConfirmation}
                   />
+                  <TouchableOpacity
+                    onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
+                    <PasswordIcon
+                      name={isPasswordHidden ? 'eye' : 'eye-off'}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                 </View>
                 {/* If this field contains an error and it has been touched, then display the error message */}
                 {props.errors.newPasswordConfirmation &&
@@ -189,8 +244,25 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
 
+  headerWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+  },
+
+  iconCon: {
+    transform: [{ translateX: wp('2.5%') }],
+  },
+
+  leftArrowIcon: {
+    fontSize: hp('4.75%'),
+    color: COLORS.black,
+  },
+
   title: {
+    flex: 1,
     marginBottom: wp('12.5%'),
+    textAlign: 'center',
+    marginRight: wp('5%'),
     ...FONTS.h2,
   },
 
@@ -226,5 +298,10 @@ const styles = StyleSheet.create({
   errors: {
     color: COLORS.red,
     ...FONTS.body4,
+  },
+
+  icon: {
+    fontSize: wp('5%'),
+    color: COLORS.black,
   },
 });
