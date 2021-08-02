@@ -25,8 +25,8 @@ const AfrostreamPanelData = ({ bs }) => {
   const data = selectedAfrostreamData;
 
   // Decode the HTML code gotten from data to it's appropraite symbol
-  const decodedSymbol = decode(data?.charging_currency_symbol);
-  console.log(JSON.stringify(data, null, 2));
+  const decodedSymbol = decode(data.charging_currency_symbol);
+  // console.log(JSON.stringify(data, null, 2));
 
   var no_of_days;
 
@@ -66,7 +66,7 @@ const AfrostreamPanelData = ({ bs }) => {
             </View>
             <View style={{ marginTop: wp('15%') }}>
               <NumberFormat
-                value={data?.discounted_charging_price}
+                value={data.discounted_charging_price}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={decodedSymbol}

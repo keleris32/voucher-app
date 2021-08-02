@@ -29,7 +29,7 @@ const AnimatedBottomSheet = ({ bs, fall }) => {
           </TouchableOpacity>
         </View>
         {isAfrocinemaActive ? (
-          <AfrocinemaPanelData bs={bs} />
+          <AfrostreamPanelData bs={bs} />
         ) : (
           <AfrostreamPanelData bs={bs} />
         )}

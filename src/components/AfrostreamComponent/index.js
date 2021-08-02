@@ -59,7 +59,7 @@ const AfrostreamComponent = () => {
           )}
         />
       </View>
-      {/* <AnimatedBottomSheet bs={bs} fall={fall} /> */}
+      <AnimatedBottomSheet bs={bs} fall={fall} />
     </>
   );
 };

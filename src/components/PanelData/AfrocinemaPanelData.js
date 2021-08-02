@@ -89,7 +89,7 @@ const AfrocinemaPanelData = async ({ bs }) => {
               </View>
             </View>
             <View style={{ marginBottom: wp('10%') }}>
-              <NumberFormat
+              {/* <NumberFormat
                 value={data?.premier.discounted_charging_price}
                 displayType={'text'}
                 thousandSeparator={true}
@@ -100,7 +100,7 @@ const AfrocinemaPanelData = async ({ bs }) => {
                     onPress={() => proceedToPaymentScreen(bs)}
                   />
                 )}
-              />
+              /> */}
             </View>
           </View>
         </View>
