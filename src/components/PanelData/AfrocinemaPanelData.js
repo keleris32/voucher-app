@@ -14,7 +14,7 @@ import { COLORS, FONTS } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
 
-const AfrocinemaPanelData = async ({ bs }) => {
+const AfrocinemaPanelData = ({ bs }) => {
   let navigation = useNavigation();
 
   // Global state variable for selectedCardData (selectedAfrocinemaData)
@@ -37,75 +37,75 @@ const AfrocinemaPanelData = async ({ bs }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <Image
-            source={{
-              uri: data.landscape_image,
-            }}
-            style={styles.image}
-          />
-          <View style={styles.titleWrapper}>
-            <Text style={styles.title}>{data.title}</Text>
-          </View>
-          <View style={styles.detailsWrapper}>
-            {/* <ScrollView> */}
-            <View style={styles.synopsisContainer}>
-              <Text style={styles.synopsis}>
-                <Text style={{ ...FONTS.h4 }}>Synopsis: </Text>
-                {data.synopsis}
-              </Text>
+    <>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View style={styles.wrapper}>
+            <Image
+              source={{
+                uri: data.landscape_image,
+              }}
+              style={styles.image}
+            />
+            <View style={styles.titleWrapper}>
+              <Text style={styles.title}>{data.title}</Text>
             </View>
-            {/* </ScrollView> */}
-            <View style={styles.descriptionWrapper}>
-              <View style={styles.description}>
-                <Text style={{ ...FONTS.h4 }}>Release year: </Text>
-                <Text style={{ color: COLORS.black, ...FONTS.body4 }}>
-                  {data.year_of_release} (
-                  <Text style={{ color: COLORS.acomartBlue2 }}>
-                    {data.territory_of_origin}
+            <View style={styles.detailsWrapper}>
+              <View style={styles.synopsisContainer}>
+                <Text style={styles.synopsis}>
+                  <Text style={{ ...FONTS.h4 }}>Synopsis: </Text>
+                  {data.synopsis}
+                </Text>
+              </View>
+              <View style={styles.descriptionWrapper}>
+                <View style={styles.description}>
+                  <Text style={{ ...FONTS.h4 }}>Release year: </Text>
+                  <Text style={{ color: COLORS.black, ...FONTS.body4 }}>
+                    {data.year_of_release} (
+                    <Text style={{ color: COLORS.acomartBlue2 }}>
+                      {data.territory_of_origin}
+                    </Text>
+                    )
                   </Text>
-                  )
-                </Text>
+                </View>
+                <View style={styles.description}>
+                  <Text style={{ ...FONTS.h4 }}>Director: </Text>
+                  <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
+                    {data.director}
+                  </Text>
+                </View>
+                <View style={styles.description}>
+                  <Text style={{ ...FONTS.h4 }}>Language: </Text>
+                  <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
+                    {data.language}
+                  </Text>
+                </View>
+                <View style={styles.description}>
+                  <Text style={{ ...FONTS.h4 }}>PG: </Text>
+                  <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
+                    {data.parental_guidance_age}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.description}>
-                <Text style={{ ...FONTS.h4 }}>Director: </Text>
-                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                  {data.director}
-                </Text>
+              <View style={{ marginBottom: wp('10%') }}>
+                <NumberFormat
+                  value={data?.premier.discounted_charging_price}
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={decodedSymbol}
+                  renderText={value => (
+                    <CustomButton
+                      buttonText={value}
+                      onPress={() => proceedToPaymentScreen(bs)}
+                    />
+                  )}
+                />
               </View>
-              <View style={styles.description}>
-                <Text style={{ ...FONTS.h4 }}>Language: </Text>
-                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                  {data.language}
-                </Text>
-              </View>
-              <View style={styles.description}>
-                <Text style={{ ...FONTS.h4 }}>PG: </Text>
-                <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                  {data.parental_guidance_age}
-                </Text>
-              </View>
-            </View>
-            <View style={{ marginBottom: wp('10%') }}>
-              {/* <NumberFormat
-                value={data?.premier.discounted_charging_price}
-                displayType={'text'}
-                thousandSeparator={true}
-                prefix={decodedSymbol}
-                renderText={value => (
-                  <CustomButton
-                    buttonText={value}
-                    onPress={() => proceedToPaymentScreen(bs)}
-                  />
-                )}
-              /> */}
             </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -165,3 +165,18 @@ const styles = StyleSheet.create({
     marginBottom: wp('1.25%'),
   },
 });
+
+// import React from 'react';
+// import { StyleSheet, Text, View } from 'react-native';
+
+// const AfrocinemaPanelData = () => {
+//   return (
+//     <View>
+//       <Text></Text>
+//     </View>
+//   );
+// };
+
+// export default AfrocinemaPanelData;
+
+// const styles = StyleSheet.create({});
