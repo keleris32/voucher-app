@@ -1,4 +1,3 @@
-import { Formik } from 'formik';
 import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
@@ -13,6 +12,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { CustomButton, CustomInput } from '../../components';
+import { Formik } from 'formik';
 import CountryModal from '../../components/CountryModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -20,16 +20,19 @@ import { COLORS, SIZES, FONTS } from '../../constants';
 import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import { validationSchema } from './validationSchema';
+import EnvironmentVariables from '../../config/env';
 
-const AccountSettings = () => {
+const AccountSettings = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Retailer global state variable
   const {
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
   const [selectedCountry, setSelectedCountry] = useState({
-    id: '',
+    id: retailerData.country_id,
     name: 'Select your country',
     code: '0',
   });
@@ -42,6 +45,7 @@ const AccountSettings = () => {
     data.append('email', formData.email);
     data.append('phone_number', formData.phoneNumber);
     data.append('country_id', selectedCountry.id);
+    data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
     data.append('_method', 'PATCH');
 
     axiosInstance
@@ -56,17 +60,41 @@ const AccountSettings = () => {
           },
         ]),
       )
-      .catch(
-        err => console.log(JSON.stringify(err, null, 2)),
-        Alert.alert('Success', 'Your Profile was updated successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setLoading(false);
+      .catch(err =>
+        Alert.alert(
+          'Error',
+          'Please check your internet connection and try again later',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setLoading(false);
+              },
             },
-          },
-        ]),
+          ],
+        ),
       );
+  };
+
+  const checkForEmail = formProp => {
+    if (retailerData.email !== formProp.email) {
+      Alert.alert(
+        'Warning',
+        'Please note that you would be required to verify your new email address',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+          },
+          {
+            text: 'Ok',
+            onPress: () => updateRetailerProfile(formProp),
+          },
+        ],
+      );
+    } else {
+      updateRetailerProfile(formProp);
+    }
   };
 
   return (
@@ -77,15 +105,18 @@ const AccountSettings = () => {
         phoneNumber: retailerData.phone_number,
       }}
       validateOnMount={true}
-      onSubmit={values => updateRetailerProfile(values)}
+      onSubmit={values => checkForEmail(values)}
       validationSchema={validationSchema}>
       {props => (
         <View style={styles.container}>
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="chevron-left" style={styles.rightArrowIcon} />
-          </TouchableOpacity> */}
-
-          <Text style={styles.title}>Account Settings</Text>
+          <View style={styles.headerWrapper}>
+            <TouchableOpacity
+              style={styles.iconCon}
+              onPress={() => navigation.goBack()}>
+              <Icon name="chevron-left" style={styles.leftArrowIcon} />
+            </TouchableOpacity>
+            <Text style={styles.title}>Account Settings</Text>
+          </View>
 
           <View style={styles.wrapper}>
             <TouchableOpacity
@@ -143,23 +174,27 @@ const AccountSettings = () => {
               </View>
               <View style={{ marginBottom: SIZES.radius }}>
                 <Text style={styles.label}>Phone Number</Text>
-                <CustomInput
-                  placeholder={retailerData.phone_number}
-                  iconType="phone"
-                  selectedCountry={selectedCountry}
-                  onChangeText={props.handleChange('phoneNumber')}
-                  onBlur={props.handleBlur('phoneNumber')}
-                  value={props.values.phoneNumber}
-                  errors={props.errors.phoneNumber}
-                  touched={props.touched.phoneNumber}
-                />
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder={retailerData.phone_number}
+                    underlineColorAndroid="transparent"
+                    placeholderTextColor={COLORS.gray}
+                    onChangeText={props.handleChange('phoneNumber')}
+                    onBlur={props.handleBlur('phoneNumber')}
+                    value={props.values.phoneNumber}
+                    errors={props.errors.phoneNumber}
+                    touched={props.touched.phoneNumber}
+                  />
+                </View>
+
                 {/* If this field contains an error and it has been touched, then display the error message */}
                 {props.errors.phoneNumber && props.touched.phoneNumber && (
                   <Text style={styles.errors}>{props.errors.phoneNumber}</Text>
                 )}
               </View>
               <CustomButton
-                buttonText="Update Profile"
+                buttonText={loading ? 'Updating' : 'Update Profile'}
                 disabled={loading}
                 onPress={props.handleSubmit}
               />
@@ -181,16 +216,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  rightArrowIcon: {
-    position: 'absolute',
-    left: wp('5%'),
-    top: wp('10%'),
+  headerWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+  },
+
+  iconCon: {
+    transform: [{ translateX: wp('2.5%') }],
+  },
+
+  leftArrowIcon: {
     fontSize: hp('4.75%'),
     color: COLORS.black,
   },
 
   title: {
+    flex: 1,
     marginBottom: wp('12.5%'),
+    textAlign: 'center',
+    marginRight: wp('5%'),
     ...FONTS.h2,
   },
 

@@ -25,8 +25,16 @@ const AfrocinemaPanelData = ({ bs }) => {
   // Initialize a variable and store Global state
   const data = selectedAfrocinemaData;
 
+  const symbol = selectedAfrocinemaData.premier.charging_currency_symbol;
+
+  const price = selectedAfrocinemaData.premier.discounted_charging_price;
+
+  console.log(data.premier.discounted_charging_price);
+
   // Decode the HTML code gotten from data to it's appropraite symbol
-  const decodedSymbol = decode(data?.premier.charging_currency_symbol);
+  const decodedSymbol = decode(
+    selectedAfrocinemaData.premier.charging_currency_symbol,
+  );
 
   const proceedToPaymentScreen = async () => {
     // Close bottom sheet
@@ -88,18 +96,20 @@ const AfrocinemaPanelData = ({ bs }) => {
                 </View>
               </View>
               <View style={{ marginBottom: wp('10%') }}>
-                <NumberFormat
-                  value={data?.premier.discounted_charging_price}
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  prefix={decodedSymbol}
-                  renderText={value => (
-                    <CustomButton
-                      buttonText={value}
-                      onPress={() => proceedToPaymentScreen(bs)}
-                    />
-                  )}
-                />
+                {selectedAfrocinemaData.premier.discounted_charging_price && (
+                  <NumberFormat
+                    value={price}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={decodedSymbol}
+                    renderText={value => (
+                      <CustomButton
+                        buttonText={value}
+                        onPress={() => proceedToPaymentScreen(bs)}
+                      />
+                    )}
+                  />
+                )}
               </View>
             </View>
           </View>
