@@ -1,10 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { decode } from 'html-entities';
+import NumberFormat from 'react-number-format';
 
 import { FONTS, SIZES, COLORS } from '../../constants';
 
 const MovieCard = props => {
+  // Decode the HTML code gotten from data to it's appropraite symbol
+  const decodedSymbol = decode(props.symbol);
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -21,10 +26,25 @@ const MovieCard = props => {
           <Text style={styles.pg}>PG: {props.parentalGuidance}</Text>
         </View>
       </View>
-      <Text style={styles.price}>
-        {'\u0024 '}
-        {props.price}
-      </Text>
+      {/* <Text style={styles.price}>
+        {decodedSymbol} {props.price}
+      </Text> */}
+      <View>
+        <NumberFormat
+          value={props.discountedPrice}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={decodedSymbol}
+          renderText={value => <Text style={styles.price}>{value}</Text>}
+        />
+        <NumberFormat
+          value={props.chargingPrice}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={decodedSymbol}
+          renderText={value => <Text style={styles.fakePrice}>{value}</Text>}
+        />
+      </View>
     </View>
   );
 };
@@ -55,7 +75,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionWrapper: {
-    flex: 0.775,
+    flex: 0.75,
     justifyContent: 'space-between',
     paddingVertical: wp('2.5%'),
     marginHorizontal: wp('2.5%'),
@@ -68,10 +88,19 @@ const styles = StyleSheet.create({
 
   pg: {
     ...FONTS.body4,
+    color: COLORS.black,
   },
 
   price: {
     color: COLORS.acomartBlue2,
-    ...FONTS.h3,
+    marginBottom: wp('1.25%'),
+    ...FONTS.h4,
+  },
+
+  fakePrice: {
+    color: COLORS.gray,
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+    ...FONTS.body4,
   },
 });

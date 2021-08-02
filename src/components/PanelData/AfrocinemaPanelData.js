@@ -6,6 +6,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
+import { decode } from 'html-entities';
+import NumberFormat from 'react-number-format';
 
 import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS } from '../../constants';
@@ -22,6 +24,9 @@ const AfrocinemaPanelData = ({ bs }) => {
 
   // Initialize a variable and store Global state
   const data = selectedAfrocinemaData;
+
+  // Decode the HTML code gotten from data to it's appropraite symbol
+  const decodedSymbol = decode(data.premier.charging_currency_symbol);
 
   const proceedToPaymentScreen = async () => {
     // Close bottom sheet
@@ -84,9 +89,17 @@ const AfrocinemaPanelData = ({ bs }) => {
               </View>
             </View>
             <View style={{ marginBottom: wp('10%') }}>
-              <CustomButton
-                buttonText={['\u0024 ', data.starting_price]}
-                onPress={() => proceedToPaymentScreen(bs)}
+              <NumberFormat
+                value={data.premier.discounted_charging_price}
+                displayType={'text'}
+                thousandSeparator={true}
+                prefix={decodedSymbol}
+                renderText={value => (
+                  <CustomButton
+                    buttonText={value}
+                    onPress={() => proceedToPaymentScreen(bs)}
+                  />
+                )}
               />
             </View>
           </View>

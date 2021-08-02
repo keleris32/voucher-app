@@ -57,7 +57,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   const fall = new Value(1);
 
   // ------------------------------------------------------- >
-  console.log(JSON.stringify(afrocinemaData, null, 2));
+  // console.log(JSON.stringify(afrocinemaData.charging_currency_symbol, null, 2));
   return (
     <>
       <View style={styles.container}>
@@ -79,7 +79,9 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
                 title={item.title}
                 image={item.landscape_image}
                 parentalGuidance={item.parental_guidance_age}
-                price={item.starting_price}
+                discountedPrice={item.premier.discounted_charging_price}
+                chargingPrice={item.premier.charging_price}
+                symbol={item.premier.charging_currency_symbol}
               />
             </TouchableOpacity>
           )}

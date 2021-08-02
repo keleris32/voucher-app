@@ -43,7 +43,9 @@ const AppNavContainer = () => {
               payload: res.data.data.retailer,
             });
           })
-          .catch(err => console.log(err));
+          .catch(err =>
+            console.log('Main navigation index, get retailer>>>', err),
+          );
 
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
@@ -51,7 +53,7 @@ const AppNavContainer = () => {
         setIsAuthLoaded(true);
 
         // if the retailer isn't logged in, set authentication state to false
-        setIsAuthenticated(false);
+        setIsAuthenticated(isLoggedIn);
       }
     } catch (error) {}
   };
@@ -78,7 +80,7 @@ const AppNavContainer = () => {
             <VerificationNavigator />
           ) : isAuthenticated &&
             retailerData?.verification_status === 'approved' ? (
-            <VerificationNavigator />
+            <TabNavigator />
           ) : (
             <AuthNavigator />
           )}
