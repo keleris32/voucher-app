@@ -51,13 +51,15 @@ const AfrostreamComponent = () => {
                 name={item.name}
                 duration={item.duration_in_days}
                 deviceLimit={item.device_limit}
-                price={item.charging_price}
+                discountedPrice={item.discounted_charging_price}
+                chargingPrice={item.charging_price}
+                symbol={item.charging_currency_symbol}
               />
             </TouchableOpacity>
           )}
         />
       </View>
-      <AnimatedBottomSheet bs={bs} fall={fall} />
+      {/* <AnimatedBottomSheet bs={bs} fall={fall} /> */}
     </>
   );
 };

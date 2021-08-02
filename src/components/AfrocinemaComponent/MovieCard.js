@@ -26,9 +26,7 @@ const MovieCard = props => {
           <Text style={styles.pg}>PG: {props.parentalGuidance}</Text>
         </View>
       </View>
-      {/* <Text style={styles.price}>
-        {decodedSymbol} {props.price}
-      </Text> */}
+
       <View>
         <NumberFormat
           value={props.discountedPrice}

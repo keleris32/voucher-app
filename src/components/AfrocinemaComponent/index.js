@@ -87,7 +87,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
           )}
         />
       </View>
-      <AnimatedBottomSheet bs={bs} fall={fall} />
+      {/* <AnimatedBottomSheet bs={bs} fall={fall} /> */}
     </>
   );
 };

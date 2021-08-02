@@ -17,7 +17,7 @@ const AppNavContainer = () => {
   } = useContext(GlobalContext);
 
   // Auth state management
-  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoaded, setIsAuthLoaded] = useState(false);
 
   // getRetailer global state
@@ -53,7 +53,7 @@ const AppNavContainer = () => {
         setIsAuthLoaded(true);
 
         // if the retailer isn't logged in, set authentication state to false
-        setIsAuthenticated(isLoggedIn);
+        setIsAuthenticated(false);
       }
     } catch (error) {}
   };
@@ -84,6 +84,7 @@ const AppNavContainer = () => {
           ) : (
             <AuthNavigator />
           )}
+          {/* <TabNavigator /> */}
         </NavigationContainer>
       ) : (
         <ActivityIndicator />

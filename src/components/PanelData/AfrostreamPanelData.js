@@ -5,6 +5,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
+import { decode } from 'html-entities';
+import NumberFormat from 'react-number-format';
 
 import { GlobalContext } from '../../context/Provider';
 import { COLORS, FONTS, SIZES } from '../../constants';
@@ -21,6 +23,10 @@ const AfrostreamPanelData = ({ bs }) => {
 
   // Initialize a variable and store Global state
   const data = selectedAfrostreamData;
+
+  // Decode the HTML code gotten from data to it's appropraite symbol
+  const decodedSymbol = decode(data?.charging_currency_symbol);
+  console.log(JSON.stringify(data, null, 2));
 
   var no_of_days;
 
@@ -59,9 +65,17 @@ const AfrostreamPanelData = ({ bs }) => {
               </Text>
             </View>
             <View style={{ marginTop: wp('15%') }}>
-              <CustomButton
-                buttonText={['\u20A6 ', data.charging_price]}
-                onPress={() => proceedToPaymentScreen()}
+              <NumberFormat
+                value={data?.discounted_charging_price}
+                displayType={'text'}
+                thousandSeparator={true}
+                prefix={decodedSymbol}
+                renderText={value => (
+                  <CustomButton
+                    buttonText={value}
+                    onPress={() => proceedToPaymentScreen(bs)}
+                  />
+                )}
               />
             </View>
           </View>

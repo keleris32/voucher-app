@@ -14,7 +14,7 @@ import { COLORS, FONTS } from '../../constants';
 import CustomButton from '../CustomButton';
 import { PAYMENTS } from '../../constants/routeNames';
 
-const AfrocinemaPanelData = ({ bs }) => {
+const AfrocinemaPanelData = async ({ bs }) => {
   let navigation = useNavigation();
 
   // Global state variable for selectedCardData (selectedAfrocinemaData)
@@ -26,7 +26,7 @@ const AfrocinemaPanelData = ({ bs }) => {
   const data = selectedAfrocinemaData;
 
   // Decode the HTML code gotten from data to it's appropraite symbol
-  const decodedSymbol = decode(data.premier.charging_currency_symbol);
+  const decodedSymbol = decode(data?.premier.charging_currency_symbol);
 
   const proceedToPaymentScreen = async () => {
     // Close bottom sheet
@@ -90,7 +90,7 @@ const AfrocinemaPanelData = ({ bs }) => {
             </View>
             <View style={{ marginBottom: wp('10%') }}>
               <NumberFormat
-                value={data.premier.discounted_charging_price}
+                value={data?.premier.discounted_charging_price}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={decodedSymbol}
