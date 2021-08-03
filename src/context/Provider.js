@@ -10,6 +10,8 @@ import getAfrostreamReducer from './reducers/getAfrostreamReducer';
 import getAfrostreamInitialState from './initialStates/getAfrostreamInitialState';
 import selectedCardReducer from './reducers/selectedCardReducer';
 import selectedCardInitialState from './initialStates/selectedCardInititalState';
+import getTransactions from './reducers/getTransactions';
+import getTransactionsInitialState from './initialStates/getTransactionsInitialState';
 
 export const GlobalContext = createContext({});
 
@@ -41,6 +43,12 @@ const GlobalProvider = ({ children }) => {
     selectedCardInitialState,
   );
 
+  // Transactions data global state
+  const [getTransactionsState, getTransactionsDispatch] = useReducer(
+    getTransactions,
+    getTransactionsInitialState,
+  );
+
   return (
     <GlobalContext.Provider
       value={{
@@ -54,6 +62,8 @@ const GlobalProvider = ({ children }) => {
         getAfrostreamDispatch,
         selectedCardState,
         selectedCardDispatch,
+        getTransactionsState,
+        getTransactionsDispatch,
       }}>
       {children}
     </GlobalContext.Provider>

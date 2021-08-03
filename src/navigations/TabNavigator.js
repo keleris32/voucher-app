@@ -57,8 +57,7 @@ const TabNavigator = () => {
           },
         }}>
         <Tab.Screen name={HOME} component={HomeStack} />
-        {/* <Tab.Screen name={TRANSACTIONS} component={TransactionsStack} /> */}
-        {/* <Tab.Screen name={PAYMENTS} component={Payments} /> */}
+        <Tab.Screen name={TRANSACTIONS} component={TransactionsStack} />
         <Tab.Screen name={SETTINGS} component={SettingsStack} />
       </Tab.Navigator>
     </>

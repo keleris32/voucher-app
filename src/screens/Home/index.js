@@ -63,7 +63,7 @@ const Home = () => {
     await axiosInstance
       .get('retailer/subscription-plans')
       .then(res => {
-        console.log(JSON.stringify(res.data.data.subscription_plans, null, 2));
+        // console.log(JSON.stringify(res.data.data.subscription_plans, null, 2));
         getAfrostreamDispatch({
           type: GET_AFROSTREAM_DATA,
           payload: res.data.data.subscription_plans,
