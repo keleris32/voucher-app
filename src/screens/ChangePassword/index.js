@@ -31,7 +31,7 @@ const ChangePassword = ({ navigation }) => {
   const [isNewPasswordConfirmHidden, setIsNewPasswordConfirmHidden] =
     useState(true);
 
-  const updateRetailerPassword = formData => {
+  const updateRetailerPassword = (formData, resetForm) => {
     setLoading(true);
 
     const data = new FormData();
@@ -48,6 +48,9 @@ const ChangePassword = ({ navigation }) => {
             text: 'OK',
             onPress: () => {
               setLoading(false);
+              resetForm();
+              setInvalidPassword(false);
+              setErrorComponent(false);
             },
           },
         ]),
@@ -74,11 +77,11 @@ const ChangePassword = ({ navigation }) => {
       });
   };
 
-  const checkForPassword = formProp => {
+  const checkForPassword = (formProp, resetForm) => {
     if (formProp.newPassword !== formProp.newPasswordConfirmation) {
       setErrorComponent(true);
     } else {
-      updateRetailerPassword(formProp);
+      updateRetailerPassword(formProp, resetForm);
     }
   };
 
@@ -90,7 +93,7 @@ const ChangePassword = ({ navigation }) => {
         newPasswordConfirmation: '',
       }}
       validateOnMount={true}
-      onSubmit={values => checkForPassword(values)}
+      onSubmit={(values, { resetForm }) => checkForPassword(values, resetForm)}
       validationSchema={validationSchema}>
       {props => (
         <View style={styles.container}>
@@ -214,7 +217,7 @@ const ChangePassword = ({ navigation }) => {
                   )}
               </View>
               <CustomButton
-                buttonText="Update Password"
+                buttonText={loading ? 'Updating' : 'Update Password'}
                 disabled={loading}
                 onPress={props.handleSubmit}
               />
