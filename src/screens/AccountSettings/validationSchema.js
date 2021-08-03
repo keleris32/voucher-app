@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const signUpValidationSchema = yup.object().shape({
+export const accountSettingsValidationSchema = yup.object().shape({
   fullName: yup
     .string()
     .matches(/^[A-Za-z ]*$/, 'Please enter valid name')

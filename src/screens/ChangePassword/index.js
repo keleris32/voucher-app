@@ -18,7 +18,7 @@ import PasswordIcon from 'react-native-vector-icons/Ionicons';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
-import { validationSchema } from './validationSchema';
+import { changePasswordValidationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
 import ErrorMessage from '../../components/ErrorMessage';
 
@@ -56,7 +56,6 @@ const ChangePassword = ({ navigation }) => {
         ]),
       )
       .catch(err => {
-        console.log(JSON.stringify(err, null, 2));
         if (err.message === 'Network Error') {
           Alert.alert(
             'Error',
@@ -94,7 +93,7 @@ const ChangePassword = ({ navigation }) => {
       }}
       validateOnMount={true}
       onSubmit={(values, { resetForm }) => checkForPassword(values, resetForm)}
-      validationSchema={validationSchema}>
+      validationSchema={changePasswordValidationSchema}>
       {props => (
         <View style={styles.container}>
           <View style={styles.headerWrapper}>

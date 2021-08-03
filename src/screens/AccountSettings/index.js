@@ -19,13 +19,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS, SIZES, FONTS } from '../../constants';
 import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
-import { validationSchema } from './validationSchema';
+import { accountSettingsValidationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const AccountSettings = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorComponent, setErrorComponent] = useState(false);
 
   // Retailer global state variable
   const {
@@ -40,6 +42,7 @@ const AccountSettings = ({ navigation }) => {
   const updateRetailerProfile = formData => {
     setLoading(true);
 
+    // Upload form
     const data = new FormData();
     data.append('name', formData.fullName);
     data.append('email', formData.email);
@@ -56,28 +59,37 @@ const AccountSettings = ({ navigation }) => {
             text: 'OK',
             onPress: () => {
               setLoading(false);
+              setErrorComponent(false);
             },
           },
         ]),
       )
-      .catch(err =>
-        Alert.alert(
-          'Error',
-          'Please check your internet connection and try again later',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                setLoading(false);
+      .catch(err => {
+        // If there's a network error, display an alert, else display an error message
+        if (err.message === 'Network Error') {
+          Alert.alert(
+            'Error',
+            'Please check your internet connection and try again later',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  setLoading(false);
+                },
               },
-            },
-          ],
-        ),
-      );
+            ],
+          );
+        } else {
+          setErrorComponent(true);
+          setLoading(false);
+        }
+      });
   };
 
   const checkForEmail = formProp => {
+    // Check if the previous email is different from the new one
     if (retailerData.email !== formProp.email) {
+      // Give a warning if the email has been changed and call the update fn if the user goes ahead
       Alert.alert(
         'Warning',
         'Please note that you would be required to verify your new email address',
@@ -93,6 +105,7 @@ const AccountSettings = ({ navigation }) => {
         ],
       );
     } else {
+      // If the email isnt different, call the update fn straightaway
       updateRetailerProfile(formProp);
     }
   };
@@ -106,7 +119,7 @@ const AccountSettings = ({ navigation }) => {
       }}
       validateOnMount={true}
       onSubmit={values => checkForEmail(values)}
-      validationSchema={validationSchema}>
+      validationSchema={accountSettingsValidationSchema}>
       {props => (
         <View style={styles.container}>
           <View style={styles.headerWrapper}>
@@ -119,6 +132,13 @@ const AccountSettings = ({ navigation }) => {
           </View>
 
           <View style={styles.wrapper}>
+            {errorComponent && (
+              <ErrorMessage
+                errorMessage="Invalid details provided!"
+                setErrorComponent={setErrorComponent}
+              />
+            )}
+
             <TouchableOpacity
               disabled={fetchError}
               onPress={() => setIsModalVisible(true)}>
