@@ -64,6 +64,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
         <SearchBar
           searchValue={searchValue}
           searchFilterFunction={searchFilterFunction}
+          placeholder="Search movies"
         />
         <FlatList
           data={filteredData}

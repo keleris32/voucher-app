@@ -12,6 +12,8 @@ import selectedCardReducer from './reducers/selectedCardReducer';
 import selectedCardInitialState from './initialStates/selectedCardInititalState';
 import getTransactions from './reducers/getTransactions';
 import getTransactionsInitialState from './initialStates/getTransactionsInitialState';
+import searchFilter from './reducers/searchFilter';
+import searchFilterInitialState from './initialStates/searchFilterInitialState';
 
 export const GlobalContext = createContext({});
 
@@ -49,6 +51,12 @@ const GlobalProvider = ({ children }) => {
     getTransactionsInitialState,
   );
 
+  // Search bar global state
+  const [searchState, searchDispatch] = useReducer(
+    searchFilter,
+    searchFilterInitialState,
+  );
+
   return (
     <GlobalContext.Provider
       value={{
@@ -64,6 +72,8 @@ const GlobalProvider = ({ children }) => {
         selectedCardDispatch,
         getTransactionsState,
         getTransactionsDispatch,
+        searchState,
+        searchDispatch,
       }}>
       {children}
     </GlobalContext.Provider>

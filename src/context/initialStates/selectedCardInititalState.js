@@ -1,8 +1,8 @@
 export default {
   selectedAfrocinemaData: {},
   selectedAfrostreamData: {},
-  isAfrocinemaActive: true,
-  isAfrostreamActive: false,
+  isAfrocinemaActive: false,
+  isAfrostreamActive: true,
   paymentData: {},
   error: '',
 };

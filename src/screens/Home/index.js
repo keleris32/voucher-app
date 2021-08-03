@@ -27,8 +27,8 @@ import {
 const Home = () => {
   // State variable for the dashboard tabs
   const [activeTab, setActiveTab] = useState({
-    afrocinema: true,
-    afrostream: false,
+    afrocinema: false,
+    afrostream: true,
   });
 
   // Global state variable for the retailer's data
@@ -99,23 +99,6 @@ const Home = () => {
       <View style={styles.subcriptionTab}>
         <TouchableOpacity
           style={{ flex: 1 }}
-          onPress={() => setActiveTab({ afrocinema: true, afrostream: false })}>
-          <View
-            style={[
-              styles.Tab,
-              activeTab.afrocinema === true ? styles.activeTab : '',
-            ]}>
-            <Text
-              style={[
-                styles.tabText,
-                activeTab.afrocinema === true ? styles.activeText : '',
-              ]}>
-              Afrocinema
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flex: 1 }}
           onPress={() => setActiveTab({ afrocinema: false, afrostream: true })}>
           <View
             style={[
@@ -128,6 +111,24 @@ const Home = () => {
                 activeTab.afrostream === true ? styles.activeText : '',
               ]}>
               Afrostream
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => setActiveTab({ afrocinema: true, afrostream: false })}>
+          <View
+            style={[
+              styles.Tab,
+              activeTab.afrocinema === true ? styles.activeTab : '',
+            ]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab.afrocinema === true ? styles.activeText : '',
+              ]}>
+              Afrocinema
             </Text>
           </View>
         </TouchableOpacity>

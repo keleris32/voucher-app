@@ -7,12 +7,9 @@ import { COLORS, SIZES, FONTS } from '../../constants';
 
 const TransactionsCard = props => {
   const formattedDate = format(parseISO(props.date), 'MMM do, yyy HH:mm a');
-  //   console.log(JSON.stringify(props.meta, null, 2));
 
-  const newMeta = Object.values(props.meta);
-  console.log(newMeta);
-
-  //   props.meta.map((item, index) => console.log(item));
+  const metaObj = JSON.parse(props.meta);
+  //   console.log(metaObj.customer_phone_number);
 
   return (
     <View style={styles.container}>
@@ -40,7 +37,7 @@ const TransactionsCard = props => {
         <View style={styles.description}>
           <Text style={{ ...FONTS.h4 }}>Customer's number: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-            {props.purpose}
+            {metaObj.customer_phone_number}
           </Text>
         </View>
       </View>

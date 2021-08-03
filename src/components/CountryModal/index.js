@@ -90,6 +90,7 @@ const CountryModal = props => {
             <SearchBar
               searchValue={searchValue}
               searchFilterFunction={searchFilterFunction}
+              placeholder="Search countries"
             />
           </View>
           <View style={styles.modalContainer}>
