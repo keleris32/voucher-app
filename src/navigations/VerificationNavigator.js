@@ -34,7 +34,7 @@ const VerificationNavigator = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name={DOCUMENTS} component={Documents} />
+          {/* <Stack.Screen name={DOCUMENTS} component={Documents} /> */}
           <Stack.Screen
             name={PENDING_VERIFICATION}
             component={PendingVerification}

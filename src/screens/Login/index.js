@@ -87,7 +87,7 @@ const Login = ({ navigation }) => {
                 <Text style={styles.forgotText}>Forgot Password?</Text>
               </TouchableOpacity>
               <CustomButton
-                buttonText="Log In"
+                buttonText={loading ? 'Logging In' : 'Log In'}
                 disabled={loading}
                 onPress={handleSubmit}
               />

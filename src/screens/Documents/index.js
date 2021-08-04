@@ -7,7 +7,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   Alert,
-  ScrollView,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -25,6 +24,8 @@ import { GlobalContext } from '../../context/Provider';
 import { GET_RETAILER } from '../../constants/actionTypes';
 
 const Documents = ({ navigation }) => {
+  const [uploading, setUploading] = useState(false);
+  const [initializing, setInitializing] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [hasUploaded, setHasUploaded] = useState(false);
   const [refreshState, setRefreshState] = useState(false);
@@ -39,6 +40,7 @@ const Documents = ({ navigation }) => {
 
   // Initiate Verification process
   const initiateVerification = async () => {
+    setInitializing(true);
     // If a file has been uploaded, then proceed else don't
     if (hasUploaded) {
       // FormData to send callback url with request.
@@ -51,14 +53,39 @@ const Documents = ({ navigation }) => {
       // Send request to initiate verification
       await axiosInstance
         .post('retailer/initiate-verification', data)
-        .then(res => navigation.replace(PENDING_VERIFICATION))
+        .then(res => {
+          navigation.replace(PENDING_VERIFICATION);
+          setInitializing(false);
+        })
         // Navigate to the Pending verifcation screen on successful request
 
-        .catch(err => console.log(err));
+        .catch(err => {
+          // console.log('Initializing error >>>> Documents screen', err)
+          Alert.alert(
+            'Error',
+            'Please check your internet connection and try again!',
+            [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  setInitializing(false);
+                },
+              },
+            ],
+          );
+        });
     } else {
       Alert.alert(
         '',
         'Please upload a means of identification before proceeding!',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setInitializing(false);
+            },
+          },
+        ],
       );
     }
   };
@@ -71,17 +98,36 @@ const Documents = ({ navigation }) => {
           callbackUrl: EnvironmentVariables.EMAIL_CALLBACK_URL,
         },
       })
-      .then(res => Alert.alert('', 'Email verification was sent successfully!'))
+      .then(res =>
+        Alert.alert('', 'Email verification was sent successfully!', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUploading(false);
+            },
+          },
+        ]),
+      )
       .catch(err =>
         Alert.alert(
           'Error',
           'Please check your internet connection and try again!',
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                setUploading(false);
+              },
+            },
+          ],
         ),
       );
   };
 
   // Upload selected file to server
   const uploadFile = async () => {
+    setUploading(false);
+
     if (retailerData?.email_verified_at) {
       // Check if any file has been selected
       if (selectedFile !== null) {
@@ -98,7 +144,14 @@ const Documents = ({ navigation }) => {
             },
           })
           .then(res => {
-            Alert.alert('Success', 'Your file was successfully uploaded!');
+            Alert.alert('Success', 'Your file was successfully uploaded!', [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  setUploading(false);
+                },
+              },
+            ]);
 
             // set hasUploaded state to true
             setHasUploaded(true);
@@ -110,6 +163,14 @@ const Documents = ({ navigation }) => {
             Alert.alert(
               'Error',
               'Please check your internet connection and try again!',
+              [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    setUploading(false);
+                  },
+                },
+              ],
             );
           });
       }
@@ -129,6 +190,7 @@ const Documents = ({ navigation }) => {
             text: 'Refresh',
             onPress: () => {
               refreshPage();
+              setUploading(false);
             },
           },
         ],
@@ -167,7 +229,7 @@ const Documents = ({ navigation }) => {
   };
 
   useEffect(async () => {
-    console.log('Component Mounted');
+    // console.log('Component Mounted>>>>>> DOcuments Screen');
     await axiosInstance
       .get('retailer/')
       .then(res => {
@@ -221,10 +283,15 @@ const Documents = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <CustomButton buttonText="Upload" onPress={uploadFile} />
+            <CustomButton
+              buttonText={uploading ? 'Uploading' : 'Upload'}
+              disabled={uploading}
+              onPress={uploadFile}
+            />
           </View>
           <CustomButton
-            buttonText="Initiate Verification"
+            buttonText={initializing ? 'Initializing' : 'Initiate Verification'}
+            disabled={initializing}
             onPress={initiateVerification}
           />
         </View>
