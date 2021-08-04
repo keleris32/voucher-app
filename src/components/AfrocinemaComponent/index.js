@@ -1,5 +1,11 @@
 import React, { useContext, useState, createRef } from 'react';
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Value } from 'react-native-reanimated';
 
@@ -14,7 +20,7 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
 
   // Afrocinema global state variable
   const {
-    getAfrocinemaState: { afrocinemaData },
+    getAfrocinemaState: { afrocinemaData, loading },
   } = useContext(GlobalContext);
 
   // Selected card global state variable
@@ -60,35 +66,43 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   // console.log(JSON.stringify(afrocinemaData.charging_currency_symbol, null, 2));
   return (
     <>
-      <View style={styles.container}>
-        <SearchBar
-          searchValue={searchValue}
-          searchFilterFunction={searchFilterFunction}
-          placeholder="Search movies"
-        />
-        <FlatList
-          data={filteredData}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => {
-                selectedOption(item), bs.current.snapTo(0);
-              }}>
-              <MovieCard
-                title={item.title}
-                image={item.landscape_image}
-                parentalGuidance={item.parental_guidance_age}
-                discountedPrice={item.premier.discounted_charging_price}
-                chargingPrice={item.premier.charging_price}
-                symbol={item.premier.charging_currency_symbol}
-              />
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-      <AnimatedBottomSheet bs={bs} fall={fall} />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
+        </View>
+      ) : (
+        <>
+          <View style={styles.container}>
+            <SearchBar
+              searchValue={searchValue}
+              searchFilterFunction={searchFilterFunction}
+              placeholder="Search movies"
+            />
+            <FlatList
+              data={filteredData}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    selectedOption(item), bs.current.snapTo(0);
+                  }}>
+                  <MovieCard
+                    title={item.title}
+                    image={item.landscape_image}
+                    parentalGuidance={item.parental_guidance_age}
+                    discountedPrice={item.premier.discounted_charging_price}
+                    chargingPrice={item.premier.charging_price}
+                    symbol={item.premier.charging_currency_symbol}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+          <AnimatedBottomSheet bs={bs} fall={fall} />
+        </>
+      )}
     </>
   );
 };
@@ -99,5 +113,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: wp('5%'),
+  },
+
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: wp('20%'),
+    width: wp('100%'),
   },
 });

@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   loadingWrapper: {
     flex: 1,
     alignItems: 'center',
+    marginTop: wp('20%'),
     width: wp('100%'),
   },
 });
