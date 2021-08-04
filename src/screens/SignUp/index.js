@@ -18,7 +18,7 @@ import { Formik } from 'formik';
 
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
-import { LOGIN } from '../../constants/routeNames';
+import { DOCUMENTS, LOGIN } from '../../constants/routeNames';
 import { signUpValidationSchema } from './validationSchema';
 import registerRetailer, {
   clearAuthState,
@@ -58,14 +58,14 @@ const SignUp = ({ navigation }) => {
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
 
-    Alert.alert('Success', 'Your registration was Successful', [
-      {
-        text: 'OK',
-        onPress: () => {
-          navigation.replace(LOGIN);
-        },
-      },
-    ]);
+    // Alert.alert('Success', 'Your registration was Successful', [
+    //   {
+    //     text: 'OK',
+    //     onPress: () => {
+    //       navigation.replace(DOCUMENTS);
+    //     },
+    //   },
+    // ]);
   };
 
   return (
@@ -207,7 +207,7 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <CustomButton
-                  buttonText="Sign Up"
+                  buttonText={loading ? 'Registering' : 'Sign Up'}
                   disabled={loading}
                   onPress={handleSubmit}
                 />

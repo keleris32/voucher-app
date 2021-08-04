@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  Image,
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -20,7 +21,13 @@ import { GlobalContext } from '../context/Provider';
 import { ACCOUNT_SETTINGS, CHANGE_PASSWORD } from '../constants/routeNames';
 
 const Settings = ({ navigation }) => {
+  // Auth global state variable
   const { authDispatch } = useContext(GlobalContext);
+
+  // retailerData global state variable
+  const {
+    getRetailerState: { retailerData },
+  } = useContext(GlobalContext);
 
   const handleLogOut = () => {
     Alert.alert('Log Out!', 'Are you sure you want to log out?', [
@@ -37,10 +44,21 @@ const Settings = ({ navigation }) => {
     ]);
   };
 
+  // console.log(JSON.stringify(retailerData, null, 2));
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View>
+          <View style={{ marginBottom: wp('12.5%') }}>
+            <Image
+              source={{ uri: retailerData?.profile_picture }}
+              style={styles.image}
+            />
+            <TouchableOpacity>
+              <Text style={styles.imageText}>Choose image</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate(ACCOUNT_SETTINGS)}>
             <View style={[styles.cardWrapper, { marginBottom: wp('7.5%') }]}>
@@ -90,6 +108,20 @@ const styles = StyleSheet.create({
     paddingVertical: wp('10%'),
     justifyContent: 'space-between',
     backgroundColor: COLORS.offWhite,
+  },
+
+  image: {
+    width: wp('40%'),
+    height: wp('40%'),
+    borderRadius: wp('20%'),
+    alignSelf: 'center',
+    marginBottom: wp('2.5%'),
+  },
+
+  imageText: {
+    alignSelf: 'center',
+    color: COLORS.acomartBlue2,
+    ...FONTS.h4,
   },
 
   cardWrapper: {

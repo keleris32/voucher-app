@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   ImageBackground,
-  TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -15,22 +15,25 @@ import {
 } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import DocumentPicker from 'react-native-document-picker';
-import { Formik } from 'formik';
 
 import { images, COLORS, SIZES, FONTS } from '../../constants';
 import { CustomButton } from '../../components';
-import { validationSchema } from './validationSchema';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import EnvironmentVariables from '../../config/env';
 import { PENDING_VERIFICATION } from '../../constants/routeNames';
 import { GlobalContext } from '../../context/Provider';
+import { GET_RETAILER } from '../../constants/actionTypes';
 
 const Documents = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [hasUploaded, setHasUploaded] = useState(false);
+  const [refreshState, setRefreshState] = useState(false);
+
+  const refreshPage = () => setRefreshState(!refreshState);
 
   // Retailer global state
   const {
+    getRetailerDispatch,
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
@@ -78,14 +81,14 @@ const Documents = ({ navigation }) => {
   };
 
   // Upload selected file to server
-  const uploadFile = async (documentData, resetForm) => {
+  const uploadFile = async () => {
     if (retailerData?.email_verified_at) {
       // Check if any file has been selected
       if (selectedFile !== null) {
         // If a file has been selected, then create FormData
         const fileToUpload = selectedFile;
         const data = new FormData();
-        data.append('documents', fileToUpload, documentData.documentName);
+        data.append('documents', fileToUpload, selectedFile.name);
 
         // Upload file to server
         await axiosInstance
@@ -100,9 +103,8 @@ const Documents = ({ navigation }) => {
             // set hasUploaded state to true
             setHasUploaded(true);
 
-            // reset state and form
+            // reset state
             setSelectedFile(null);
-            resetForm();
           })
           .catch(err => {
             Alert.alert(
@@ -115,17 +117,19 @@ const Documents = ({ navigation }) => {
       // Alert pop-up with email verification link
       Alert.alert(
         'Verify your email',
-        'Please verify your email before proceeding!',
+        'Please verify your email before proceeding! Refresh if you have already verified',
         [
           {
-            text: 'Resend email verification',
+            text: 'Resend verification',
             onPress: () => {
               resendEmailVerification();
             },
           },
           {
-            text: 'Ok',
-            onPress: () => {},
+            text: 'Refresh',
+            onPress: () => {
+              refreshPage();
+            },
           },
         ],
       );
@@ -162,35 +166,40 @@ const Documents = ({ navigation }) => {
     }
   };
 
-  return (
-    <Formik
-      initialValues={{
-        documentName: '',
-      }}
-      validateOnMount={true}
-      onSubmit={(values, { resetForm }) => uploadFile(values, resetForm)}
-      validationSchema={validationSchema}>
-      {props => (
-        <SafeAreaView style={styles.container}>
-          <ImageBackground source={images.mainBg} style={styles.bgImage}>
-            <View style={styles.screenWrapper}>
-              <View>
-                <Text style={styles.title}>
-                  Kindly upload a means of identification and initiate the
-                  verification process.
-                </Text>
-              </View>
+  useEffect(async () => {
+    console.log('Component Mounted');
+    await axiosInstance
+      .get('retailer/')
+      .then(res => {
+        getRetailerDispatch({
+          type: GET_RETAILER,
+          payload: res.data.data.retailer,
+        });
+      })
+      .catch(err => console.log('Documents Screen, get retailer>>>', err));
+  }, [refreshState]);
 
-              <View style={styles.formContainer}>
-                <Text style={styles.formText}>
-                  Indicate your means of identification and select a file.
-                </Text>
-                <View style={styles.inputWrapper}>
-                  <Text style={{ flex: 1, ...FONTS.body4 }}>
-                    Driver's License, International Passport, Social Security
-                    Number, Voter's card, National Identification Number etc.
-                  </Text>
-                  {/* <TextInput
+  return (
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={images.mainBg} style={styles.bgImage}>
+        <View style={styles.screenWrapper}>
+          <View>
+            <Text style={styles.title}>
+              Kindly upload a means of identification and initiate the
+              verification process.
+            </Text>
+          </View>
+
+          <View style={styles.formContainer}>
+            <Text style={styles.formText}>
+              Indicate your means of identification and select a file.
+            </Text>
+            <View style={styles.inputWrapper}>
+              <Text style={{ flex: 1, ...FONTS.italic4, color: COLORS.gray }}>
+                Driver's License, International Passport, Social Security
+                Number, Voter's card, National Identification Number etc.
+              </Text>
+              {/* <TextInput
                     style={styles.input}
                     onChangeText={props.handleChange('documentName')}
                     value={props.values.documentName}
@@ -199,33 +208,28 @@ const Documents = ({ navigation }) => {
                     touched={props.touched.documentName}
                     placeholder="Driver's License etc.."
                   /> */}
-                  <TouchableOpacity
-                    style={[
-                      styles.pickerBtn,
-                      {
-                        borderWidth: selectedFile ? 4 : 0,
-                        borderColor: selectedFile ? COLORS.acomartBlue2 : '',
-                      },
-                    ]}
-                    onPress={selectDocument}>
-                    <Icons name="file-upload" style={styles.icon} />
-                  </TouchableOpacity>
-                </View>
-
-                <CustomButton
-                  buttonText="Upload"
-                  onPress={props.handleSubmit}
-                />
-              </View>
-              <CustomButton
-                buttonText="Initiate Verification"
-                onPress={initiateVerification}
-              />
+              <TouchableOpacity
+                style={[
+                  styles.pickerBtn,
+                  {
+                    borderWidth: selectedFile ? 4 : 0,
+                    borderColor: selectedFile ? COLORS.acomartBlue2 : '',
+                  },
+                ]}
+                onPress={selectDocument}>
+                <Icons name="file-upload" style={styles.icon} />
+              </TouchableOpacity>
             </View>
-          </ImageBackground>
-        </SafeAreaView>
-      )}
-    </Formik>
+
+            <CustomButton buttonText="Upload" onPress={uploadFile} />
+          </View>
+          <CustomButton
+            buttonText="Initiate Verification"
+            onPress={initiateVerification}
+          />
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 

@@ -77,6 +77,11 @@ export const FONTS = {
     fontSize: SIZES.body5,
     lineHeight: 22,
   },
+  italic4: {
+    fontFamily: 'Raleway-Italic',
+    fontSize: SIZES.body4,
+    lineHeight: 22,
+  },
 };
 
 const appTheme = { COLORS, SIZES, FONTS };
