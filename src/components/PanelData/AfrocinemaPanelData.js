@@ -25,16 +25,16 @@ const AfrocinemaPanelData = ({ bs }) => {
   // Initialize a variable and store Global state
   const data = selectedAfrocinemaData;
 
-  // if (selectedAfrocinemaData.premier.charging_currency_symbol) {
-  //   const symbol = selectedAfrocinemaData?.premier.charging_currency_symbol;
-  // }
+  // // if (selectedAfrocinemaData.premier.charging_currency_symbol) {
+  const symbol = selectedAfrocinemaData?.premier.charging_currency_symbol;
+  // // }
 
-  // const price = selectedAfrocinemaData.premier.discounted_charging_price;
+  const price = selectedAfrocinemaData.premier.discounted_charging_price;
 
-  // console.log(selectedAfrocinemaData.premier.charging_currency_symbol);
+  // // console.log(selectedAfrocinemaData.premier.charging_currency_symbol);
 
-  // Decode the HTML code gotten from data to it's appropraite symbol
-  // const decodedSymbol = decode(symbol);
+  // // Decode the HTML code gotten from data to it's appropraite symbol
+  const decodedSymbol = decode(symbol);
 
   const proceedToPaymentScreen = async () => {
     // Close bottom sheet
@@ -96,7 +96,7 @@ const AfrocinemaPanelData = ({ bs }) => {
                 </View>
               </View>
               <View style={{ marginBottom: wp('10%') }}>
-                {/* {selectedAfrocinemaData.premier.discounted_charging_price && (
+                {selectedAfrocinemaData.premier.discounted_charging_price && (
                   <NumberFormat
                     value={price}
                     displayType={'text'}
@@ -109,7 +109,7 @@ const AfrocinemaPanelData = ({ bs }) => {
                       />
                     )}
                   />
-                )} */}
+                )}
               </View>
             </View>
           </View>

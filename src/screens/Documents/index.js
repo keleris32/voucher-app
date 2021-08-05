@@ -128,6 +128,8 @@ const Documents = ({ navigation }) => {
   const uploadFile = async () => {
     setUploading(false);
 
+    console.log(JSON.stringify(selectedFile, null, 2));
+
     if (retailerData?.email_verified_at) {
       // Check if any file has been selected
       if (selectedFile !== null) {
@@ -138,7 +140,7 @@ const Documents = ({ navigation }) => {
 
         // Upload file to server
         await axiosInstance
-          .post('retailer/documents', data, {
+          .post('retailer/documents/', data, {
             headers: {
               'Content-Type': 'multipart/form-data; ',
             },
@@ -160,6 +162,10 @@ const Documents = ({ navigation }) => {
             setSelectedFile(null);
           })
           .catch(err => {
+            console.log(
+              'uploadFile>>>documents screen',
+              JSON.stringify(err, null, 2),
+            );
             Alert.alert(
               'Error',
               'Please check your internet connection and try again!',
@@ -173,6 +179,15 @@ const Documents = ({ navigation }) => {
               ],
             );
           });
+      } else {
+        Alert.alert('', 'Please select a file before proceeding', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUploading(false);
+            },
+          },
+        ]);
       }
     } else {
       // Alert pop-up with email verification link
@@ -202,7 +217,7 @@ const Documents = ({ navigation }) => {
   const selectDocument = async () => {
     try {
       // Document Picker to select a file
-      const file = await DocumentPicker.pickMultiple({
+      const file = await DocumentPicker.pick({
         // The type of file eligible for selection
         type: [
           DocumentPicker.types.pdf,

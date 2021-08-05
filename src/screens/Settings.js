@@ -19,6 +19,7 @@ import { COLORS, FONTS, SIZES } from '../constants';
 import logoutRetailer from '../context/actions/auth/logoutRetailer';
 import { GlobalContext } from '../context/Provider';
 import { ACCOUNT_SETTINGS, CHANGE_PASSWORD } from '../constants/routeNames';
+import DocumentPicker from 'react-native-document-picker';
 
 const Settings = ({ navigation }) => {
   // Auth global state variable
@@ -44,6 +45,30 @@ const Settings = ({ navigation }) => {
     ]);
   };
 
+  const selectDocument = async () => {
+    try {
+      // Document Picker to select a file
+      const file = await DocumentPicker.pick({
+        // The type of file eligible for selection
+        type: [DocumentPicker.types.images],
+      });
+
+      // set the result to state
+      setSelectedFile(file);
+    } catch (err) {
+      setSelectedFile(null);
+
+      if (DocumentPicker.isCancel(err)) {
+        return;
+      } else {
+        Alert.alert(
+          'Error.',
+          'Something went wrong. Please check your internet connection and try again!',
+        );
+      }
+    }
+  };
+
   // console.log(JSON.stringify(retailerData, null, 2));
 
   return (
@@ -55,8 +80,8 @@ const Settings = ({ navigation }) => {
               source={{ uri: retailerData?.profile_picture }}
               style={styles.image}
             />
-            <TouchableOpacity>
-              <Text style={styles.imageText}>Choose image</Text>
+            <TouchableOpacity onPress={() => selectDocument()}>
+              <Text style={styles.imageText}>Update image</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity

@@ -51,102 +51,117 @@ const PaymentScreenComponent = () => {
     },
   } = useContext(GlobalContext);
 
-  const getClientSecret = async () => {
-    if (isAfrocinemaActive) {
-      const formData = new FormData();
-      formData.append('video_id', selectedAfrocinemaData.id);
-      formData.append('payment_purpose', 'afrocinema_premier');
-      formData.append('customer_country_id', selectedCountry.id);
-      formData.append('customer_phone_number', givenPhoneNumber);
+  const fetchAfrocinemaPayment = async prop => {
+    setLoading(true);
 
-      try {
-        let response = await axiosInstance.post(
-          'stripe/get-payment-intent',
-          formData,
-        );
+    // Create a FormData and append the required fields
+    const afrocinemaFormData = new FormData();
+    afrocinemaFormData.append('video_id', selectedAfrocinemaData.id);
+    afrocinemaFormData.append('payment_purpose', 'afrocinema_premier');
+    afrocinemaFormData.append('customer_country_id', selectedCountry.id);
+    afrocinemaFormData.append('customer_phone_number', prop);
 
-        // =-------------------------------->
-        // =---------------------------------->
-
-        const { error } = await initPaymentSheet({
-          customerId: response.data.data.payment_intent.customer,
-          paymentIntentClientSecret:
-            response.data.data.payment_intent.client_secret,
+    // Send a request to get the client secret and customer Id and set them to the initPaymentSheet
+    await axiosInstance
+      .post('stripe/get-payment-intent', afrocinemaFormData)
+      .then(res => {
+        console.log('omo e go oooo>>>', JSON.stringify(res.data, null, 2));
+        setLoading(false);
+        initPaymentSheet({
+          customerId: res.data.data.payment_intent.customer,
+          paymentIntentClientSecret: res.data.data.payment_intent.client_secret,
         });
-
-        if (!error) {
-          setLoading(true);
-        } else {
-          console.log('initPayment error>>', error);
-        }
-
-        // =-------------------------------->
-        // =---------------------------------->
-      } catch (error) {
-        console.log('Afrocinema', error);
-      }
-      // ---------- End of If ---------------->
-    } else {
-      const formData = new FormData();
-      formData.append('plan_id', selectedAfrostreamData.id);
-      formData.append('payment_purpose', 'afrostream_subscription');
-      formData.append(
-        'cancel_subscription_url',
-        'https://myafrostream.tv/user',
-      );
-      formData.append('customer_country_id', selectedCountry.id);
-      formData.append('customer_phone_number', givenPhoneNumber);
-
-      // console.log('Afrostream', givenPhoneNumber);
-
-      try {
-        let response = await axiosInstance.post(
-          'stripe/get-payment-intent',
-          formData,
-        );
-
-        // =-------------------------------->
-        // =---------------------------------->
-
-        const { error } = await initPaymentSheet({
-          customerId: response.data.data.payment_intent.customer,
-          paymentIntentClientSecret:
-            response.data.data.payment_intent.client_secret,
-        });
-
-        if (!error) {
-          setLoading(true);
-        } else {
-          console.log('initPayment error>>', error);
-        }
-
-        // =-------------------------------->
-        // =---------------------------------->
-      } catch (error) {
-        console.log('Afrostream', error);
-      }
-
-      // ---------------- End of Else ------------------>
-    }
+      })
+      .catch(err => {
+        console.log('err>>>>>>', err);
+        setLoading(false);
+      });
   };
 
-  const openPaymentSheet = async () => {
-    await getClientSecret();
+  const fetchAfrostreamPayment = async prop => {
+    setLoading(true);
 
-    const { error } = await presentPaymentSheet({ clientSecret });
+    // Create a FormData and append the required fields
+    const afrostreamFormData = new FormData();
+    afrostreamFormData.append('plan_id', selectedAfrostreamData.id);
+    afrostreamFormData.append('payment_purpose', 'afrostream_subscription');
+    afrostreamFormData.append(
+      'cancel_subscription_url',
+      'https://myafrostream.tv/user',
+    );
+    afrostreamFormData.append('customer_country_id', selectedCountry.id);
+    afrostreamFormData.append('customer_phone_number', prop);
 
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
+    // Send a request to get the client secret and customer Id and set them to the initPaymentSheet
+    await axiosInstance
+      .post('stripe/get-payment-intent', afrostreamFormData)
+      .then(res => {
+        console.log('omo e go oooo>>>', JSON.stringify(res.data, null, 2));
+        setLoading(false);
+        initPaymentSheet({
+          customerId: res.data.data.payment_intent.customer,
+          paymentIntentClientSecret: res.data.data.payment_intent.client_secret,
+        });
+      })
+      .catch(err => {
+        console.log('err>>>>>>', err);
+        setLoading(false);
+      });
+  };
+
+  const openPaymentSheet = async prop => {
+    // if the selected product is afrocinema, then await the fetchAfrocinema fn, else await fetchAfrostream fn
+    if (isAfrocinemaActive) {
+      await fetchAfrocinemaPayment(prop);
     } else {
-      Alert.alert('Success', 'Your order has been confirmed!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            setLoading(false);
-          },
-        },
-      ]);
+      await fetchAfrostreamPayment(prop);
     }
+
+    await presentPaymentSheet({ clientSecret })
+      .then(res => {
+        Alert.alert('Success', 'Your order has been confirmed!', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setLoading(false);
+            },
+          },
+        ]);
+      })
+      .catch(error => {
+        Alert.alert(error.code, error.message, [
+          {
+            text: 'OK',
+            onPress: () => {
+              setLoading(false);
+            },
+          },
+        ]);
+      });
+
+    // const { error } = await presentPaymentSheet({ clientSecret });
+
+    // if (error) {
+    //   Alert.alert(error.code, error.message, [
+    //     {
+    //       text: 'OK',
+    //       onPress: () => {
+    //         setLoading(false);
+    //       },
+    //     },
+    //   ]);
+    // } else {
+    //   Alert.alert('Success', 'Your order has been confirmed!', [
+    //     {
+    //       text: 'OK',
+    //       onPress: () => {
+    //         setLoading(false);
+    //       },
+    //     },
+    //   ]);
+    // }
+
+    console.log('omo the thing just pass me');
   };
 
   return (
@@ -157,8 +172,9 @@ const PaymentScreenComponent = () => {
       validateOnMount={true}
       onSubmit={values => {
         // console.log(values, selectedCountry.id)
-        setGivenPhoneNumber(values.phoneNumber);
-        openPaymentSheet();
+        // setGivenPhoneNumber(values.phoneNumber);
+        openPaymentSheet(values.phoneNumber);
+        // simpleFetch();
       }}
       validationSchema={validationSchema}>
       {props => (
@@ -197,7 +213,7 @@ const PaymentScreenComponent = () => {
 
                 <CustomButton
                   disabled={loading}
-                  buttonText="Proceed to Checkout"
+                  buttonText={loading ? 'Processing' : 'Proceed to Checkout'}
                   onPress={props.handleSubmit}
                 />
               </View>

@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -92,7 +93,10 @@ const Home = () => {
             <Text style={styles.headerUsername}>{name[0]}</Text>
           </View>
           <View>
-            <Icon name="user-circle" style={styles.userIcon} />
+            <Image
+              source={{ uri: retailerData?.profile_picture }}
+              style={styles.userIcon}
+            />
           </View>
         </View>
       </ImageBackground>
@@ -177,8 +181,9 @@ const styles = StyleSheet.create({
   },
 
   userIcon: {
-    fontSize: hp('8%'),
-    color: COLORS.white,
+    width: wp('20%'),
+    height: wp('20%'),
+    borderRadius: wp('10%'),
   },
 
   subcriptionTab: {
