@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,11 +7,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {
-  CardField,
-  CardFieldInput,
-  useStripe,
-} from '@stripe/stripe-react-native';
+import { useStripe } from '@stripe/stripe-react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -27,19 +23,17 @@ import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
 
 const PaymentScreenComponent = () => {
-  const [card, setCard] = useState(CardFieldInput.Details | null);
-  const { confirmPayment, handleCardAction } = useStripe();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [givenPhoneNumber, setGivenPhoneNumber] = useState('');
   const [selectedCountry, setSelectedCountry] = useState({
     id: '',
     name: 'Select your country',
     code: '0',
   });
 
+  // Stripe public key
   const clientSecret = EnvironmentVariables.STRIPE_PUBLIC_KEY;
 
   // Global state variable for selectedCard data
@@ -51,6 +45,7 @@ const PaymentScreenComponent = () => {
     },
   } = useContext(GlobalContext);
 
+  // Fn to request for client secret if the product is from Afrocinema
   const fetchAfrocinemaPayment = async prop => {
     setLoading(true);
 
@@ -61,23 +56,30 @@ const PaymentScreenComponent = () => {
     afrocinemaFormData.append('customer_country_id', selectedCountry.id);
     afrocinemaFormData.append('customer_phone_number', prop);
 
-    // Send a request to get the client secret and customer Id and set them to the initPaymentSheet
-    await axiosInstance
-      .post('stripe/get-payment-intent', afrocinemaFormData)
-      .then(res => {
-        console.log('omo e go oooo>>>', JSON.stringify(res.data, null, 2));
-        setLoading(false);
-        initPaymentSheet({
-          customerId: res.data.data.payment_intent.customer,
-          paymentIntentClientSecret: res.data.data.payment_intent.client_secret,
-        });
-      })
-      .catch(err => {
-        console.log('err>>>>>>', err);
-        setLoading(false);
-      });
+    var customer;
+    var paymentIntent;
+
+    try {
+      // Request to get PaymentIntent
+      let response = await axiosInstance.post(
+        'stripe/get-payment-intent',
+        afrocinemaFormData,
+      );
+
+      customer = await response.data.data.payment_intent.customer;
+      paymentIntent = await response.data.data.payment_intent.client_secret;
+
+      console.log('cinema first stage done');
+      // setLoading(false);
+    } catch (error) {
+      console.log('Caught cinema error', error);
+      setLoading(false);
+    }
+
+    return { customer, paymentIntent };
   };
 
+  // Fn to request for client secret if the product is from Afrostream
   const fetchAfrostreamPayment = async prop => {
     setLoading(true);
 
@@ -92,76 +94,107 @@ const PaymentScreenComponent = () => {
     afrostreamFormData.append('customer_country_id', selectedCountry.id);
     afrostreamFormData.append('customer_phone_number', prop);
 
-    // Send a request to get the client secret and customer Id and set them to the initPaymentSheet
-    await axiosInstance
-      .post('stripe/get-payment-intent', afrostreamFormData)
-      .then(res => {
-        console.log('omo e go oooo>>>', JSON.stringify(res.data, null, 2));
-        setLoading(false);
-        initPaymentSheet({
-          customerId: res.data.data.payment_intent.customer,
-          paymentIntentClientSecret: res.data.data.payment_intent.client_secret,
-        });
-      })
-      .catch(err => {
-        console.log('err>>>>>>', err);
-        setLoading(false);
+    var customer;
+    var paymentIntent;
+
+    try {
+      // Request to get PaymentIntent
+      let response = await axiosInstance.post(
+        'stripe/get-payment-intent',
+        afrostreamFormData,
+      );
+
+      customer = await response.data.data.payment_intent.customer;
+      paymentIntent = await response.data.data.payment_intent.client_secret;
+
+      console.log('stream first stage done');
+    } catch (error) {
+      console.log('Caught stream error', error);
+      setLoading(false);
+    }
+
+    return { customer, paymentIntent };
+  };
+
+  // Initialize payment with payment Intent details retrieved from the server
+  const initializePayment = async prop => {
+    // If selected product is an afrocinema_premier, then call fetchAfrocinemaPayment function
+    if (isAfrocinemaActive) {
+      // fetchAfrocinemaPayment Fn
+      const { customer, paymentIntent } = await fetchAfrocinemaPayment(prop);
+
+      // START OF IF STATEMENT
+      // ----------------------------------------------->
+      // ----------------------------------------------->
+
+      // Start of InitPaymentSheet for Afrocinema
+      const { error } = await initPaymentSheet({
+        customerId: customer,
+        paymentIntentClientSecret: paymentIntent,
       });
+
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('2nd stage done');
+      }
+
+      // END OF IF STATEMENT
+      // ----------------------------------------------->
+      // ----------------------------------------------->
+    } else {
+      // fetchAfrostreamPayment Fn
+      const { customer, paymentIntent } = await fetchAfrostreamPayment(prop);
+
+      // START OF ELSE STATEMENT
+      // ----------------------------------------------->
+      // ----------------------------------------------->
+
+      // State of InitPaymentSheet for Afrostream
+      const { error } = await initPaymentSheet({
+        customerId: customer,
+        paymentIntentClientSecret: paymentIntent,
+      });
+
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('2nd stage done');
+      }
+
+      // END OF ELSE STATEMENT
+      // ----------------------------------------------->
+      // ----------------------------------------------->
+    }
   };
 
   const openPaymentSheet = async prop => {
-    // if the selected product is afrocinema, then await the fetchAfrocinema fn, else await fetchAfrostream fn
-    if (isAfrocinemaActive) {
-      await fetchAfrocinemaPayment(prop);
+    // InitializePayment Fn
+    await initializePayment(prop);
+
+    console.log('3rd stage');
+
+    const { error } = await presentPaymentSheet({ clientSecret });
+
+    if (error) {
+      Alert.alert(error.code, error.message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+      ]);
     } else {
-      await fetchAfrostreamPayment(prop);
+      Alert.alert('Success', 'Your order has been confirmed!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+      ]);
     }
-
-    await presentPaymentSheet({ clientSecret })
-      .then(res => {
-        Alert.alert('Success', 'Your order has been confirmed!', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setLoading(false);
-            },
-          },
-        ]);
-      })
-      .catch(error => {
-        Alert.alert(error.code, error.message, [
-          {
-            text: 'OK',
-            onPress: () => {
-              setLoading(false);
-            },
-          },
-        ]);
-      });
-
-    // const { error } = await presentPaymentSheet({ clientSecret });
-
-    // if (error) {
-    //   Alert.alert(error.code, error.message, [
-    //     {
-    //       text: 'OK',
-    //       onPress: () => {
-    //         setLoading(false);
-    //       },
-    //     },
-    //   ]);
-    // } else {
-    //   Alert.alert('Success', 'Your order has been confirmed!', [
-    //     {
-    //       text: 'OK',
-    //       onPress: () => {
-    //         setLoading(false);
-    //       },
-    //     },
-    //   ]);
-    // }
-
-    console.log('omo the thing just pass me');
   };
 
   return (
@@ -171,10 +204,7 @@ const PaymentScreenComponent = () => {
       }}
       validateOnMount={true}
       onSubmit={values => {
-        // console.log(values, selectedCountry.id)
-        // setGivenPhoneNumber(values.phoneNumber);
         openPaymentSheet(values.phoneNumber);
-        // simpleFetch();
       }}
       validationSchema={validationSchema}>
       {props => (
