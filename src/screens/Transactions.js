@@ -65,18 +65,19 @@ const Transactions = () => {
         </View>
       ) : (
         <View style={styles.wrapper}>
+          <View style={{ width: wp('100%'), paddingHorizontal: wp('5%') }}>
+            <SearchBar
+              searchValue={searchValue}
+              searchFilterFunction={searchFilterFunction}
+              placeholder="Search phone numbers"
+            />
+          </View>
           <View>
             <FlatList
               data={searchFilterData}
               keyExtractor={item => item.id}
-              ListHeaderComponent={
-                <SearchBar
-                  searchValue={searchValue}
-                  searchFilterFunction={searchFilterFunction}
-                  placeholder="Search phone numbers"
-                />
-              }
-              showsVerticalScrollIndicator={false}
+              // ListHeaderComponent={}
+              showsVerticalScrollIndicator={true}
               renderItem={({ item }) => (
                 <TransactionsCard
                   date={item.is_successful_at}
@@ -85,6 +86,7 @@ const Transactions = () => {
                   reference={item.transaction_reference}
                   purpose={item.payment_purpose}
                   meta={item.meta}
+                  model={item.model}
                 />
               )}
             />
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
 
   wrapper: {
     flex: 1,
-    width: wp('95%'),
+    width: wp('100%'),
   },
 
   loadingWrapper: {

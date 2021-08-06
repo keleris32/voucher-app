@@ -6,10 +6,11 @@ import { format, parseISO } from 'date-fns';
 import { COLORS, SIZES, FONTS } from '../../constants';
 
 const TransactionsCard = props => {
+  // format the date (e.g from 08/04/2021 20:46 => Aug 4th, 2021 20:46PM)
   const formattedDate = format(parseISO(props.date), 'MMM do, yyy HH:mm a');
 
+  // Parse the meta data from string to JSON
   const metaObj = JSON.parse(props.meta);
-  //   console.log(metaObj.customer_phone_number);
 
   return (
     <View style={styles.container}>
@@ -23,9 +24,11 @@ const TransactionsCard = props => {
       </View>
       <View style={styles.descriptionWrapper}>
         <View style={styles.description}>
-          <Text style={{ ...FONTS.h4 }}>Reference: </Text>
+          <Text style={{ ...FONTS.h4 }}>Title: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-            {props.reference}
+            {props.purpose === 'afrocinema_premier'
+              ? props.model.title
+              : props.model.name}
           </Text>
         </View>
         <View style={styles.description}>
@@ -49,9 +52,9 @@ export default TransactionsCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: wp('90%'),
+    alignSelf: 'center',
     paddingVertical: wp('2.75%'),
-    // marginBottom: wp('2.5%'),
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray,
   },

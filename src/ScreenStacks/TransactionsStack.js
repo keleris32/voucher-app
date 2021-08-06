@@ -31,7 +31,7 @@ const TransactionsStack = () => {
     });
 
     await axiosInstance
-      .get('retailer/payment-transactions')
+      .get('retailer/payment-transactions?include=model')
       .then(res => {
         getTransactionsDispatch({
           type: GET_TRANSACTIONS,
@@ -41,6 +41,7 @@ const TransactionsStack = () => {
           type: GET_SEARCH_DATA,
           payload: res.data.data.payment_transactions,
         });
+        console.log('Transaction Stack>>', JSON.stringify(res.data, null, 2));
       })
       .catch(err => {
         console.log('Transaction Stack>>', JSON.stringify(err, null, 2));
