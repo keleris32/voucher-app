@@ -14,13 +14,14 @@ import {
 } from 'react-native-responsive-screen';
 import { Formik } from 'formik';
 
-import { COLORS, FONTS, SIZES } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import { GlobalContext } from '../../context/Provider';
 import { CustomButton, CustomInput } from '../../components';
 import EnvironmentVariables from '../../config/env';
 import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
+import { FlutterwavePayment } from './FlutterwavePayment';
 
 const PaymentScreenComponent = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -43,6 +44,11 @@ const PaymentScreenComponent = () => {
       selectedAfrocinemaData,
       selectedAfrostreamData,
     },
+  } = useContext(GlobalContext);
+
+  // Global state variable for retailer's data
+  const {
+    getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
   // Fn to request for client secret if the product is from Afrocinema
@@ -205,6 +211,12 @@ const PaymentScreenComponent = () => {
       validateOnMount={true}
       onSubmit={values => {
         openPaymentSheet(values.phoneNumber);
+        // FlutterwavePayment(
+        //   values.phoneNumber,
+        //   selectedCountry.id,
+        //   isAfrocinemaActive,
+        //   isAfrocinemaActive ? selectedAfrocinemaData : selectedAfrostreamData,
+        // );
       }}
       validationSchema={validationSchema}>
       {props => (
@@ -280,29 +292,3 @@ const styles = StyleSheet.create({
     ...FONTS.body4,
   },
 });
-
-{
-  /* <CardField
-          postalCodeEnabled={false}
-          placeholder={{
-            number: '4242 4242 4242 4242',
-          }}
-          cardStyle={{
-            // flexDirection: 'column',
-            backgroundColor: '#FFFFFF',
-            textColor: '#000000',
-          }}
-          style={{
-            // flexDirection: 'column',
-            width: '100%',
-            height: 50,
-            marginVertical: 30,
-          }}
-          onCardChange={cardDetails => {
-            setCard(cardDetails);
-          }}
-          onFocus={focusedField => {
-            console.log('focusField', focusedField);
-          }}
-        /> */
-}
