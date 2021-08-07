@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -28,6 +28,12 @@ const AccountSettings = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorComponent, setErrorComponent] = useState(false);
+
+  // useEffect(() => {
+  //   return () => {
+  //     navigation.goBack();
+  //   };
+  // }, []);
 
   // Retailer global state variable
   const {

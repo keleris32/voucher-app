@@ -56,7 +56,16 @@ const TabNavigator = () => {
             height: hp('10%'),
           },
         }}>
-        <Tab.Screen name={HOME} component={HomeStack} />
+        <Tab.Screen
+          name={HOME}
+          component={HomeStack}
+          listeners={({ navigation }) => ({
+            tabPress: event => {
+              event.preventDefault();
+              navigation.navigate(HOME, { screen: HOME });
+            },
+          })}
+        />
         <Tab.Screen name={TRANSACTIONS} component={TransactionsStack} />
         <Tab.Screen name={SETTINGS} component={SettingsStack} />
       </Tab.Navigator>
