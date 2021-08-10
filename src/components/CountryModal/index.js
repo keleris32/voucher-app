@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,8 @@ const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
+  const isCurrent = useRef(true);
+
   const { getRetailerDispatch } = useContext(GlobalContext);
 
   // State variable for filtered search data
@@ -32,8 +34,10 @@ const CountryModal = props => {
   const fetchCountryData = async () => {
     try {
       const request = await axiosInstance.get('countries');
-      setCountryData(request.data.data.countries);
-      setFilteredData(request.data.data.countries);
+      if (isCurrent.current) {
+        setCountryData(request.data.data.countries);
+        setFilteredData(request.data.data.countries);
+      }
       props.setFetchError(false);
     } catch (err) {
       props.setFetchError(true);
@@ -69,6 +73,12 @@ const CountryModal = props => {
       setSearchValue(text);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      isCurrent.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     fetchCountryData();
