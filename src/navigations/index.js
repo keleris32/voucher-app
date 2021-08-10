@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
 import TabNavigator from './TabNavigator';
 import AuthNavigator from './AuthNavigator';
@@ -33,8 +34,6 @@ const AppNavContainer = () => {
 
       // If the object is present, set the authenication state variable to true, else false
       if (retailer) {
-        setIsAuthLoaded(true);
-
         await axiosInstance
           .get('retailer/')
           .then(res => {
@@ -49,11 +48,13 @@ const AppNavContainer = () => {
 
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
-      } else {
-        setIsAuthLoaded(true);
 
+        setIsAuthLoaded(true);
+      } else {
         // if the retailer isn't logged in, set authentication state to false
         setIsAuthenticated(false);
+
+        setIsAuthLoaded(true);
       }
     } catch (error) {}
   };
@@ -63,6 +64,13 @@ const AppNavContainer = () => {
   useEffect(() => {
     getRetailerData();
   }, [isLoggedIn]);
+
+  // Hide Splash Screen after App has loaded
+  useEffect(() => {
+    if (isAuthLoaded) {
+      SplashScreen.hide();
+    }
+  }, [isAuthLoaded]);
 
   return (
     <>

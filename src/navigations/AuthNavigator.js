@@ -14,11 +14,11 @@ const Stack = createStackNavigator();
 const AuthNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SPLASH_SCREEN}
+      initialRouteName={LOGIN}
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={SPLASH_SCREEN} component={SplashScreen} />
+      {/* <Stack.Screen name={SPLASH_SCREEN} component={SplashScreen} /> */}
       <Stack.Screen name={LOGIN} component={Login} />
       <Stack.Screen name={SIGN_UP} component={SignUp} />
       <Stack.Screen name={FORGOT_PASSWORD} component={ForgotPassword} />
