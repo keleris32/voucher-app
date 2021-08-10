@@ -54,13 +54,13 @@ const Documents = ({ navigation }) => {
       await axiosInstance
         .post('retailer/initiate-verification', data)
         .then(res => {
+          // Navigate to the Pending verifcation screen on successful request
           navigation.replace(PENDING_VERIFICATION);
           setInitializing(false);
+          setHasUploaded(false);
         })
-        // Navigate to the Pending verifcation screen on successful request
 
         .catch(err => {
-          // console.log('Initializing error >>>> Documents screen', err)
           Alert.alert(
             'Error',
             'Please check your internet connection and try again!',
@@ -126,9 +126,7 @@ const Documents = ({ navigation }) => {
 
   // Upload selected file to server
   const uploadFile = async () => {
-    setUploading(false);
-
-    console.log(JSON.stringify(selectedFile, null, 2));
+    setUploading(true);
 
     if (retailerData?.email_verified_at) {
       // Check if any file has been selected
@@ -136,7 +134,10 @@ const Documents = ({ navigation }) => {
         // If a file has been selected, then create FormData
         const fileToUpload = selectedFile;
         const data = new FormData();
-        data.append('documents', fileToUpload, selectedFile.name);
+
+        fileToUpload.forEach(file => {
+          data.append('documents', file, selectedFile.name);
+        });
 
         // Upload file to server
         await axiosInstance
@@ -162,10 +163,6 @@ const Documents = ({ navigation }) => {
             setSelectedFile(null);
           })
           .catch(err => {
-            console.log(
-              'uploadFile>>>documents screen',
-              JSON.stringify(err, null, 2),
-            );
             Alert.alert(
               'Error',
               'Please check your internet connection and try again!',
@@ -217,7 +214,7 @@ const Documents = ({ navigation }) => {
   const selectDocument = async () => {
     try {
       // Document Picker to select a file
-      const file = await DocumentPicker.pick({
+      const file = await DocumentPicker.pickMultiple({
         // The type of file eligible for selection
         type: [
           DocumentPicker.types.pdf,
@@ -244,7 +241,6 @@ const Documents = ({ navigation }) => {
   };
 
   useEffect(async () => {
-    // console.log('Component Mounted>>>>>> DOcuments Screen');
     await axiosInstance
       .get('retailer/')
       .then(res => {
@@ -253,7 +249,9 @@ const Documents = ({ navigation }) => {
           payload: res.data.data.retailer,
         });
       })
-      .catch(err => console.log('Documents Screen, get retailer>>>', err));
+      .catch(err => {
+        return;
+      });
   }, [refreshState]);
 
   return (
@@ -285,17 +283,42 @@ const Documents = ({ navigation }) => {
                     touched={props.touched.documentName}
                     placeholder="Driver's License etc.."
                   /> */}
-              <TouchableOpacity
-                style={[
-                  styles.pickerBtn,
-                  {
-                    borderWidth: selectedFile ? 4 : 0,
-                    borderColor: selectedFile ? COLORS.acomartBlue2 : '',
-                  },
-                ]}
-                onPress={selectDocument}>
-                <Icons name="file-upload" style={styles.icon} />
-              </TouchableOpacity>
+              <View>
+                {selectedFile && (
+                  <View
+                    style={{
+                      // flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      marginVertical: wp('1.5%'),
+                      // backgroundColor: COLORS.red,
+                    }}>
+                    <View
+                      style={{
+                        width: wp('2%'),
+                        height: wp('2%'),
+                        borderRadius: wp('50%'),
+                        backgroundColor: COLORS.red,
+                        marginHorizontal: wp('1%'),
+                      }}
+                    />
+                    {/* <Text style={{ ...FONTS.h4, color: COLORS.red }}>
+                      {selectedFile.length}
+                    </Text> */}
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={[
+                    styles.pickerBtn,
+                    {
+                      borderWidth: selectedFile ? 4 : 0,
+                      borderColor: selectedFile ? COLORS.acomartBlue2 : '',
+                    },
+                  ]}
+                  onPress={selectDocument}>
+                  <Icons name="file-upload" style={styles.icon} />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <CustomButton
