@@ -1,24 +1,37 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import SearchBar from '../components/AfrocinemaComponent/SearchBar';
 
 import TransactionsCard from '../components/TransactionsCard';
 import { COLORS, FONTS } from '../constants';
-import { GET_SEARCH_DATA } from '../constants/actionTypes';
+import {
+  GET_SEARCH_DATA,
+  GET_TRANSACTIONS,
+  GET_TRANSACTIONS_ERROR,
+  GET_TRANSACTIONS_LOADING,
+} from '../constants/actionTypes';
 import { GlobalContext } from '../context/Provider';
+import axiosInstance from '../helpers/axiosInterceptor';
 
 const Transactions = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [filteredData, setFilteredData] = useState('');
+  const [refreshState, setRefreshState] = useState(false);
+
+  const refreshPage = () => setRefreshState(!refreshState);
 
   // Transactions data global state variable
   const {
+    getTransactionsDispatch,
     getTransactionsState: { transactionsData, loading },
   } = useContext(GlobalContext);
 
@@ -27,6 +40,37 @@ const Transactions = () => {
     searchDispatch,
     searchState: { searchFilterData },
   } = useContext(GlobalContext);
+
+  // get transactions data from api
+  const getTransactionsData = async () => {
+    getTransactionsDispatch({
+      type: GET_TRANSACTIONS_LOADING,
+    });
+
+    await axiosInstance
+      .get('retailer/payment-transactions?include=model')
+      .then(res => {
+        setFilteredData(res.data.data.payment_transactions);
+        getTransactionsDispatch({
+          type: GET_TRANSACTIONS,
+          payload: res.data.data.payment_transactions,
+        });
+
+        // searchDispatch({
+        //   type: GET_SEARCH_DATA,
+        //   payload: res.data.data.payment_transactions,
+        // });
+        // console.log('Transaction Stack>>', JSON.stringify(res.data, null, 2));
+      })
+      .catch(err => {
+        // console.log(err.message);
+        return;
+        // getTransactionsDispatch({
+        //   type: GET_TRANSACTIONS_ERROR,
+        // });
+        // console.log('Transaction Stack>>', JSON.stringify(err, null, 2));
+      });
+  };
 
   // console.log(JSON.stringify(transactionsData, null, 2));
   const searchFilterFunction = text => {
@@ -41,20 +85,29 @@ const Transactions = () => {
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
-      searchDispatch({
-        type: GET_SEARCH_DATA,
-        payload: newData,
-      });
+
+      setFilteredData(newData);
+      // searchDispatch({
+      //   type: GET_SEARCH_DATA,
+      //   payload: newData,
+      // });
       setSearchValue(text);
     } else {
       // if it is empty, update filteredData with afrocinemaData
-      searchDispatch({
-        type: GET_SEARCH_DATA,
-        payload: transactionsData,
-      });
+      setFilteredData(transactionsData);
+      // searchDispatch({
+      //   type: GET_SEARCH_DATA,
+      //   payload: transactionsData,
+      // });
       setSearchValue(text);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      getTransactionsData();
+    }, [refreshState]),
+  );
 
   return (
     <View style={styles.container}>
@@ -74,7 +127,7 @@ const Transactions = () => {
           </View>
           <View>
             <FlatList
-              data={searchFilterData}
+              data={filteredData}
               keyExtractor={item => item.id}
               // ListHeaderComponent={}
               showsVerticalScrollIndicator={true}

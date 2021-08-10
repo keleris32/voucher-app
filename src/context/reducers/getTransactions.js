@@ -1,5 +1,6 @@
 import {
   GET_TRANSACTIONS,
+  GET_TRANSACTIONS_ERROR,
   GET_TRANSACTIONS_LOADING,
 } from '../../constants/actionTypes';
 
@@ -9,6 +10,7 @@ const getTransactions = (state, { type, payload }) => {
       return {
         ...state,
         loading: true,
+        error: false,
       };
 
     case GET_TRANSACTIONS:
@@ -16,6 +18,12 @@ const getTransactions = (state, { type, payload }) => {
         ...state,
         transactionsData: payload,
         loading: false,
+      };
+
+    case GET_TRANSACTIONS_ERROR:
+      return {
+        ...state,
+        error: true,
       };
 
     default:

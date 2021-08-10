@@ -1,5 +1,5 @@
 export default {
   transactionsData: {},
-  loading: 'false',
-  error: '',
+  loading: false,
+  error: false,
 };
