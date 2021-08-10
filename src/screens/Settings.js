@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,8 +20,12 @@ import logoutRetailer from '../context/actions/auth/logoutRetailer';
 import { GlobalContext } from '../context/Provider';
 import { ACCOUNT_SETTINGS, CHANGE_PASSWORD } from '../constants/routeNames';
 import DocumentPicker from 'react-native-document-picker';
+import axiosInstance from '../helpers/axiosInterceptor';
 
 const Settings = ({ navigation }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   // Auth global state variable
   const { authDispatch } = useContext(GlobalContext);
 
@@ -46,6 +50,8 @@ const Settings = ({ navigation }) => {
   };
 
   const selectDocument = async () => {
+    setIsUpdating(true);
+
     try {
       // Document Picker to select a file
       const file = await DocumentPicker.pick({
@@ -53,19 +59,65 @@ const Settings = ({ navigation }) => {
         type: [DocumentPicker.types.images],
       });
 
+      console.log(JSON.stringify(file, null, 2));
+
       // set the result to state
       setSelectedFile(file);
     } catch (err) {
       setSelectedFile(null);
 
       if (DocumentPicker.isCancel(err)) {
-        return;
+        setIsUpdating(false);
       } else {
         Alert.alert(
           'Error.',
           'Something went wrong. Please check your internet connection and try again!',
         );
       }
+    }
+  };
+
+  const uploadImage = async () => {
+    await selectDocument();
+
+    if (selectedFile !== null) {
+      const formData = new FormData();
+      formData.append('profile_picture', selectedFile, selectedFile.name);
+
+      axiosInstance
+        .post('retailer/profile-picture', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data;',
+          },
+        })
+        .then(res => {
+          Alert.alert(
+            'Success.',
+            'Your profile picture was successfully updated!',
+            [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  setIsUpdating(false);
+                },
+              },
+            ],
+          );
+        })
+        .catch(err => {
+          Alert.alert(
+            'Error.',
+            'Something went wrong. Please check your internet connection and try again!',
+            [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  setIsUpdating(false);
+                },
+              },
+            ],
+          );
+        });
     }
   };
 
@@ -80,8 +132,10 @@ const Settings = ({ navigation }) => {
               source={{ uri: retailerData?.profile_picture }}
               style={styles.image}
             />
-            <TouchableOpacity onPress={() => selectDocument()}>
-              <Text style={styles.imageText}>Update image</Text>
+            <TouchableOpacity onPress={() => uploadImage()}>
+              <Text style={styles.imageText}>
+                {isUpdating ? 'Updating...' : 'Update image'}
+              </Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
