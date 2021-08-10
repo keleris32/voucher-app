@@ -11,7 +11,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { CustomButton, CustomInput } from '../../components';
+import { CustomButton } from '../../components';
 import { Formik } from 'formik';
 import CountryModal from '../../components/CountryModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -29,16 +29,12 @@ const AccountSettings = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorComponent, setErrorComponent] = useState(false);
 
-  // useEffect(() => {
-  //   return () => {
-  //     navigation.goBack();
-  //   };
-  // }, []);
-
   // Retailer global state variable
   const {
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
+
+  // Selected country state variable
   const [selectedCountry, setSelectedCountry] = useState({
     id: retailerData.country_id,
     name: 'Select your country',

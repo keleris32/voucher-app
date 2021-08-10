@@ -21,6 +21,7 @@ import { GlobalContext } from '../context/Provider';
 import { ACCOUNT_SETTINGS, CHANGE_PASSWORD } from '../constants/routeNames';
 import DocumentPicker from 'react-native-document-picker';
 import axiosInstance from '../helpers/axiosInterceptor';
+import { GET_RETAILER } from '../constants/actionTypes';
 
 const Settings = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -31,6 +32,7 @@ const Settings = ({ navigation }) => {
 
   // retailerData global state variable
   const {
+    getRetailerDispatch,
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
@@ -91,6 +93,10 @@ const Settings = ({ navigation }) => {
           },
         })
         .then(res => {
+          getRetailerDispatch({
+            type: GET_RETAILER,
+            payload: res.data.data.retailer,
+          });
           Alert.alert(
             'Success.',
             'Your profile picture was successfully updated!',
