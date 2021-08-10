@@ -75,8 +75,8 @@ const Home = () => {
 
   // Call both functions on component mount
   useEffect(() => {
-    getAfrocinemaData();
     getAfrostreamData();
+    getAfrocinemaData();
   }, []);
 
   // To separate Retailer's first name and last name, and return both names in an array

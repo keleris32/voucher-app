@@ -22,6 +22,7 @@ import axiosInstance from '../../helpers/axiosInterceptor';
 import { accountSettingsValidationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
 import ErrorMessage from '../../components/ErrorMessage';
+import { GET_RETAILER } from '../../constants/actionTypes';
 
 const AccountSettings = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,7 @@ const AccountSettings = ({ navigation }) => {
 
   // Retailer global state variable
   const {
+    getRetailerDispatch,
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
@@ -55,7 +57,11 @@ const AccountSettings = ({ navigation }) => {
 
     axiosInstance
       .post('retailer', data)
-      .then(res =>
+      .then(res => {
+        getRetailerDispatch({
+          type: GET_RETAILER,
+          payload: res.data.data.retailer,
+        });
         Alert.alert('Success', 'Your Profile was updated successfully', [
           {
             text: 'OK',
@@ -64,8 +70,8 @@ const AccountSettings = ({ navigation }) => {
               setErrorComponent(false);
             },
           },
-        ]),
-      )
+        ]);
+      })
       .catch(err => {
         // If there's a network error, display an alert, else display an error message
         if (err.message === 'Network Error') {
