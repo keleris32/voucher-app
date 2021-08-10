@@ -50,10 +50,10 @@ const Login = ({ navigation }) => {
       }) => (
         <View style={styles.container}>
           <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            <TouchableOpacity
-              onPress={() => navigation.replace('SplashScreen')}>
-              <Image source={icons.fullAcomart} style={styles.logo} />
-            </TouchableOpacity>
+            {/* <TouchableOpacity
+              onPress={() => navigation.replace('SplashScreen')}> */}
+            <Image source={icons.fullAcomart} style={styles.logo} />
+            {/* </TouchableOpacity> */}
             <View style={styles.formContainer}>
               <CustomInput
                 placeholder="Email"

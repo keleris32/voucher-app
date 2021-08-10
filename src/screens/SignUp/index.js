@@ -97,10 +97,10 @@ const SignUp = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={true}>
             <ImageBackground source={images.loginBg} style={styles.bgImage}>
-              <TouchableOpacity
-                onPress={() => navigation.replace('SplashScreen')}>
-                <Image source={icons.fullAcomart} style={styles.logo} />
-              </TouchableOpacity>
+              {/* <TouchableOpacity
+                onPress={() => navigation.replace('SplashScreen')}> */}
+              <Image source={icons.fullAcomart} style={styles.logo} />
+              {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
                 {error?.errors && (
