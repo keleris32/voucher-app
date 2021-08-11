@@ -14,7 +14,7 @@ import { GET_RETAILER } from '../constants/actionTypes';
 const AppNavContainer = () => {
   // Auth global state
   const {
-    authState: { isLoggedIn },
+    authState: { isLoggedIn, isLoggedOut },
   } = useContext(GlobalContext);
 
   // Auth state management
@@ -87,7 +87,8 @@ const AppNavContainer = () => {
           isAuthenticated &&
           retailerData?.verification_status === 'pending' ? (
             <VerificationNavigator />
-          ) : isAuthenticated &&
+          ) : !isLoggedOut &&
+            isAuthenticated &&
             retailerData?.verification_status === 'approved' ? (
             <TabNavigator />
           ) : (

@@ -1,4 +1,7 @@
-import { LOGOUT_RETAILER } from '../../../constants/actionTypes';
+import {
+  LOGOUT_RETAILER,
+  LOGOUT_RETAILER_ERROR,
+} from '../../../constants/actionTypes';
 import axiosInstance from '../../../helpers/axiosInterceptor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,16 +21,20 @@ export default () => dispatch => {
       });
     })
     .catch(err => {
-      // console.log(err?.response.data);
-      // If the Logout operation is successfully, remove the jwtToken from local storage
-      AsyncStorage.removeItem('token');
+      // // console.log(err?.response.data);
+      // // If the Logout operation is successfully, remove the jwtToken from local storage
+      // AsyncStorage.removeItem('token');
 
-      // If the Logout operation is successfully, remove the retailer object from local storage
-      AsyncStorage.removeItem('retailer');
+      // // If the Logout operation is successfully, remove the retailer object from local storage
+      // AsyncStorage.removeItem('retailer');
 
-      // Dispatch this action which sets the authState, isLoggedIn to false.
+      // // Dispatch this action which sets the authState, isLoggedIn to false.
+      // dispatch({
+      //   type: LOGOUT_RETAILER,
+      // });
+
       dispatch({
-        type: LOGOUT_RETAILER,
+        type: LOGOUT_RETAILER_ERROR,
       });
     });
 };
