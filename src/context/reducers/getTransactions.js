@@ -23,7 +23,7 @@ const getTransactions = (state, { type, payload }) => {
     case GET_TRANSACTIONS_ERROR:
       return {
         ...state,
-        error: true,
+        loading: false,
       };
 
     default:

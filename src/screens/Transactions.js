@@ -21,10 +21,12 @@ import {
 } from '../constants/actionTypes';
 import { GlobalContext } from '../context/Provider';
 import axiosInstance from '../helpers/axiosInterceptor';
+import ErrorPageComponent from '../components/ErrorPageComponent';
 
 const Transactions = () => {
   const [searchValue, setSearchValue] = useState('');
   const [filteredData, setFilteredData] = useState('');
+  const [fetchError, setFetchError] = useState(false);
   const [refreshState, setRefreshState] = useState(false);
 
   const refreshPage = () => setRefreshState(!refreshState);
@@ -43,10 +45,11 @@ const Transactions = () => {
 
   // get transactions data from api
   const getTransactionsData = async () => {
+    setFetchError(false);
     getTransactionsDispatch({
       type: GET_TRANSACTIONS_LOADING,
     });
-
+    // console.log('gets here');
     await axiosInstance
       .get('retailer/payment-transactions?include=model')
       .then(res => {
@@ -63,8 +66,12 @@ const Transactions = () => {
         // console.log('Transaction Stack>>', JSON.stringify(res.data, null, 2));
       })
       .catch(err => {
+        // console.log('never gets here');
         // console.log(err.message);
-        return;
+        getTransactionsDispatch({
+          type: GET_TRANSACTIONS_ERROR,
+        });
+        setFetchError(true);
         // getTransactionsDispatch({
         //   type: GET_TRANSACTIONS_ERROR,
         // });
@@ -112,7 +119,12 @@ const Transactions = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Transactions</Text>
-      {loading ? (
+      {fetchError ? (
+        <ErrorPageComponent
+          text="Ops! Please check your internet connection and try again."
+          refreshComp={refreshPage}
+        />
+      ) : loading ? (
         <View style={styles.loadingWrapper}>
           <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
         </View>
