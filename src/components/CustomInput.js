@@ -1,6 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import PasswordIcon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { COLORS, FONTS, SIZES } from '../constants';
@@ -15,6 +22,8 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
   } else if (iconType === 'email') {
     icon = 'envelope';
   } else if (iconType === 'password') {
+    icon = 'lock';
+  } else if (iconType === 'passwordConfirm') {
     icon = 'lock';
   }
 
@@ -52,6 +61,26 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
         placeholderTextColor={COLORS.gray}
         {...props}
       />
+      {iconType === 'password' && (
+        <TouchableOpacity
+          onPress={() => props.setIsPasswordHidden(!props.isPasswordHidden)}>
+          <PasswordIcon
+            name={props.isPasswordHidden ? 'eye' : 'eye-off'}
+            style={styles.passwordIcon}
+          />
+        </TouchableOpacity>
+      )}
+      {iconType === 'passwordConfirm' && (
+        <TouchableOpacity
+          onPress={() =>
+            props.setIsPasswordConfirmHidden(!props.isPasswordConfirmHidden)
+          }>
+          <PasswordIcon
+            name={props.isPasswordConfirmHidden ? 'eye' : 'eye-off'}
+            style={styles.passwordIcon}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -95,5 +124,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.base * 1.5,
     color: COLORS.white,
     ...FONTS.h3,
+  },
+
+  passwordIcon: {
+    fontSize: wp('5%'),
+    color: COLORS.black,
   },
 });

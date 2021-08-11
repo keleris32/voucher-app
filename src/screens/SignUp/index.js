@@ -28,6 +28,8 @@ import CountryModal from '../../components/CountryModal';
 import EnvironmentVariables from '../../config/env';
 
 const SignUp = ({ navigation }) => {
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isPasswordConfirmHidden, setIsPasswordConfirmHidden] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
@@ -94,16 +96,16 @@ const SignUp = ({ navigation }) => {
               {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
-                {error?.errors && (
+                {/* {error?.errors && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Invalid credentials provided!
                     </Text>
                   </View>
-                )}
+                )} */}
 
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
-                {(fetchError || error?.networkError) && (
+                {error?.message && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Please check your internet connection
@@ -124,6 +126,9 @@ const SignUp = ({ navigation }) => {
                     setFetchError={setFetchError}
                   />
                 </TouchableOpacity>
+                {error?.errors?.country_id && (
+                  <Text style={styles.errors}>Please select your country</Text>
+                )}
 
                 <CustomInput
                   placeholder="Full Name"
@@ -153,6 +158,11 @@ const SignUp = ({ navigation }) => {
                 {errors.phoneNumber && touched.phoneNumber && (
                   <Text style={styles.errors}>{errors.phoneNumber}</Text>
                 )}
+                {error?.errors?.phone_number && (
+                  <Text style={styles.errors}>
+                    {error?.errors?.phone_number}
+                  </Text>
+                )}
 
                 <CustomInput
                   placeholder="Email"
@@ -167,16 +177,21 @@ const SignUp = ({ navigation }) => {
                 {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
                 )}
+                {error?.errors?.email && (
+                  <Text style={styles.errors}>{error?.errors?.email}</Text>
+                )}
 
                 <CustomInput
                   placeholder="Password"
                   iconType="password"
-                  secureTextEntry={true}
+                  secureTextEntry={isPasswordHidden}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   value={values.password}
                   errors={errors.password}
                   touched={touched.password}
+                  isPasswordHidden={isPasswordHidden}
+                  setIsPasswordHidden={setIsPasswordHidden}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.password && touched.password && (
@@ -185,17 +200,22 @@ const SignUp = ({ navigation }) => {
 
                 <CustomInput
                   placeholder="Confirm Password"
-                  iconType="password"
-                  secureTextEntry={true}
+                  iconType="passwordConfirm"
+                  secureTextEntry={isPasswordConfirmHidden}
                   onChangeText={handleChange('confirmPassword')}
                   onBlur={handleBlur('confirmPassword')}
                   value={values.confirmPassword}
                   errors={errors.confirmPassword}
                   touched={touched.confirmPassword}
+                  isPasswordConfirmHidden={isPasswordConfirmHidden}
+                  setIsPasswordConfirmHidden={setIsPasswordConfirmHidden}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
                 {errors.confirmPassword && touched.confirmPassword && (
                   <Text style={styles.errors}>{errors.confirmPassword}</Text>
+                )}
+                {error?.errors?.password && (
+                  <Text style={styles.errors}>{error?.errors?.password}</Text>
                 )}
 
                 <CustomButton
