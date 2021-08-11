@@ -148,10 +148,10 @@ const AccountSettings = ({ navigation }) => {
             )}
 
             <TouchableOpacity
-              disabled={fetchError}
+              // disabled={fetchError}
               onPress={() => setIsModalVisible(true)}>
               <CountryModal
-                isModalVisible={fetchError ? false : isModalVisible}
+                isModalVisible={isModalVisible}
                 setIsModalVisible={setIsModalVisible}
                 selectedCountry={selectedCountry}
                 setSelectedCountry={setSelectedCountry}

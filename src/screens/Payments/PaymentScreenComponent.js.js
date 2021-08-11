@@ -21,7 +21,6 @@ import { CustomButton, CustomInput } from '../../components';
 import EnvironmentVariables from '../../config/env';
 import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
-import { FlutterwavePayment } from './FlutterwavePayment';
 
 const PaymentScreenComponent = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -75,11 +74,23 @@ const PaymentScreenComponent = () => {
       customer = await response.data.data.payment_intent.customer;
       paymentIntent = await response.data.data.payment_intent.client_secret;
 
-      console.log('cinema first stage done');
+      // console.log('cinema first stage done');
       // setLoading(false);
     } catch (error) {
-      console.log('Caught cinema error', error);
-      setLoading(false);
+      // console.log('Caught cinema error', error);
+      Alert.alert(
+        'Error',
+        'Please check your internet connection and try again later.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setLoading(false);
+            },
+          },
+        ],
+      );
+      // setLoading(false);
     }
 
     return { customer, paymentIntent };
@@ -113,10 +124,22 @@ const PaymentScreenComponent = () => {
       customer = await response.data.data.payment_intent.customer;
       paymentIntent = await response.data.data.payment_intent.client_secret;
 
-      console.log('stream first stage done');
+      // console.log('stream first stage done');
     } catch (error) {
-      console.log('Caught stream error', error);
-      setLoading(false);
+      // console.log('Caught stream error', error);
+      Alert.alert(
+        'Error',
+        'Please check your internet connection and try again later.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setLoading(false);
+            },
+          },
+        ],
+      );
+      // setLoading(false);
     }
 
     return { customer, paymentIntent };
@@ -142,7 +165,7 @@ const PaymentScreenComponent = () => {
       if (error) {
         console.log(error);
       } else {
-        console.log('2nd stage done');
+        // console.log('2nd stage done');
       }
 
       // END OF IF STATEMENT
@@ -165,7 +188,7 @@ const PaymentScreenComponent = () => {
       if (error) {
         console.log(error);
       } else {
-        console.log('2nd stage done');
+        // console.log('2nd stage done');
       }
 
       // END OF ELSE STATEMENT
@@ -178,7 +201,7 @@ const PaymentScreenComponent = () => {
     // InitializePayment Fn
     await initializePayment(prop);
 
-    console.log('3rd stage');
+    // console.log('3rd stage');
 
     const { error } = await presentPaymentSheet({ clientSecret });
 
@@ -211,12 +234,6 @@ const PaymentScreenComponent = () => {
       validateOnMount={true}
       onSubmit={values => {
         openPaymentSheet(values.phoneNumber);
-        // FlutterwavePayment(
-        //   values.phoneNumber,
-        //   selectedCountry.id,
-        //   isAfrocinemaActive,
-        //   isAfrocinemaActive ? selectedAfrocinemaData : selectedAfrostreamData,
-        // );
       }}
       validationSchema={validationSchema}>
       {props => (
@@ -225,10 +242,10 @@ const PaymentScreenComponent = () => {
             <View style={styles.wrapper}>
               <Text style={styles.title}>Customer's Details</Text>
               <TouchableOpacity
-                disabled={fetchError}
+                // disabled={fetchError}
                 onPress={() => setIsModalVisible(true)}>
                 <CountryModal
-                  isModalVisible={fetchError ? false : isModalVisible}
+                  isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   selectedCountry={selectedCountry}
                   setSelectedCountry={setSelectedCountry}
