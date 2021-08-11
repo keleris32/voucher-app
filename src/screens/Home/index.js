@@ -26,6 +26,11 @@ import {
 } from '../../constants/actionTypes';
 
 const Home = () => {
+  const [fetchError, setFetchError] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const refreshComp = () => setRefresh(!refresh);
+
   // State variable for the dashboard tabs
   const [activeTab, setActiveTab] = useState({
     afrocinema: false,
@@ -41,11 +46,15 @@ const Home = () => {
   const [filteredData, setFilteredData] = useState({});
 
   // Global state for Afrocinema and Afrostream
-  const { getAfrocinemaDispatch, getAfrostreamDispatch } =
-    useContext(GlobalContext);
+  const {
+    getAfrocinemaDispatch,
+    getAfrostreamDispatch,
+    getAfrostreamState: { loading },
+  } = useContext(GlobalContext);
 
   // Get afrocinema's data from server and store in Global state
   const getAfrocinemaData = async () => {
+    setFetchError(false);
     await axiosInstance
       .get('retailer/videos')
       .then(res => {
@@ -56,11 +65,14 @@ const Home = () => {
         });
         setFilteredData(res.data.data.videos);
       })
-      .catch(err => console.log(err.response));
+      .catch(err => {
+        setFetchError(true);
+      });
   };
 
   // Get afrostream's data from server and store in Global state
   const getAfrostreamData = async () => {
+    setFetchError(false);
     await axiosInstance
       .get('retailer/subscription-plans')
       .then(res => {
@@ -70,14 +82,16 @@ const Home = () => {
           payload: res.data.data.subscription_plans,
         });
       })
-      .catch(err => console.log(err.response));
+      .catch(err => {
+        setFetchError(true);
+      });
   };
 
   // Call both functions on component mount
   useEffect(() => {
     getAfrostreamData();
     getAfrocinemaData();
-  }, []);
+  }, [refresh]);
 
   // To separate Retailer's first name and last name, and return both names in an array
   const name = retailerData?.name.split(' ');
@@ -120,6 +134,7 @@ const Home = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          disabled={loading}
           style={{ flex: 1 }}
           onPress={() => setActiveTab({ afrocinema: true, afrostream: false })}>
           <View
@@ -143,7 +158,12 @@ const Home = () => {
           setFilteredData={setFilteredData}
         />
       )}
-      {activeTab.afrostream && <AfrostreamComponent />}
+      {activeTab.afrostream && (
+        <AfrostreamComponent
+          refreshComp={refreshComp}
+          fetchError={fetchError}
+        />
+      )}
     </SafeAreaView>
   );
 };

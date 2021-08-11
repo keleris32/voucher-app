@@ -74,9 +74,9 @@ const AppNavContainer = () => {
 
   return (
     <>
-      {/* {console.log('isLoggedIn>>', isLoggedIn)}
+      {console.log('isLoggedIn>>', isLoggedIn)}
       {console.log('isAuthenticated>>', isAuthenticated)}
-      {console.log('Verification_status>>', retailerData.verification_status)} */}
+      {console.log('Verification_status>>', retailerData.verification_status)}
       {isAuthLoaded ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
@@ -87,8 +87,7 @@ const AppNavContainer = () => {
           isAuthenticated &&
           retailerData?.verification_status !== 'approved' ? (
             <VerificationNavigator />
-          ) : isLoggedIn &&
-            isAuthenticated &&
+          ) : isAuthenticated &&
             retailerData?.verification_status === 'approved' ? (
             <TabNavigator />
           ) : (

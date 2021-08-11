@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,8 @@ import { FORGOT_PASSWORD, SIGN_UP } from '../../constants/routeNames';
 import { loginValidationSchema } from './validationSchema';
 import { GlobalContext } from '../../context/Provider';
 import loginRetailer from '../../context/actions/auth/loginRetailer';
+import { useFocusEffect } from '@react-navigation/native';
+import { clearAuthState } from '../../context/actions/auth/registerRetailer';
 
 const Login = ({ navigation }) => {
   const [isLoginPasswordHidden, setIsLoginPasswordHidden] = useState(true);
@@ -28,6 +30,17 @@ const Login = ({ navigation }) => {
     authDispatch,
     authState: { error, loading, data },
   } = useContext(GlobalContext);
+
+  // Return a callback dispatch function to clear the authentication state on component unMount
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (data || error) {
+          clearAuthState()(authDispatch);
+        }
+      };
+    }, [data, error]),
+  );
 
   const submitForm = formData => {
     // If the form is valid, then the form's values are dispatched to the server

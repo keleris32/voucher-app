@@ -6,7 +6,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import { Value } from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
@@ -14,8 +17,9 @@ import SubscriptionCard from './SubscriptionCard';
 import { SELECTED_AFROSTREAM_CARD } from '../../constants/actionTypes';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 import { COLORS } from '../../constants';
+import ErrorPageComponent from '../ErrorPageComponent';
 
-const AfrostreamComponent = () => {
+const AfrostreamComponent = ({ refreshComp, fetchError }) => {
   // Afrostream global state variable
   const {
     getAfrostreamState: { afrostreamData, loading },
@@ -44,7 +48,12 @@ const AfrostreamComponent = () => {
 
   return (
     <>
-      {loading ? (
+      {fetchError ? (
+        <ErrorPageComponent
+          text="Ops! Please check your internet connection and try again."
+          refreshComp={refreshComp}
+        />
+      ) : loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
         </View>
