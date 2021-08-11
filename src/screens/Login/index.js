@@ -22,6 +22,8 @@ import { GlobalContext } from '../../context/Provider';
 import loginRetailer from '../../context/actions/auth/loginRetailer';
 
 const Login = ({ navigation }) => {
+  const [isLoginPasswordHidden, setIsLoginPasswordHidden] = useState(true);
+
   const {
     authDispatch,
     authState: { error, loading, data },
@@ -55,6 +57,24 @@ const Login = ({ navigation }) => {
             <Image source={icons.fullAcomart} style={styles.logo} />
             {/* </TouchableOpacity> */}
             <View style={styles.formContainer}>
+              {/* Display an error message, if the form's data is deemed invalid by the server */}
+              {error?.email && (
+                <View style={styles.invalidErrorMessage}>
+                  <Text style={styles.invalidErrorText}>
+                    Invalid credentials provided!
+                  </Text>
+                </View>
+              )}
+
+              {/* Display an error message, if form failed to connect to the server */}
+              {error?.message && (
+                <View style={styles.invalidErrorMessage}>
+                  <Text style={styles.invalidErrorText}>
+                    Please check your internet connection!
+                  </Text>
+                </View>
+              )}
+
               <CustomInput
                 placeholder="Email"
                 iconType="email"
@@ -70,13 +90,15 @@ const Login = ({ navigation }) => {
               )}
               <CustomInput
                 placeholder="Password"
-                iconType="password"
-                secureTextEntry={true}
+                iconType="loginPassword"
+                secureTextEntry={isLoginPasswordHidden}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
                 errors={errors.password}
                 touched={touched.password}
+                isLoginPasswordHidden={isLoginPasswordHidden}
+                setIsLoginPasswordHidden={setIsLoginPasswordHidden}
               />
               {/* If this field contains an error and it has been touched, then display the error message */}
               {errors.password && touched.password && (
@@ -154,6 +176,20 @@ const styles = StyleSheet.create({
   errors: {
     marginBottom: SIZES.radius,
     color: COLORS.red,
+    ...FONTS.h4,
+  },
+
+  invalidErrorMessage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: SIZES.margin,
+    marginBottom: SIZES.radius,
+    backgroundColor: COLORS.red,
+    borderRadius: SIZES.base / 2,
+  },
+
+  invalidErrorText: {
+    color: COLORS.white,
     ...FONTS.h4,
   },
 });

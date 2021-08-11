@@ -95,15 +95,6 @@ const SignUp = ({ navigation }) => {
               <Image source={icons.fullAcomart} style={styles.logo} />
               {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
-                {/* Display an error message, if the form's data is deemed invalid by the server */}
-                {/* {error?.errors && (
-                  <View style={styles.invalidErrorMessage}>
-                    <Text style={styles.invalidErrorText}>
-                      Invalid credentials provided!
-                    </Text>
-                  </View>
-                )} */}
-
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
                 {error?.message && (
                   <View style={styles.invalidErrorMessage}>

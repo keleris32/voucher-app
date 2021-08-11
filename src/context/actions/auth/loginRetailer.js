@@ -32,15 +32,9 @@ export default ({ email, password }) =>
         });
       })
       .catch(err => {
-        console.log(err.response.data);
         dispatch({
           type: LOGIN_FAIL,
-          payload: err.response
-            ? err.response.data
-            : {
-                networkError:
-                  'Please check your internet connection and try again later.',
-              },
+          payload: err.response ? err.response.data.data : err,
         });
       });
   };

@@ -52,7 +52,6 @@ export default ({
         });
       })
       .catch(err => {
-        console.log(JSON.stringify(err, null, 2));
         dispatch({
           type: REGISTER_FAIL,
           payload: err.response ? err.response.data : err,

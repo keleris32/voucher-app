@@ -25,6 +25,8 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
     icon = 'lock';
   } else if (iconType === 'passwordConfirm') {
     icon = 'lock';
+  } else if (iconType === 'loginPassword') {
+    icon = 'lock';
   }
 
   return (
@@ -77,6 +79,18 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
           }>
           <PasswordIcon
             name={props.isPasswordConfirmHidden ? 'eye' : 'eye-off'}
+            style={styles.passwordIcon}
+          />
+        </TouchableOpacity>
+      )}
+
+      {iconType === 'loginPassword' && (
+        <TouchableOpacity
+          onPress={() =>
+            props.setIsLoginPasswordHidden(!props.isLoginPasswordHidden)
+          }>
+          <PasswordIcon
+            name={props.isLoginPasswordHidden ? 'eye' : 'eye-off'}
             style={styles.passwordIcon}
           />
         </TouchableOpacity>

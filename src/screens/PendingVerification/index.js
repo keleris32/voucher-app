@@ -27,6 +27,27 @@ const PendingVerification = () => {
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
+  const checkStatus = () => {
+    if (retailerData.verification_status !== 'approved') {
+      Alert.alert(
+        'Pending',
+        'You would be notified once the vetting process has been completed',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setLoading(false);
+              setClicked(false);
+            },
+          },
+        ],
+      );
+    } else {
+      setLoading(false);
+      setClicked(false);
+    }
+  };
+
   const getData = async () => {
     await axiosInstance
       .get('retailer/')
@@ -53,27 +74,6 @@ const PendingVerification = () => {
             ],
           );
       });
-  };
-
-  const checkStatus = () => {
-    if (retailerData.verification_status !== 'approved') {
-      Alert.alert(
-        'Pending',
-        'You would be notified once the vetting process has been completed',
-        [
-          {
-            text: 'Ok',
-            onPress: () => {
-              setLoading(false);
-              setClicked(false);
-            },
-          },
-        ],
-      );
-    } else {
-      setLoading(false);
-      setClicked(false);
-    }
   };
 
   useEffect(() => {
