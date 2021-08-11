@@ -7,7 +7,6 @@ export const ACCOUNT_SETTINGS = 'AccountSettings';
 export const CHANGE_PASSWORD = 'ChangePassword';
 
 // AuthNavigator route names
-export const SPLASH_SCREEN = 'SplashScreen';
 export const LOGIN = 'Login';
 export const SIGN_UP = 'SignUp';
 export const FORGOT_PASSWORD = 'ForgotPassword';

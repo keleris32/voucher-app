@@ -5,7 +5,7 @@ import {
   View,
   Modal,
   TouchableOpacity,
-  ScrollView,
+  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import {
@@ -15,32 +15,40 @@ import {
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
-import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import SearchBar from '../AfrocinemaComponent/SearchBar';
+import ErrorPageComponent from '../ErrorPageComponent';
 
 const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  // const [refreshLoading, setRefreshLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const refreshComp = () => setRefresh(!refresh);
 
   const isCurrent = useRef(true);
-
-  const { getRetailerDispatch } = useContext(GlobalContext);
 
   // State variable for filtered search data
   const [filteredData, setFilteredData] = useState({});
 
   // Fetch data from the countries api and store in the countryData state variable
   const fetchCountryData = async () => {
+    props.setFetchError(false);
+    setLoading(true);
     try {
       const request = await axiosInstance.get('countries');
-      if (isCurrent.current) {
-        setCountryData(request.data.data.countries);
-        setFilteredData(request.data.data.countries);
-      }
-      props.setFetchError(false);
+      // if (isCurrent.current) {
+      setCountryData(request.data.data.countries);
+      setFilteredData(request.data.data.countries);
+      setLoading(false);
+      // }
     } catch (err) {
+      // if (isCurrent.current) {
       props.setFetchError(true);
+      setLoading(false);
+      // }
     }
   };
 
@@ -74,15 +82,15 @@ const CountryModal = props => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      isCurrent.current = false;
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     isCurrent.current = false;
+  //   };
+  // }, []);
 
   useEffect(() => {
     fetchCountryData();
-  }, []);
+  }, [refresh]);
 
   return (
     <View>
@@ -104,31 +112,29 @@ const CountryModal = props => {
             />
           </View>
           <View style={styles.modalContainer}>
-            <FlatList
-              data={filteredData}
-              keyExtractor={item => item.id}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => selectedOption(item)}>
-                  <View style={styles.optionContainer}>
-                    <Text style={styles.optionName}>{item.name}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-            {/* <ScrollView>
-              {countryData?.map(option => {
-                return (
-                  <TouchableOpacity
-                    key={option.id}
-                    onPress={() => selectedOption(option)}>
+            {props.fetchError ? (
+              <ErrorPageComponent
+                text="Ops! Please check your internet connection and try again."
+                refreshComp={refreshComp}
+              />
+            ) : loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
+              </View>
+            ) : (
+              <FlatList
+                data={filteredData}
+                keyExtractor={item => item.id}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => selectedOption(item)}>
                     <View style={styles.optionContainer}>
-                      <Text style={styles.optionName}>{option.name}</Text>
+                      <Text style={styles.optionName}>{item.name}</Text>
                     </View>
                   </TouchableOpacity>
-                );
-              })}
-            </ScrollView> */}
+                )}
+              />
+            )}
           </View>
           <TouchableOpacity
             onPress={() => props.setIsModalVisible(!props.isModalVisible)}>
@@ -207,5 +213,12 @@ const styles = StyleSheet.create({
 
   optionName: {
     ...FONTS.h3,
+  },
+
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
 });

@@ -18,7 +18,7 @@ import { Formik } from 'formik';
 
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
-import { DOCUMENTS, LOGIN } from '../../constants/routeNames';
+import { LOGIN } from '../../constants/routeNames';
 import { signUpValidationSchema } from './validationSchema';
 import registerRetailer, {
   clearAuthState,
@@ -57,15 +57,6 @@ const SignUp = ({ navigation }) => {
 
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
-
-    // Alert.alert('Success', 'Your registration was Successful', [
-    //   {
-    //     text: 'OK',
-    //     onPress: () => {
-    //       navigation.replace(DOCUMENTS);
-    //     },
-    //   },
-    // ]);
   };
 
   return (
@@ -121,10 +112,11 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <TouchableOpacity
-                  disabled={fetchError}
+                  // disabled={fetchError}
                   onPress={() => setIsModalVisible(true)}>
                   <CountryModal
-                    isModalVisible={fetchError ? false : isModalVisible}
+                    // isModalVisible={fetchError ? false : isModalVisible}
+                    isModalVisible={isModalVisible}
                     setIsModalVisible={setIsModalVisible}
                     selectedCountry={selectedCountry}
                     setSelectedCountry={setSelectedCountry}
