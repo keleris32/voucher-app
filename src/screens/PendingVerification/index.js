@@ -16,17 +16,20 @@ const PendingVerification = () => {
   const [clicked, setClicked] = useState(false);
   const [refreshState, setRefreshState] = useState(false);
 
+  // function to refresh page
   const refreshPage = () => {
     setLoading(true);
     setRefreshState(!refreshState);
     setClicked(true);
   };
 
+  // retailer global state variable
   const {
     getRetailerDispatch,
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
+  // After data has been fetched, check the verification status of the retailer
   const checkStatus = () => {
     if (retailerData.verification_status !== 'approved') {
       Alert.alert(
@@ -48,6 +51,8 @@ const PendingVerification = () => {
     }
   };
 
+  // Get retailer Data and set in global state variable, then if successful, call the
+  // checkStatus function
   const getData = async () => {
     await axiosInstance
       .get('retailer/')
@@ -59,25 +64,25 @@ const PendingVerification = () => {
         checkStatus();
       })
       .catch(err => {
-        console.log('Pending Screen, get retailer>>>', err),
-          Alert.alert(
-            'Error',
-            'Please check your internet connection and try again.',
-            [
-              {
-                text: 'Ok',
-                onPress: () => {
-                  setLoading(false);
-                  setClicked(false);
-                },
+        // console.log('Pending Screen, get retailer>>>', err),
+        Alert.alert(
+          'Error',
+          'Please check your internet connection and try again.',
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                setLoading(false);
+                setClicked(false);
               },
-            ],
-          );
+            },
+          ],
+        );
       });
   };
 
+  // Only try to fetch Data when refresh button has been clicked (clicked =true)
   useEffect(() => {
-    console.log('Component Mounted');
     clicked && getData();
   }, [refreshState]);
 

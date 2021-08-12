@@ -126,11 +126,10 @@ const Documents = ({ navigation }) => {
 
   // Upload selected file to server
   const uploadFile = async () => {
-    setUploading(true);
-
     if (retailerData?.email_verified_at) {
       // Check if any file has been selected
       if (selectedFile !== null) {
+        setUploading(true);
         // If a file has been selected, then create FormData
         const fileToUpload = selectedFile;
         const data = new FormData();
@@ -180,9 +179,7 @@ const Documents = ({ navigation }) => {
         Alert.alert('', 'Please select a file before proceeding', [
           {
             text: 'Ok',
-            onPress: () => {
-              setUploading(false);
-            },
+            onPress: () => {},
           },
         ]);
       }
@@ -202,7 +199,6 @@ const Documents = ({ navigation }) => {
             text: 'Refresh',
             onPress: () => {
               refreshPage();
-              setUploading(false);
             },
           },
         ],
@@ -250,7 +246,10 @@ const Documents = ({ navigation }) => {
         });
       })
       .catch(err => {
-        return;
+        Alert.alert(
+          'Error.',
+          'Something went wrong. Please check your internet connection and try again later.',
+        );
       });
   }, [refreshState]);
 
