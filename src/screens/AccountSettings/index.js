@@ -108,7 +108,7 @@ const AccountSettings = ({ navigation }) => {
             onPress: () => {},
           },
           {
-            text: 'Ok',
+            text: 'Proceed',
             onPress: () => updateRetailerProfile(formProp),
           },
         ],
