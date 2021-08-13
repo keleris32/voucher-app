@@ -3,14 +3,15 @@ import * as yup from 'yup';
 export const signUpValidationSchema = yup.object().shape({
   fullName: yup
     .string()
-    .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
+    .matches(/^[A-Z-a-z ]*$/, 'Please enter valid name')
     .max(40, 'The name is too long!')
     .required('Name is required'),
   phoneNumber: yup
     .string()
     .required('Please enter a phone number')
     .matches(
-      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      // /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      /^[0-9]\d+$/,
       'Enter a valid phone number',
     ),
   email: yup

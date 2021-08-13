@@ -56,5 +56,6 @@ export default ({
           type: REGISTER_FAIL,
           payload: err.response ? err.response.data : err,
         });
+        console.log(JSON.stringify(err, null, 2));
       });
   };

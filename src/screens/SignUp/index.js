@@ -60,6 +60,7 @@ const SignUp = ({ navigation }) => {
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
   };
+  console.log('Sign up error>>>>>', JSON.stringify(error, null, 2));
 
   return (
     <Formik
@@ -96,7 +97,7 @@ const SignUp = ({ navigation }) => {
               {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
-                {error?.message && (
+                {error?.message === 'Network Error' && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Please check your internet connection
@@ -146,9 +147,9 @@ const SignUp = ({ navigation }) => {
                   touched={touched.phoneNumber}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.phoneNumber && touched.phoneNumber && (
+                {/* {errors.phoneNumber && touched.phoneNumber && (
                   <Text style={styles.errors}>{errors.phoneNumber}</Text>
-                )}
+                )} */}
                 {error?.errors?.phone_number && (
                   <Text style={styles.errors}>
                     {error?.errors?.phone_number}
@@ -165,9 +166,9 @@ const SignUp = ({ navigation }) => {
                   touched={touched.email}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.email && touched.email && (
+                {/* {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
-                )}
+                )} */}
                 {error?.errors?.email && (
                   <Text style={styles.errors}>{error?.errors?.email}</Text>
                 )}

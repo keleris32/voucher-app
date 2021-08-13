@@ -6,7 +6,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  TextInput,
+  ScrollView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -64,76 +64,83 @@ const Login = ({ navigation }) => {
         errors,
       }) => (
         <View style={styles.container}>
-          <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            {/* <TouchableOpacity
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}>
+            <ImageBackground source={images.loginBg} style={styles.bgImage}>
+              {/* <TouchableOpacity
               onPress={() => navigation.replace('SplashScreen')}> */}
-            <Image source={icons.fullAcomart} style={styles.logo} />
-            {/* </TouchableOpacity> */}
-            <View style={styles.formContainer}>
-              {/* Display an error message, if the form's data is deemed invalid by the server */}
-              {error?.email && (
-                <View style={styles.invalidErrorMessage}>
-                  <Text style={styles.invalidErrorText}>
-                    Invalid credentials provided!
-                  </Text>
-                </View>
-              )}
+              <Image source={icons.fullAcomart} style={styles.logo} />
+              {/* </TouchableOpacity> */}
+              <View style={styles.formContainer}>
+                {/* Display an error message, if the form's data is deemed invalid by the server */}
+                {error?.email && (
+                  <View style={styles.invalidErrorMessage}>
+                    <Text style={styles.invalidErrorText}>
+                      Invalid credentials provided!
+                    </Text>
+                  </View>
+                )}
 
-              {/* Display an error message, if form failed to connect to the server */}
-              {error?.message && (
-                <View style={styles.invalidErrorMessage}>
-                  <Text style={styles.invalidErrorText}>
-                    Please check your internet connection!
-                  </Text>
-                </View>
-              )}
+                {/* Display an error message, if form failed to connect to the server */}
+                {error?.message && (
+                  <View style={styles.invalidErrorMessage}>
+                    <Text style={styles.invalidErrorText}>
+                      Please check your internet connection!
+                    </Text>
+                  </View>
+                )}
 
-              <CustomInput
-                placeholder="Email"
-                iconType="email"
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
-                errors={errors.email}
-                touched={touched.email}
-              />
-              {/* If this field contains an error and it has been touched, then display the error message */}
-              {errors.email && touched.email && (
-                <Text style={styles.errors}>{errors.email}</Text>
-              )}
-              <CustomInput
-                placeholder="Password"
-                iconType="loginPassword"
-                secureTextEntry={isLoginPasswordHidden}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                value={values.password}
-                errors={errors.password}
-                touched={touched.password}
-                isLoginPasswordHidden={isLoginPasswordHidden}
-                setIsLoginPasswordHidden={setIsLoginPasswordHidden}
-              />
-              {/* If this field contains an error and it has been touched, then display the error message */}
-              {errors.password && touched.password && (
-                <Text style={styles.errors}>{errors.password}</Text>
-              )}
-              <TouchableOpacity
-                onPress={() => navigation.navigate(FORGOT_PASSWORD)}>
-                <Text style={styles.forgotText}>Forgot Password?</Text>
-              </TouchableOpacity>
-              <CustomButton
-                buttonText={loading ? 'Logging In' : 'Log In'}
-                disabled={loading}
-                onPress={handleSubmit}
-              />
-              <View style={styles.registerContainer}>
-                <Text style={styles.registerText}>Not Registered?</Text>
-                <TouchableOpacity onPress={() => navigation.replace(SIGN_UP)}>
-                  <Text style={styles.signUpText}>Sign Up!</Text>
+                <CustomInput
+                  placeholder="Email"
+                  iconType="email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  errors={errors.email}
+                  touched={touched.email}
+                />
+                {/* If this field contains an error and it has been touched, then display the error message */}
+                {errors.email && touched.email && (
+                  <Text style={styles.errors}>{errors.email}</Text>
+                )}
+                <CustomInput
+                  placeholder="Password"
+                  iconType="loginPassword"
+                  secureTextEntry={isLoginPasswordHidden}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  errors={errors.password}
+                  touched={touched.password}
+                  isLoginPasswordHidden={isLoginPasswordHidden}
+                  setIsLoginPasswordHidden={setIsLoginPasswordHidden}
+                />
+                {/* If this field contains an error and it has been touched, then display the error message */}
+                {errors.password && touched.password && (
+                  <Text style={styles.errors}>{errors.password}</Text>
+                )}
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(FORGOT_PASSWORD)}>
+                  <Text style={styles.forgotText}>Forgot Password?</Text>
                 </TouchableOpacity>
+                <CustomButton
+                  buttonText={loading ? 'Logging In' : 'Log In'}
+                  disabled={loading}
+                  onPress={handleSubmit}
+                />
+                <View style={styles.registerContainer}>
+                  <Text style={styles.registerText}>Not Registered?</Text>
+                  <TouchableOpacity onPress={() => navigation.replace(SIGN_UP)}>
+                    <Text style={styles.signUpText}>Sign Up!</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </ScrollView>
         </View>
       )}
     </Formik>
@@ -152,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover',
+    paddingVertical: wp('5%'),
   },
 
   logo: {

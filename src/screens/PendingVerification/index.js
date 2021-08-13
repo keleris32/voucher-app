@@ -61,6 +61,7 @@ const PendingVerification = () => {
           type: GET_RETAILER,
           payload: res.data.data.retailer,
         });
+        // console.log(JSON.stringify(res.data.data.retailer, null, 2));
         checkStatus();
       })
       .catch(err => {
