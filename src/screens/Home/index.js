@@ -89,8 +89,8 @@ const Home = () => {
 
   // Call both functions on component mount
   useEffect(() => {
-    getAfrostreamData();
     getAfrocinemaData();
+    getAfrostreamData();
   }, [refresh]);
 
   // To separate Retailer's first name and last name, and return both names in an array
@@ -156,6 +156,8 @@ const Home = () => {
         <AfrocinemaComponent
           filteredData={filteredData}
           setFilteredData={setFilteredData}
+          refreshComp={refreshComp}
+          fetchError={fetchError}
         />
       )}
       {activeTab.afrostream && (

@@ -14,8 +14,14 @@ import MovieCard from './MovieCard';
 import { SELECTED_AFROCINEMA_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
+import ErrorPageComponent from '../ErrorPageComponent';
 
-const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
+const AfrocinemaComponent = ({
+  filteredData,
+  setFilteredData,
+  fetchError,
+  refreshComp,
+}) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Afrocinema global state variable
@@ -66,7 +72,12 @@ const AfrocinemaComponent = ({ filteredData, setFilteredData }) => {
   // console.log(JSON.stringify(afrocinemaData.charging_currency_symbol, null, 2));
   return (
     <>
-      {loading ? (
+      {fetchError ? (
+        <ErrorPageComponent
+          text="Ops! Please check your internet connection and try again."
+          refreshComp={refreshComp}
+        />
+      ) : loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
         </View>
