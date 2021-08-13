@@ -60,7 +60,7 @@ const SignUp = ({ navigation }) => {
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
   };
-  console.log('Sign up error>>>>>', JSON.stringify(error, null, 2));
+  // console.log('Sign up error>>>>>', JSON.stringify(error, null, 2));
 
   return (
     <Formik
@@ -142,7 +142,7 @@ const SignUp = ({ navigation }) => {
                   selectedCountry={selectedCountry}
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
-                  value={values.phoneNumber}
+                  value={values.phoneNumber.trim()}
                   errors={errors.phoneNumber}
                   touched={touched.phoneNumber}
                 />
@@ -161,7 +161,7 @@ const SignUp = ({ navigation }) => {
                   iconType="email"
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
-                  value={values.email}
+                  value={values.email.trim()}
                   errors={errors.email}
                   touched={touched.email}
                 />

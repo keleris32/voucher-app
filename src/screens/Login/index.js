@@ -99,7 +99,7 @@ const Login = ({ navigation }) => {
                   iconType="email"
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
-                  value={values.email}
+                  value={values.email.trim()}
                   errors={errors.email}
                   touched={touched.email}
                 />
@@ -113,7 +113,7 @@ const Login = ({ navigation }) => {
                   secureTextEntry={isLoginPasswordHidden}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
-                  value={values.password}
+                  value={values.password.trim()}
                   errors={errors.password}
                   touched={touched.password}
                   isLoginPasswordHidden={isLoginPasswordHidden}
