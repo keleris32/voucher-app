@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -95,134 +96,147 @@ const ChangePassword = ({ navigation }) => {
       onSubmit={(values, { resetForm }) => checkForPassword(values, resetForm)}
       validationSchema={changePasswordValidationSchema}>
       {props => (
-        <View style={styles.container}>
-          <View style={styles.headerWrapper}>
-            <TouchableOpacity
-              style={styles.iconCon}
-              onPress={() => navigation.goBack()}>
-              <Icon name="chevron-left" style={styles.leftArrowIcon} />
-            </TouchableOpacity>
-            <Text style={styles.title}>Change Password</Text>
-          </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          alwaysBounceVertical={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}>
+          <View style={styles.container}>
+            <View style={styles.headerWrapper}>
+              <TouchableOpacity
+                style={styles.iconCon}
+                onPress={() => navigation.goBack()}>
+                <Icon name="chevron-left" style={styles.leftArrowIcon} />
+              </TouchableOpacity>
+              <Text style={styles.title}>Change Password</Text>
+            </View>
 
-          <View style={styles.wrapper}>
-            {invalidPassword && (
-              <ErrorMessage
-                errorMessage="Your current password is incorrect"
-                setErrorComponent={setInvalidPassword}
-              />
-            )}
+            <View style={styles.wrapper}>
+              {invalidPassword && (
+                <ErrorMessage
+                  errorMessage="Your current password is incorrect"
+                  setErrorComponent={setInvalidPassword}
+                />
+              )}
 
-            {errorComponent && (
-              <ErrorMessage
-                errorMessage="Your new password does not match!"
-                setErrorComponent={setErrorComponent}
-              />
-            )}
+              {errorComponent && (
+                <ErrorMessage
+                  errorMessage="Your new password does not match!"
+                  setErrorComponent={setErrorComponent}
+                />
+              )}
 
-            <View style={styles.formContainer}>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>Current Password</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder="Current Password"
-                    secureTextEntry={isNewPasswordHidden}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('currentPassword')}
-                    onBlur={props.handleBlur('currentPassword')}
-                    value={props.values.currentPassword}
-                    errors={props.errors.currentPassword}
-                    touched={props.touched.currentPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      setIsNewPasswordHidden(!isNewPasswordHidden)
-                    }>
-                    <PasswordIcon
-                      name={isNewPasswordHidden ? 'eye' : 'eye-off'}
-                      style={styles.icon}
+              <View style={styles.formContainer}>
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>Current Password</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder="Current Password"
+                      secureTextEntry={isNewPasswordHidden}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('currentPassword')}
+                      onBlur={props.handleBlur('currentPassword')}
+                      value={props.values.currentPassword}
+                      errors={props.errors.currentPassword}
+                      touched={props.touched.currentPassword}
                     />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setIsNewPasswordHidden(!isNewPasswordHidden)
+                      }>
+                      <PasswordIcon
+                        name={isNewPasswordHidden ? 'eye' : 'eye-off'}
+                        style={styles.icon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.currentPassword &&
+                    props.touched.currentPassword && (
+                      <Text style={styles.errors}>
+                        {props.errors.currentPassword}
+                      </Text>
+                    )}
                 </View>
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.currentPassword &&
-                  props.touched.currentPassword && (
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>New Password</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder="New Password"
+                      secureTextEntry={isNewPasswordConfirmHidden}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('newPassword')}
+                      onBlur={props.handleBlur('newPassword')}
+                      value={props.values.newPassword}
+                      errors={props.errors.newPassword}
+                      touched={props.touched.newPassword}
+                    />
+                    <TouchableOpacity
+                      onPress={() =>
+                        setIsNewPasswordConfirmHidden(
+                          !isNewPasswordConfirmHidden,
+                        )
+                      }>
+                      <PasswordIcon
+                        name={isNewPasswordConfirmHidden ? 'eye' : 'eye-off'}
+                        style={styles.icon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.newPassword && props.touched.newPassword && (
                     <Text style={styles.errors}>
-                      {props.errors.currentPassword}
+                      {props.errors.newPassword}
                     </Text>
                   )}
-              </View>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>New Password</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder="New Password"
-                    secureTextEntry={isNewPasswordConfirmHidden}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('newPassword')}
-                    onBlur={props.handleBlur('newPassword')}
-                    value={props.values.newPassword}
-                    errors={props.errors.newPassword}
-                    touched={props.touched.newPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() =>
-                      setIsNewPasswordConfirmHidden(!isNewPasswordConfirmHidden)
-                    }>
-                    <PasswordIcon
-                      name={isNewPasswordConfirmHidden ? 'eye' : 'eye-off'}
-                      style={styles.icon}
-                    />
-                  </TouchableOpacity>
                 </View>
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.newPassword && props.touched.newPassword && (
-                  <Text style={styles.errors}>{props.errors.newPassword}</Text>
-                )}
-              </View>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>New Password Confirmation</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder="New Password Confirmation"
-                    secureTextEntry={isPasswordHidden}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('newPasswordConfirmation')}
-                    onBlur={props.handleBlur('newPasswordConfirmation')}
-                    value={props.values.newPasswordConfirmation}
-                    errors={props.errors.newPasswordConfirmation}
-                    touched={props.touched.newPasswordConfirmation}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
-                    <PasswordIcon
-                      name={isPasswordHidden ? 'eye' : 'eye-off'}
-                      style={styles.icon}
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>New Password Confirmation</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder="New Password Confirmation"
+                      secureTextEntry={isPasswordHidden}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange(
+                        'newPasswordConfirmation',
+                      )}
+                      onBlur={props.handleBlur('newPasswordConfirmation')}
+                      value={props.values.newPasswordConfirmation}
+                      errors={props.errors.newPasswordConfirmation}
+                      touched={props.touched.newPasswordConfirmation}
                     />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
+                      <PasswordIcon
+                        name={isPasswordHidden ? 'eye' : 'eye-off'}
+                        style={styles.icon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.newPasswordConfirmation &&
+                    props.touched.newPasswordConfirmation && (
+                      <Text style={styles.errors}>
+                        {props.errors.newPasswordConfirmation}
+                      </Text>
+                    )}
                 </View>
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.newPasswordConfirmation &&
-                  props.touched.newPasswordConfirmation && (
-                    <Text style={styles.errors}>
-                      {props.errors.newPasswordConfirmation}
-                    </Text>
-                  )}
+                <CustomButton
+                  buttonText={loading ? 'Updating' : 'Update Password'}
+                  disabled={loading}
+                  onPress={props.handleSubmit}
+                />
               </View>
-              <CustomButton
-                buttonText={loading ? 'Updating' : 'Update Password'}
-                disabled={loading}
-                onPress={props.handleSubmit}
-              />
             </View>
           </View>
-        </View>
+        </ScrollView>
       )}
     </Formik>
   );

@@ -86,7 +86,7 @@ const Login = ({ navigation }) => {
                 )}
 
                 {/* Display an error message, if form failed to connect to the server */}
-                {error?.message && (
+                {error?.message === 'Network Error' && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Please check your internet connection!

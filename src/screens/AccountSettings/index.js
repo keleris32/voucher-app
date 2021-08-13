@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -129,106 +130,115 @@ const AccountSettings = ({ navigation }) => {
       onSubmit={values => checkForEmail(values)}
       validationSchema={accountSettingsValidationSchema}>
       {props => (
-        <View style={styles.container}>
-          <View style={styles.headerWrapper}>
-            <TouchableOpacity
-              style={styles.iconCon}
-              onPress={() => navigation.goBack()}>
-              <Icon name="chevron-left" style={styles.leftArrowIcon} />
-            </TouchableOpacity>
-            <Text style={styles.title}>Account Settings</Text>
-          </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          alwaysBounceVertical={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}>
+          <View style={styles.container}>
+            <View style={styles.headerWrapper}>
+              <TouchableOpacity
+                style={styles.iconCon}
+                onPress={() => navigation.goBack()}>
+                <Icon name="chevron-left" style={styles.leftArrowIcon} />
+              </TouchableOpacity>
+              <Text style={styles.title}>Account Settings</Text>
+            </View>
 
-          <View style={styles.wrapper}>
-            {errorComponent && (
-              <ErrorMessage
-                errorMessage="Invalid details provided!"
-                setErrorComponent={setErrorComponent}
-              />
-            )}
+            <View style={styles.wrapper}>
+              {errorComponent && (
+                <ErrorMessage
+                  errorMessage="Invalid details provided!"
+                  setErrorComponent={setErrorComponent}
+                />
+              )}
 
-            <TouchableOpacity
-              // disabled={fetchError}
-              onPress={() => setIsModalVisible(true)}>
-              <CountryModal
-                isModalVisible={isModalVisible}
-                setIsModalVisible={setIsModalVisible}
-                selectedCountry={selectedCountry}
-                setSelectedCountry={setSelectedCountry}
-                fetchError={fetchError}
-                setFetchError={setFetchError}
-              />
-            </TouchableOpacity>
-            <View style={styles.formContainer}>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>Name</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={retailerData.name}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('fullName')}
-                    onBlur={props.handleBlur('fullName')}
-                    value={props.values.fullName}
-                    errors={props.errors.fullName}
-                    touched={props.touched.fullName}
-                  />
+              <TouchableOpacity
+                // disabled={fetchError}
+                onPress={() => setIsModalVisible(true)}>
+                <CountryModal
+                  isModalVisible={isModalVisible}
+                  setIsModalVisible={setIsModalVisible}
+                  selectedCountry={selectedCountry}
+                  setSelectedCountry={setSelectedCountry}
+                  fetchError={fetchError}
+                  setFetchError={setFetchError}
+                />
+              </TouchableOpacity>
+              <View style={styles.formContainer}>
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>Name</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={retailerData.name}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('fullName')}
+                      onBlur={props.handleBlur('fullName')}
+                      value={props.values.fullName}
+                      errors={props.errors.fullName}
+                      touched={props.touched.fullName}
+                    />
+                  </View>
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.fullName && props.touched.fullName && (
+                    <Text style={styles.errors}>{props.errors.fullName}</Text>
+                  )}
                 </View>
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.fullName && props.touched.fullName && (
-                  <Text style={styles.errors}>{props.errors.fullName}</Text>
-                )}
-              </View>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>Email</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={retailerData.email}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('email')}
-                    onBlur={props.handleBlur('email')}
-                    value={props.values.email}
-                    errors={props.errors.email}
-                    touched={props.touched.email}
-                  />
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>Email</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={retailerData.email}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('email')}
+                      onBlur={props.handleBlur('email')}
+                      value={props.values.email}
+                      errors={props.errors.email}
+                      touched={props.touched.email}
+                    />
+                  </View>
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.email && props.touched.email && (
+                    <Text style={styles.errors}>{props.errors.email}</Text>
+                  )}
                 </View>
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.email && props.touched.email && (
-                  <Text style={styles.errors}>{props.errors.email}</Text>
-                )}
-              </View>
-              <View style={{ marginBottom: SIZES.radius }}>
-                <Text style={styles.label}>Phone Number</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={retailerData.phone_number}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor={COLORS.gray}
-                    onChangeText={props.handleChange('phoneNumber')}
-                    onBlur={props.handleBlur('phoneNumber')}
-                    value={props.values.phoneNumber}
-                    errors={props.errors.phoneNumber}
-                    touched={props.touched.phoneNumber}
-                  />
-                </View>
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>Phone Number</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={retailerData.phone_number}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('phoneNumber')}
+                      onBlur={props.handleBlur('phoneNumber')}
+                      value={props.values.phoneNumber}
+                      errors={props.errors.phoneNumber}
+                      touched={props.touched.phoneNumber}
+                    />
+                  </View>
 
-                {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.phoneNumber && props.touched.phoneNumber && (
-                  <Text style={styles.errors}>{props.errors.phoneNumber}</Text>
-                )}
+                  {/* If this field contains an error and it has been touched, then display the error message */}
+                  {props.errors.phoneNumber && props.touched.phoneNumber && (
+                    <Text style={styles.errors}>
+                      {props.errors.phoneNumber}
+                    </Text>
+                  )}
+                </View>
+                <CustomButton
+                  buttonText={loading ? 'Updating' : 'Update Profile'}
+                  disabled={loading}
+                  onPress={props.handleSubmit}
+                />
               </View>
-              <CustomButton
-                buttonText={loading ? 'Updating' : 'Update Profile'}
-                disabled={loading}
-                onPress={props.handleSubmit}
-              />
             </View>
           </View>
-        </View>
+        </ScrollView>
       )}
     </Formik>
   );
