@@ -9,6 +9,7 @@ export const accountSettingsValidationSchema = yup.object().shape({
   phoneNumber: yup
     .string()
     .required('Please enter a phone number')
+    .trim()
     .matches(
       // /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
       /^[0-9]\d+$/,
@@ -21,5 +22,6 @@ export const accountSettingsValidationSchema = yup.object().shape({
   email: yup
     .string()
     .email('Please enter a valid Email address')
+    .trim()
     .required('Email Address is required'),
 });

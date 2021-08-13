@@ -197,7 +197,7 @@ const AccountSettings = ({ navigation }) => {
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('email')}
                       onBlur={props.handleBlur('email')}
-                      value={props.values.email}
+                      value={props.values.email.trim()}
                       errors={props.errors.email}
                       touched={props.touched.email}
                     />
@@ -217,7 +217,7 @@ const AccountSettings = ({ navigation }) => {
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('phoneNumber')}
                       onBlur={props.handleBlur('phoneNumber')}
-                      value={props.values.phoneNumber}
+                      value={props.values.phoneNumber.trim()}
                       errors={props.errors.phoneNumber}
                       touched={props.touched.phoneNumber}
                     />

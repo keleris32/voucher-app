@@ -260,7 +260,7 @@ const PaymentScreenComponent = () => {
                   selectedCountry={selectedCountry}
                   onChangeText={props.handleChange('phoneNumber')}
                   onBlur={props.handleBlur('phoneNumber')}
-                  value={props.values.phoneNumber}
+                  value={props.values.phoneNumber.trim()}
                   errors={props.errors.phoneNumber}
                   touched={props.touched.phoneNumber}
                 />
