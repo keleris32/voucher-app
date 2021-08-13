@@ -5,7 +5,7 @@ import {
 import axiosInstance from '../../../helpers/axiosInterceptor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default () => dispatch => {
+export default navigation => dispatch => {
   axiosInstance
     .get('retailer/auth/logout')
     .then(res => {
@@ -19,6 +19,7 @@ export default () => dispatch => {
       dispatch({
         type: LOGOUT_RETAILER,
       });
+      navigation.goBack('initialRoute');
     })
     .catch(err => {
       // // console.log(err?.response.data);

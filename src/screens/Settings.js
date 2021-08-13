@@ -45,7 +45,7 @@ const Settings = ({ navigation }) => {
       {
         text: 'Confirm',
         onPress: () => {
-          logoutRetailer()(authDispatch);
+          logoutRetailer(navigation)(authDispatch);
         },
       },
     ]);
