@@ -11,6 +11,7 @@ const SearchBar = ({ searchValue, searchFilterFunction, placeholder }) => {
       <Icons name="search" style={styles.icon} />
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor={COLORS.gray}
         style={styles.input}
         value={searchValue}
         onChangeText={text => searchFilterFunction(text)}
