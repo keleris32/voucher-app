@@ -11,7 +11,12 @@ const ErrorMessage = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{props.errorMessage}</Text>
-      <TouchableOpacity onPress={() => props.setErrorComponent(false)}>
+      <TouchableOpacity
+        onPress={() =>
+          props.setErrorComponent
+            ? props.setErrorComponent(false)
+            : props.clearAuthState()
+        }>
         <Icon name="cancel" style={styles.icon} />
       </TouchableOpacity>
     </View>

@@ -2,7 +2,8 @@ export default {
   isLoggedIn: false,
   data: {},
   loading: false,
-  error: '',
+  loginError: '',
+  signUpError: '',
   logoutError: false,
   isLoggedOut: false,
 };

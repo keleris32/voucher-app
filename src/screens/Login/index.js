@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,14 +22,24 @@ import { GlobalContext } from '../../context/Provider';
 import loginRetailer from '../../context/actions/auth/loginRetailer';
 import { useFocusEffect } from '@react-navigation/native';
 import { clearAuthState } from '../../context/actions/auth/registerRetailer';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const Login = ({ navigation }) => {
   const [isLoginPasswordHidden, setIsLoginPasswordHidden] = useState(true);
 
   const {
     authDispatch,
-    authState: { error, loading, data },
+    authState: { loginError, loading, data },
   } = useContext(GlobalContext);
+
+  const clearLoginState = () => {
+    clearAuthState()(authDispatch);
+  };
+
+  const submitForm = formData => {
+    // If the form is valid, then the form's values are dispatched to the server
+    loginRetailer(formData)(authDispatch);
+  };
 
   // Return a callback dispatch function to clear the authentication state on component unMount
   useFocusEffect(
@@ -39,13 +49,8 @@ const Login = ({ navigation }) => {
           clearAuthState()(authDispatch);
         }
       };
-    }, [data, error]),
+    }, [data, loginError]),
   );
-
-  const submitForm = formData => {
-    // If the form is valid, then the form's values are dispatched to the server
-    loginRetailer(formData)(authDispatch);
-  };
 
   return (
     <Formik
@@ -77,16 +82,20 @@ const Login = ({ navigation }) => {
               {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
-                {error?.email && (
-                  <View style={styles.invalidErrorMessage}>
-                    <Text style={styles.invalidErrorText}>
-                      Invalid credentials provided!
-                    </Text>
-                  </View>
+                {loginError?.email && (
+                  <ErrorMessage
+                    errorMessage="Invalid credentials provided"
+                    clearAuthState={clearLoginState}
+                  />
+                  // <View style={styles.invalidErrorMessage}>
+                  //   <Text style={styles.invalidErrorText}>
+                  //     Invalid credentials provided!
+                  //   </Text>
+                  // </View>
                 )}
 
                 {/* Display an error message, if form failed to connect to the server */}
-                {error?.message === 'Network Error' && (
+                {loginError?.message === 'Network Error' && (
                   <View style={styles.invalidErrorMessage}>
                     <Text style={styles.invalidErrorText}>
                       Please check your internet connection!

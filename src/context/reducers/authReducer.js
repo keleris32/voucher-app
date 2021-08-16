@@ -17,7 +17,8 @@ const authReducer = (state, { type, payload }) => {
       return {
         ...state,
         loading: true,
-        error: '',
+        loginError: '',
+        signUpError: '',
       };
 
     case REGISTER_SUCCESS:
@@ -31,11 +32,17 @@ const authReducer = (state, { type, payload }) => {
       };
 
     case REGISTER_FAIL:
+      return {
+        ...state,
+        loading: false,
+        signUpError: payload,
+      };
+
     case LOGIN_FAIL:
       return {
         ...state,
         loading: false,
-        error: payload,
+        loginError: payload,
       };
 
     case CLEAR_AUTH_STATE:
@@ -43,7 +50,9 @@ const authReducer = (state, { type, payload }) => {
         ...state,
         loading: false,
         data: null,
-        error: null,
+        loginError: null,
+        signUpError: null,
+        logoutError: false,
       };
 
     case LOGOUT_RETAILER:
