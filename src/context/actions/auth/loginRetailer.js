@@ -32,7 +32,6 @@ export default ({ email, password }) =>
         });
       })
       .catch(err => {
-        console.log(JSON.stringify(err, null, 2));
         dispatch({
           type: LOGIN_FAIL,
           payload: err.response ? err.response.data.data : err,

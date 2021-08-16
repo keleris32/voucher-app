@@ -26,6 +26,7 @@ import registerRetailer, {
 import { GlobalContext } from '../../context/Provider';
 import CountryModal from '../../components/CountryModal';
 import EnvironmentVariables from '../../config/env';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const SignUp = ({ navigation }) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
@@ -37,20 +38,27 @@ const SignUp = ({ navigation }) => {
     name: 'Select your country',
     code: '0',
   });
+
+  // Auth state global variable
   const {
     authDispatch,
-    authState: { error, loading, data },
+    authState: { signUpError, loading, data },
   } = useContext(GlobalContext);
+
+  // Clear Auth State
+  const clearLoginState = () => {
+    clearAuthState()(authDispatch);
+  };
 
   // Return a callback dispatch function to clear the authentication state on component unMount
   useFocusEffect(
     useCallback(() => {
       return () => {
-        if (data || error) {
+        if (data || signUpError) {
           clearAuthState()(authDispatch);
         }
       };
-    }, [data, error]),
+    }, [data, signUpError]),
   );
 
   const submitRegistration = formData => {
@@ -97,12 +105,16 @@ const SignUp = ({ navigation }) => {
               {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
-                {error?.message === 'Network Error' && (
-                  <View style={styles.invalidErrorMessage}>
-                    <Text style={styles.invalidErrorText}>
-                      Please check your internet connection
-                    </Text>
-                  </View>
+                {signUpError?.message === 'Network Error' && (
+                  <ErrorMessage
+                    errorMessage="Please check your network connection!"
+                    clearAuthState={clearLoginState}
+                  />
+                  // <View style={styles.invalidErrorMessage}>
+                  //   <Text style={styles.invalidErrorText}>
+                  //     Please check your internet connection
+                  //   </Text>
+                  // </View>
                 )}
 
                 <TouchableOpacity
@@ -118,7 +130,7 @@ const SignUp = ({ navigation }) => {
                     setFetchError={setFetchError}
                   />
                 </TouchableOpacity>
-                {error?.errors?.country_id && (
+                {signUpError?.errors?.country_id && (
                   <Text style={styles.errors}>Please select your country</Text>
                 )}
 
@@ -135,6 +147,9 @@ const SignUp = ({ navigation }) => {
                 {errors.fullName && touched.fullName && (
                   <Text style={styles.errors}>{errors.fullName}</Text>
                 )}
+                {/* {signUpError?.errors?.name && (
+                  <Text style={styles.errors}>{signUpError?.errors?.name}</Text>
+                )} */}
 
                 <CustomInput
                   placeholder="Phone Number"
@@ -150,9 +165,9 @@ const SignUp = ({ navigation }) => {
                 {/* {errors.phoneNumber && touched.phoneNumber && (
                   <Text style={styles.errors}>{errors.phoneNumber}</Text>
                 )} */}
-                {error?.errors?.phone_number && (
+                {signUpError?.errors?.phone_number && (
                   <Text style={styles.errors}>
-                    {error?.errors?.phone_number}
+                    {signUpError?.errors?.phone_number}
                   </Text>
                 )}
 
@@ -169,8 +184,10 @@ const SignUp = ({ navigation }) => {
                 {/* {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
                 )} */}
-                {error?.errors?.email && (
-                  <Text style={styles.errors}>{error?.errors?.email}</Text>
+                {signUpError?.errors?.email && (
+                  <Text style={styles.errors}>
+                    {signUpError?.errors?.email}
+                  </Text>
                 )}
 
                 <CustomInput
@@ -203,11 +220,15 @@ const SignUp = ({ navigation }) => {
                   setIsPasswordConfirmHidden={setIsPasswordConfirmHidden}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.confirmPassword && touched.confirmPassword && (
-                  <Text style={styles.errors}>{errors.confirmPassword}</Text>
-                )}
-                {error?.errors?.password && (
-                  <Text style={styles.errors}>{error?.errors?.password}</Text>
+                {!signUpError?.errors?.password &&
+                  errors.confirmPassword &&
+                  touched.confirmPassword && (
+                    <Text style={styles.errors}>{errors.confirmPassword}</Text>
+                  )}
+                {signUpError?.errors?.password && (
+                  <Text style={styles.errors}>
+                    {signUpError?.errors?.password}
+                  </Text>
                 )}
 
                 <CustomButton

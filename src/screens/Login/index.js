@@ -32,6 +32,7 @@ const Login = ({ navigation }) => {
     authState: { loginError, loading, data },
   } = useContext(GlobalContext);
 
+  // Clear Auth State
   const clearLoginState = () => {
     clearAuthState()(authDispatch);
   };
