@@ -42,7 +42,7 @@ const SignUp = ({ navigation }) => {
   // Auth state global variable
   const {
     authDispatch,
-    authState: { signUpError, loading, data },
+    authState: { signUpError, signUpLoading, data },
   } = useContext(GlobalContext);
 
   // Clear Auth State
@@ -232,8 +232,8 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <CustomButton
-                  buttonText={loading ? 'Registering' : 'Sign Up'}
-                  disabled={loading}
+                  buttonText={signUpLoading ? 'Registering' : 'Sign Up'}
+                  disabled={signUpLoading}
                   onPress={handleSubmit}
                 />
                 <View style={styles.registerContainer}>

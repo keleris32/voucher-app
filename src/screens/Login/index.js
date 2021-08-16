@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
 
   const {
     authDispatch,
-    authState: { loginError, loading, data },
+    authState: { loginError, loginLoading, data },
   } = useContext(GlobalContext);
 
   // Clear Auth State
@@ -129,8 +129,8 @@ const Login = ({ navigation }) => {
                   <Text style={styles.forgotText}>Forgot Password?</Text>
                 </TouchableOpacity>
                 <CustomButton
-                  buttonText={loading ? 'Logging In' : 'Log In'}
-                  disabled={loading}
+                  buttonText={loginLoading ? 'Logging In' : 'Log In'}
+                  disabled={loginLoading}
                   onPress={handleSubmit}
                 />
                 <View style={styles.registerContainer}>

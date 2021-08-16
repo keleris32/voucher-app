@@ -13,12 +13,17 @@ import {
 const authReducer = (state, { type, payload }) => {
   switch (type) {
     case REGISTER_LOADING:
+      return {
+        ...state,
+        signUpLoading: true,
+        signUpError: '',
+      };
+
     case LOGIN_LOADING:
       return {
         ...state,
-        loading: true,
+        loginLoading: true,
         loginError: '',
-        signUpError: '',
       };
 
     case REGISTER_SUCCESS:
@@ -27,28 +32,30 @@ const authReducer = (state, { type, payload }) => {
         ...state,
         isLoggedIn: true,
         isLoggedOut: false,
-        loading: false,
+        loginLoading: false,
+        signUpLoading: false,
         data: payload,
       };
 
     case REGISTER_FAIL:
       return {
         ...state,
-        loading: false,
+        signUpLoading: false,
         signUpError: payload,
       };
 
     case LOGIN_FAIL:
       return {
         ...state,
-        loading: false,
+        loginLoading: false,
         loginError: payload,
       };
 
     case CLEAR_AUTH_STATE:
       return {
         ...state,
-        loading: false,
+        loginLoading: false,
+        signUpLoading: false,
         data: null,
         loginError: null,
         signUpError: null,
@@ -58,7 +65,6 @@ const authReducer = (state, { type, payload }) => {
     case LOGOUT_RETAILER:
       return {
         ...state,
-        loading: false,
         data: null,
         isLoggedIn: false,
         isLoggedOut: true,
