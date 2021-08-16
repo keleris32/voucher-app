@@ -22,19 +22,38 @@ import { ACCOUNT_SETTINGS, CHANGE_PASSWORD } from '../constants/routeNames';
 import DocumentPicker from 'react-native-document-picker';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
+import { clearAuthState } from '../context/actions/auth/registerRetailer';
 
 const Settings = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Auth global state variable
-  const { authDispatch } = useContext(GlobalContext);
+  const {
+    authDispatch,
+    authState: { logoutError },
+  } = useContext(GlobalContext);
 
   // retailerData global state variable
   const {
     getRetailerDispatch,
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
+
+  if (logoutError) {
+    Alert.alert(
+      'Error.',
+      'Please check your internet connection and try again.',
+      [
+        {
+          text: 'Ok',
+          onPress: () => {
+            clearAuthState()(authDispatch);
+          },
+        },
+      ],
+    );
+  }
 
   const handleLogOut = () => {
     Alert.alert('Log Out!', 'Are you sure you want to log out?', [
@@ -126,8 +145,6 @@ const Settings = ({ navigation }) => {
         });
     }
   };
-
-  // console.log(JSON.stringify(retailerData, null, 2));
 
   return (
     <SafeAreaView>
