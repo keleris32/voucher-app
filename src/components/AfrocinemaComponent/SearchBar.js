@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 
   input: {
     flex: 1,
+    height: wp('12.5%'),
     color: COLORS.black,
     ...FONTS.h4,
   },
