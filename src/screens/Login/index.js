@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        if (data || error) {
+        if (data || loginError) {
           clearAuthState()(authDispatch);
         }
       };
@@ -76,10 +76,7 @@ const Login = ({ navigation }) => {
               flexGrow: 1,
             }}>
             <ImageBackground source={images.loginBg} style={styles.bgImage}>
-              {/* <TouchableOpacity
-              onPress={() => navigation.replace('SplashScreen')}> */}
               <Image source={icons.fullAcomart} style={styles.logo} />
-              {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* Display an error message, if the form's data is deemed invalid by the server */}
                 {loginError?.email && (
@@ -87,20 +84,14 @@ const Login = ({ navigation }) => {
                     errorMessage="Invalid credentials provided"
                     clearAuthState={clearLoginState}
                   />
-                  // <View style={styles.invalidErrorMessage}>
-                  //   <Text style={styles.invalidErrorText}>
-                  //     Invalid credentials provided!
-                  //   </Text>
-                  // </View>
                 )}
 
                 {/* Display an error message, if form failed to connect to the server */}
                 {loginError?.message === 'Network Error' && (
-                  <View style={styles.invalidErrorMessage}>
-                    <Text style={styles.invalidErrorText}>
-                      Please check your internet connection!
-                    </Text>
-                  </View>
+                  <ErrorMessage
+                    errorMessage="Please check your network connection!"
+                    clearAuthState={clearLoginState}
+                  />
                 )}
 
                 <CustomInput
@@ -206,20 +197,6 @@ const styles = StyleSheet.create({
   errors: {
     marginBottom: SIZES.radius,
     color: COLORS.red,
-    ...FONTS.h4,
-  },
-
-  invalidErrorMessage: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: SIZES.margin,
-    marginBottom: SIZES.radius,
-    backgroundColor: COLORS.red,
-    borderRadius: SIZES.base / 2,
-  },
-
-  invalidErrorText: {
-    color: COLORS.white,
     ...FONTS.h4,
   },
 });
