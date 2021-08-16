@@ -43,7 +43,7 @@ const Settings = ({ navigation }) => {
   if (logoutError) {
     Alert.alert(
       'Error.',
-      'Please check your internet connection and try again.',
+      'Something went wrong. Please check your internet connection and try again.',
       [
         {
           text: 'Ok',
@@ -70,7 +70,7 @@ const Settings = ({ navigation }) => {
     ]);
   };
 
-  const selectDocument = async () => {
+  const selectImage = async () => {
     setIsUpdating(true);
 
     try {
@@ -99,7 +99,7 @@ const Settings = ({ navigation }) => {
   };
 
   const uploadImage = async () => {
-    await selectDocument();
+    await selectImage();
 
     if (selectedFile !== null) {
       const formData = new FormData();
