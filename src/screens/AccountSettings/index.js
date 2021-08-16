@@ -30,6 +30,7 @@ const AccountSettings = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorComponent, setErrorComponent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Retailer global state variable
   const {
@@ -39,13 +40,14 @@ const AccountSettings = ({ navigation }) => {
 
   // Selected country state variable
   const [selectedCountry, setSelectedCountry] = useState({
-    id: retailerData.country_id,
+    id: 'retailerData.country_id',
     name: 'Select your country',
     code: '0',
   });
 
   const updateRetailerProfile = formData => {
     setLoading(true);
+    setErrorMessage('');
 
     // Upload form
     const data = new FormData();
@@ -76,20 +78,25 @@ const AccountSettings = ({ navigation }) => {
       .catch(err => {
         // If there's a network error, display an alert, else display an error message
         if (err.message === 'Network Error') {
-          Alert.alert(
-            'Error',
-            'Please check your internet connection and try again later',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  setLoading(false);
-                },
-              },
-            ],
-          );
-        } else {
           setErrorComponent(true);
+          setErrorMessage('');
+          setLoading(false);
+
+          // Alert.alert(
+          //   'Error',
+          //   'Please check your internet connection and try again later',
+          //   [
+          //     {
+          //       text: 'OK',
+          //       onPress: () => {
+          //         setLoading(false);
+          //       },
+          //     },
+          //   ],
+          // );
+        } else {
+          // setErrorComponent(true);
+          setErrorMessage(err?.response?.data?.errors);
           setLoading(false);
         }
       });
@@ -149,7 +156,7 @@ const AccountSettings = ({ navigation }) => {
             <View style={styles.wrapper}>
               {errorComponent && (
                 <ErrorMessage
-                  errorMessage="Invalid details provided!"
+                  errorMessage="Please check your network connection!"
                   setErrorComponent={setErrorComponent}
                 />
               )}
@@ -166,6 +173,12 @@ const AccountSettings = ({ navigation }) => {
                   setFetchError={setFetchError}
                 />
               </TouchableOpacity>
+              {/* If the field is not valid, display an error */}
+              {errorMessage?.country_id && (
+                <Text style={styles.errorMessage}>
+                  Please select your country
+                </Text>
+              )}
               <View style={styles.formContainer}>
                 <View style={{ marginBottom: SIZES.radius }}>
                   <Text style={styles.label}>Name</Text>
@@ -183,8 +196,14 @@ const AccountSettings = ({ navigation }) => {
                     />
                   </View>
                   {/* If this field contains an error and it has been touched, then display the error message */}
-                  {props.errors.fullName && props.touched.fullName && (
+                  {/* {props.errors.fullName && props.touched.fullName && (
                     <Text style={styles.errors}>{props.errors.fullName}</Text>
+                  )} */}
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.name && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.name}
+                    </Text>
                   )}
                 </View>
                 <View style={{ marginBottom: SIZES.radius }}>
@@ -203,8 +222,14 @@ const AccountSettings = ({ navigation }) => {
                     />
                   </View>
                   {/* If this field contains an error and it has been touched, then display the error message */}
-                  {props.errors.email && props.touched.email && (
+                  {/* {props.errors.email && props.touched.email && (
                     <Text style={styles.errors}>{props.errors.email}</Text>
+                  )} */}
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.email && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.email}
+                    </Text>
                   )}
                 </View>
                 <View style={{ marginBottom: SIZES.radius }}>
@@ -224,9 +249,15 @@ const AccountSettings = ({ navigation }) => {
                   </View>
 
                   {/* If this field contains an error and it has been touched, then display the error message */}
-                  {props.errors.phoneNumber && props.touched.phoneNumber && (
+                  {/* {props.errors.phoneNumber && props.touched.phoneNumber && (
                     <Text style={styles.errors}>
                       {props.errors.phoneNumber}
+                    </Text>
+                  )} */}
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.phone_number && !errorMessage?.country_id && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.phone_number}
                     </Text>
                   )}
                 </View>
@@ -308,5 +339,11 @@ const styles = StyleSheet.create({
   errors: {
     color: COLORS.red,
     ...FONTS.body4,
+  },
+
+  errorMessage: {
+    marginBottom: SIZES.radius,
+    color: COLORS.red,
+    ...FONTS.h4,
   },
 });
