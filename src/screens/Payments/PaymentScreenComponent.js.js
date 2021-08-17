@@ -81,7 +81,6 @@ const PaymentScreenComponent = ({ navigation }) => {
       // Set state to display an errorComponent for network error or errorMessage for form error
       if (error.message === 'Network Error') {
         setErrorComponent(true);
-        setErrorMessage('');
         setLoading(false);
       } else {
         setErrorMessage(error?.response?.data?.errors);
@@ -131,7 +130,6 @@ const PaymentScreenComponent = ({ navigation }) => {
       // Set state to display an errorComponent for network error or errorMessage for form error
       if (error.message === 'Network Error') {
         setErrorComponent(true);
-        setErrorMessage('');
         setLoading(false);
       } else {
         setErrorMessage(error?.response?.data?.errors);
@@ -270,7 +268,7 @@ const PaymentScreenComponent = ({ navigation }) => {
               <Text style={styles.title}>Customer's Details</Text>
               {errorComponent && (
                 <ErrorMessage
-                  errorMessage="Please check your network connection!"
+                  errorMessage="Please check your internet connection!"
                   setErrorComponent={setErrorComponent}
                 />
               )}

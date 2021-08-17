@@ -26,7 +26,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 const ChangePassword = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [errorComponent, setErrorComponent] = useState(false);
-  const [invalidPassword, setInvalidPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isNewPasswordHidden, setIsNewPasswordHidden] = useState(true);
   const [isNewPasswordConfirmHidden, setIsNewPasswordConfirmHidden] =
@@ -34,6 +34,8 @@ const ChangePassword = ({ navigation }) => {
 
   const updateRetailerPassword = (formData, resetForm) => {
     setLoading(true);
+    errorMessage && setErrorMessage('');
+    errorComponent && setErrorComponent(false);
 
     const data = new FormData();
     data.append('current_password', formData.currentPassword);
@@ -50,39 +52,22 @@ const ChangePassword = ({ navigation }) => {
             onPress: () => {
               setLoading(false);
               resetForm();
-              setInvalidPassword(false);
               setErrorComponent(false);
+              setErrorMessage('');
             },
           },
         ]),
       )
       .catch(err => {
+        // Set state to display an error message for network error and form error
         if (err.message === 'Network Error') {
-          Alert.alert(
-            'Error',
-            'Please check your internet connection and try again later',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  setLoading(false);
-                },
-              },
-            ],
-          );
+          setErrorComponent(true);
+          setLoading(false);
         } else {
-          setInvalidPassword(true);
+          setErrorMessage(err?.response?.data?.errors);
           setLoading(false);
         }
       });
-  };
-
-  const checkForPassword = (formProp, resetForm) => {
-    if (formProp.newPassword !== formProp.newPasswordConfirmation) {
-      setErrorComponent(true);
-    } else {
-      updateRetailerPassword(formProp, resetForm);
-    }
   };
 
   return (
@@ -93,7 +78,9 @@ const ChangePassword = ({ navigation }) => {
         newPasswordConfirmation: '',
       }}
       validateOnMount={true}
-      onSubmit={(values, { resetForm }) => checkForPassword(values, resetForm)}
+      onSubmit={(values, { resetForm }) =>
+        updateRetailerPassword(values, resetForm)
+      }
       validationSchema={changePasswordValidationSchema}>
       {props => (
         <ScrollView
@@ -113,16 +100,10 @@ const ChangePassword = ({ navigation }) => {
             </View>
 
             <View style={styles.wrapper}>
-              {invalidPassword && (
-                <ErrorMessage
-                  errorMessage="Your current password is incorrect"
-                  setErrorComponent={setInvalidPassword}
-                />
-              )}
-
+              {/* Display error message if internet connection is unavailable */}
               {errorComponent && (
                 <ErrorMessage
-                  errorMessage="Your new password does not match!"
+                  errorMessage="Please check your internet connection!"
                   setErrorComponent={setErrorComponent}
                 />
               )}
@@ -139,7 +120,7 @@ const ChangePassword = ({ navigation }) => {
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('currentPassword')}
                       onBlur={props.handleBlur('currentPassword')}
-                      value={props.values.currentPassword}
+                      value={props.values.currentPassword.trim()}
                       errors={props.errors.currentPassword}
                       touched={props.touched.currentPassword}
                     />
@@ -154,12 +135,20 @@ const ChangePassword = ({ navigation }) => {
                     </TouchableOpacity>
                   </View>
                   {/* If this field contains an error and it has been touched, then display the error message */}
-                  {props.errors.currentPassword &&
+                  {!errorMessage?.current_password &&
+                    props.errors.currentPassword &&
                     props.touched.currentPassword && (
                       <Text style={styles.errors}>
                         {props.errors.currentPassword}
                       </Text>
                     )}
+
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.current_password && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.current_password}
+                    </Text>
+                  )}
                 </View>
                 <View style={{ marginBottom: SIZES.radius }}>
                   <Text style={styles.label}>New Password</Text>
@@ -172,7 +161,7 @@ const ChangePassword = ({ navigation }) => {
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('newPassword')}
                       onBlur={props.handleBlur('newPassword')}
-                      value={props.values.newPassword}
+                      value={props.values.newPassword.trim()}
                       errors={props.errors.newPassword}
                       touched={props.touched.newPassword}
                     />
@@ -189,11 +178,13 @@ const ChangePassword = ({ navigation }) => {
                     </TouchableOpacity>
                   </View>
                   {/* If this field contains an error and it has been touched, then display the error message */}
-                  {props.errors.newPassword && props.touched.newPassword && (
-                    <Text style={styles.errors}>
-                      {props.errors.newPassword}
-                    </Text>
-                  )}
+                  {!errorMessage?.new_password &&
+                    props.errors.newPassword &&
+                    props.touched.newPassword && (
+                      <Text style={styles.errors}>
+                        {props.errors.newPassword}
+                      </Text>
+                    )}
                 </View>
                 <View style={{ marginBottom: SIZES.radius }}>
                   <Text style={styles.label}>New Password Confirmation</Text>
@@ -208,7 +199,7 @@ const ChangePassword = ({ navigation }) => {
                         'newPasswordConfirmation',
                       )}
                       onBlur={props.handleBlur('newPasswordConfirmation')}
-                      value={props.values.newPasswordConfirmation}
+                      value={props.values.newPasswordConfirmation.trim()}
                       errors={props.errors.newPasswordConfirmation}
                       touched={props.touched.newPasswordConfirmation}
                     />
@@ -227,6 +218,13 @@ const ChangePassword = ({ navigation }) => {
                         {props.errors.newPasswordConfirmation}
                       </Text>
                     )}
+
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.new_password && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.new_password}
+                    </Text>
+                  )}
                 </View>
                 <CustomButton
                   buttonText={loading ? 'Updating' : 'Update Password'}
@@ -312,12 +310,19 @@ const styles = StyleSheet.create({
   },
 
   errors: {
+    marginBottom: SIZES.radius,
     color: COLORS.red,
-    ...FONTS.body4,
+    ...FONTS.h4,
   },
 
   icon: {
     fontSize: wp('5%'),
     color: COLORS.black,
+  },
+
+  errorMessage: {
+    marginBottom: SIZES.radius,
+    color: COLORS.red,
+    ...FONTS.h4,
   },
 });

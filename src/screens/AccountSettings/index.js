@@ -47,7 +47,8 @@ const AccountSettings = ({ navigation }) => {
 
   const updateRetailerProfile = formData => {
     setLoading(true);
-    setErrorMessage('');
+    errorMessage && setErrorMessage('');
+    errorComponent && setErrorComponent(false);
 
     // Upload form
     const data = new FormData();
@@ -79,21 +80,7 @@ const AccountSettings = ({ navigation }) => {
         // Set state to display an error message for network error and form error
         if (err.message === 'Network Error') {
           setErrorComponent(true);
-          setErrorMessage('');
           setLoading(false);
-
-          // Alert.alert(
-          //   'Error',
-          //   'Please check your internet connection and try again later',
-          //   [
-          //     {
-          //       text: 'OK',
-          //       onPress: () => {
-          //         setLoading(false);
-          //       },
-          //     },
-          //   ],
-          // );
         } else {
           setErrorMessage(err?.response?.data?.errors);
           setLoading(false);
@@ -155,7 +142,7 @@ const AccountSettings = ({ navigation }) => {
             <View style={styles.wrapper}>
               {errorComponent && (
                 <ErrorMessage
-                  errorMessage="Please check your network connection!"
+                  errorMessage="Please check your internet connection!"
                   setErrorComponent={setErrorComponent}
                 />
               )}

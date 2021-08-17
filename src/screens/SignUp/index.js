@@ -99,22 +99,14 @@ const SignUp = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={true}>
             <ImageBackground source={images.loginBg} style={styles.bgImage}>
-              {/* <TouchableOpacity
-                onPress={() => navigation.replace('SplashScreen')}> */}
               <Image source={icons.fullAcomart} style={styles.logo} />
-              {/* </TouchableOpacity> */}
               <View style={styles.formContainer}>
                 {/* If the app fails to fetch data from the server, then this error message will be displayed */}
                 {signUpError?.message === 'Network Error' && (
                   <ErrorMessage
-                    errorMessage="Please check your network connection!"
+                    errorMessage="Please check your internet connection!"
                     clearAuthState={clearLoginState}
                   />
-                  // <View style={styles.invalidErrorMessage}>
-                  //   <Text style={styles.invalidErrorText}>
-                  //     Please check your internet connection
-                  //   </Text>
-                  // </View>
                 )}
 
                 <TouchableOpacity
@@ -147,9 +139,6 @@ const SignUp = ({ navigation }) => {
                 {errors.fullName && touched.fullName && (
                   <Text style={styles.errors}>{errors.fullName}</Text>
                 )}
-                {/* {signUpError?.errors?.name && (
-                  <Text style={styles.errors}>{signUpError?.errors?.name}</Text>
-                )} */}
 
                 <CustomInput
                   placeholder="Phone Number"

@@ -90,7 +90,7 @@ const Login = ({ navigation }) => {
                 {/* Display an error message, if form failed to connect to the server */}
                 {loginError?.message === 'Network Error' && (
                   <ErrorMessage
-                    errorMessage="Please check your network connection!"
+                    errorMessage="Please check your internet connection!"
                     clearAuthState={clearLoginState}
                   />
                 )}
