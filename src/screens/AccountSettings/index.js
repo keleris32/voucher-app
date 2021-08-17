@@ -76,7 +76,7 @@ const AccountSettings = ({ navigation }) => {
         ]);
       })
       .catch(err => {
-        // If there's a network error, display an alert, else display an error message
+        // Set state to display an error message for network error and form error
         if (err.message === 'Network Error') {
           setErrorComponent(true);
           setErrorMessage('');
@@ -95,7 +95,6 @@ const AccountSettings = ({ navigation }) => {
           //   ],
           // );
         } else {
-          // setErrorComponent(true);
           setErrorMessage(err?.response?.data?.errors);
           setLoading(false);
         }

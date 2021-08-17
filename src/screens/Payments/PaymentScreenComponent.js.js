@@ -26,6 +26,8 @@ import { validationSchema } from './validationSchema';
 const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
+  const [errorComponent, setErrorComponent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
@@ -46,14 +48,11 @@ const PaymentScreenComponent = ({ navigation }) => {
     },
   } = useContext(GlobalContext);
 
-  // Global state variable for retailer's data
-  // const {
-  //   getRetailerState: { retailerData },
-  // } = useContext(GlobalContext);
-
   // Fn to request for client secret if the product is from Afrocinema
   const fetchAfrocinemaPayment = async prop => {
     setLoading(true);
+    errorMessage && setErrorMessage('');
+    errorComponent && setErrorComponent(false);
 
     // Create a FormData and append the required fields
     const afrocinemaFormData = new FormData();
@@ -75,23 +74,21 @@ const PaymentScreenComponent = ({ navigation }) => {
       customer = await response.data.data.payment_intent.customer;
       paymentIntent = await response.data.data.payment_intent.client_secret;
 
-      // console.log('cinema first stage done');
-      // setLoading(false);
+      // End of Try ---->>
+      // ------>>
     } catch (error) {
-      // console.log('Caught cinema error', error);
-      Alert.alert(
-        'Error',
-        'Please check your internet connection and try again later.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              setLoading(false);
-            },
-          },
-        ],
-      );
-      // setLoading(false);
+      // Set state to display an errorComponent for network error or errorMessage for form error
+      if (error.message === 'Network Error') {
+        setErrorComponent(true);
+        setErrorMessage('');
+        setLoading(false);
+      } else {
+        setErrorMessage(error?.response?.data?.errors);
+        setLoading(false);
+      }
+
+      // End of Catch ---->>
+      // ------>>
     }
 
     return { customer, paymentIntent };
@@ -100,6 +97,8 @@ const PaymentScreenComponent = ({ navigation }) => {
   // Fn to request for client secret if the product is from Afrostream
   const fetchAfrostreamPayment = async prop => {
     setLoading(true);
+    errorMessage && setErrorMessage('');
+    errorComponent && setErrorComponent(false);
 
     // Create a FormData and append the required fields
     const afrostreamFormData = new FormData();
@@ -125,22 +124,21 @@ const PaymentScreenComponent = ({ navigation }) => {
       customer = await response.data.data.payment_intent.customer;
       paymentIntent = await response.data.data.payment_intent.client_secret;
 
-      // console.log('stream first stage done');
+      // End of Try ---->>
+      // ------>>
     } catch (error) {
-      // console.log('Caught stream error', error);
-      Alert.alert(
-        'Error',
-        'Please check your internet connection and try again later.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              setLoading(false);
-            },
-          },
-        ],
-      );
-      // setLoading(false);
+      // Set state to display an errorComponent for network error or errorMessage for form error
+      if (error.message === 'Network Error') {
+        setErrorComponent(true);
+        setErrorMessage('');
+        setLoading(false);
+      } else {
+        setErrorMessage(error?.response?.data?.errors);
+        setLoading(false);
+      }
+
+      // End of Catch ---->>
+      // ------>>
     }
 
     return { customer, paymentIntent };
@@ -164,7 +162,18 @@ const PaymentScreenComponent = ({ navigation }) => {
       });
 
       if (error) {
-        console.log(error);
+        Alert.alert(
+          'Error',
+          'Please check your internet connection and try again later.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setLoading(false);
+              },
+            },
+          ],
+        );
       } else {
         // console.log('2nd stage done');
       }
@@ -187,7 +196,18 @@ const PaymentScreenComponent = ({ navigation }) => {
       });
 
       if (error) {
-        console.log(error);
+        Alert.alert(
+          'Error',
+          'Please check your internet connection and try again later.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setLoading(false);
+              },
+            },
+          ],
+        );
       } else {
         // console.log('2nd stage done');
       }
@@ -247,6 +267,12 @@ const PaymentScreenComponent = ({ navigation }) => {
             </TouchableOpacity>
             <View style={styles.wrapper}>
               <Text style={styles.title}>Customer's Details</Text>
+              {errorComponent && (
+                <ErrorMessage
+                  errorMessage="Please check your network connection!"
+                  setErrorComponent={setErrorComponent}
+                />
+              )}
               <TouchableOpacity
                 // disabled={fetchError}
                 onPress={() => setIsModalVisible(true)}>
@@ -259,6 +285,13 @@ const PaymentScreenComponent = ({ navigation }) => {
                   setFetchError={setFetchError}
                 />
               </TouchableOpacity>
+
+              {/* Display error message from server */}
+              {errorMessage?.customer_country_id && (
+                <Text style={styles.errorMessage}>
+                  Please select your country
+                </Text>
+              )}
               <View style={{ marginVertical: wp('7.5%') }}>
                 <CustomInput
                   placeholder="Phone Number"
@@ -272,8 +305,19 @@ const PaymentScreenComponent = ({ navigation }) => {
                 />
 
                 {/* If this field contains an error and it has been touched, then display the error message */}
-                {props.errors.phoneNumber && props.touched.phoneNumber && (
-                  <Text style={styles.errors}>{props.errors.phoneNumber}</Text>
+                {!errorMessage?.customer_phone_number &&
+                  props.errors.phoneNumber &&
+                  props.touched.phoneNumber && (
+                    <Text style={styles.errors}>
+                      {props.errors.phoneNumber}
+                    </Text>
+                  )}
+
+                {/* Display error message from server */}
+                {errorMessage?.customer_phone_number && (
+                  <Text style={styles.errorMessage}>
+                    {errorMessage?.customer_phone_number}
+                  </Text>
                 )}
 
                 <CustomButton
@@ -304,7 +348,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: wp('10%'),
     left: wp('5%'),
-    // transform: [{ translateX: wp('2.5%') }],
   },
 
   leftArrowIcon: {
@@ -325,5 +368,11 @@ const styles = StyleSheet.create({
   errors: {
     color: COLORS.red,
     ...FONTS.body4,
+  },
+
+  errorMessage: {
+    // marginBottom: SIZES.radius,
+    color: COLORS.red,
+    ...FONTS.h4,
   },
 });
