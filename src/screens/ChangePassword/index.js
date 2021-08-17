@@ -46,7 +46,7 @@ const ChangePassword = ({ navigation }) => {
     axiosInstance
       .post('retailer/change-password', data)
       .then(res =>
-        Alert.alert('Success', 'Your Profile was updated successfully', [
+        Alert.alert('Success', 'Your Password was updated successfully', [
           {
             text: 'OK',
             onPress: () => {
