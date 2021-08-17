@@ -22,6 +22,7 @@ import { CustomButton, CustomInput } from '../../components';
 import EnvironmentVariables from '../../config/env';
 import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
