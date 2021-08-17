@@ -13,6 +13,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Formik } from 'formik';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { COLORS, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
@@ -22,7 +23,7 @@ import EnvironmentVariables from '../../config/env';
 import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
 
-const PaymentScreenComponent = () => {
+const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
@@ -46,9 +47,9 @@ const PaymentScreenComponent = () => {
   } = useContext(GlobalContext);
 
   // Global state variable for retailer's data
-  const {
-    getRetailerState: { retailerData },
-  } = useContext(GlobalContext);
+  // const {
+  //   getRetailerState: { retailerData },
+  // } = useContext(GlobalContext);
 
   // Fn to request for client secret if the product is from Afrocinema
   const fetchAfrocinemaPayment = async prop => {
@@ -239,6 +240,11 @@ const PaymentScreenComponent = () => {
       {props => (
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.iconCon}
+              onPress={() => navigation.goBack()}>
+              <Icon name="chevron-left" style={styles.leftArrowIcon} />
+            </TouchableOpacity>
             <View style={styles.wrapper}>
               <Text style={styles.title}>Customer's Details</Text>
               <TouchableOpacity
@@ -292,6 +298,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.offWhite,
+  },
+
+  iconCon: {
+    position: 'absolute',
+    top: wp('10%'),
+    left: wp('5%'),
+    // transform: [{ translateX: wp('2.5%') }],
+  },
+
+  leftArrowIcon: {
+    fontSize: hp('4.75%'),
+    color: COLORS.black,
   },
 
   wrapper: {
