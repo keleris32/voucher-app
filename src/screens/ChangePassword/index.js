@@ -1,4 +1,3 @@
-import { Formik } from 'formik';
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -13,6 +12,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { Formik } from 'formik';
 import { CustomButton } from '../../components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PasswordIcon from 'react-native-vector-icons/Ionicons';
@@ -41,7 +41,7 @@ const ChangePassword = ({ navigation }) => {
     data.append('current_password', formData.currentPassword);
     data.append('new_password', formData.newPassword);
     data.append('new_password_confirmation', formData.newPasswordConfirmation);
-    data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
+    data.append('callbackUrl', EnvironmentVariables.CONTACT_CALLBACK_URL);
 
     axiosInstance
       .post('retailer/change-password', data)
