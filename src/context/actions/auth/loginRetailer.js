@@ -21,20 +21,17 @@ export default ({ email, password }) =>
         AsyncStorage.setItem('token', res.data.data.jwtToken);
 
         // If the Login operation is successfully, store the retailer object in local storage
-        AsyncStorage.setItem(
-          'retailer',
-          JSON.stringify(res.data.data.retailer),
-        );
+        AsyncStorage.setItem('retailer', JSON.stringify(res.data.data.user));
 
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: res.data,
+          payload: res.data.data.user,
         });
       })
       .catch(err => {
         dispatch({
           type: LOGIN_FAIL,
-          payload: err.response ? err.response.data.data : err,
+          payload: err.response ? err.response.data.errors : err,
         });
       });
   };

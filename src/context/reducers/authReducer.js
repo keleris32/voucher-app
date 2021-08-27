@@ -47,8 +47,8 @@ const authReducer = (state, { type, payload }) => {
     case LOGIN_FAIL:
       return {
         ...state,
-        loginLoading: false,
         loginError: payload,
+        loginLoading: false,
       };
 
     case CLEAR_AUTH_STATE:

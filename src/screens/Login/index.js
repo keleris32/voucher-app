@@ -23,6 +23,7 @@ import loginRetailer from '../../context/actions/auth/loginRetailer';
 import { useFocusEffect } from '@react-navigation/native';
 import { clearAuthState } from '../../context/actions/auth/registerRetailer';
 import ErrorMessage from '../../components/ErrorMessage';
+import EnvironmentVariables from '../../config/env';
 
 const Login = ({ navigation }) => {
   const [isLoginPasswordHidden, setIsLoginPasswordHidden] = useState(true);
@@ -38,6 +39,7 @@ const Login = ({ navigation }) => {
   };
 
   const submitForm = formData => {
+    console.log(formData);
     // If the form is valid, then the form's values are dispatched to the server
     loginRetailer(formData)(authDispatch);
   };
@@ -50,7 +52,7 @@ const Login = ({ navigation }) => {
           clearAuthState()(authDispatch);
         }
       };
-    }, [data, loginError]),
+    }, []),
   );
 
   return (

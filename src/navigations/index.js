@@ -35,11 +35,11 @@ const AppNavContainer = () => {
       // If the object is present, set the authenication state variable to true, else false
       if (retailer) {
         await axiosInstance
-          .get('retailer/')
+          .get('retailer')
           .then(res => {
             getRetailerDispatch({
               type: GET_RETAILER,
-              payload: res.data.data.retailer,
+              payload: res.data.data.user,
             });
           })
           .catch(err =>
@@ -74,9 +74,9 @@ const AppNavContainer = () => {
 
   return (
     <>
-      {/* {console.log('isLoggedIn>>', isLoggedIn)}
+      {console.log('isLoggedIn>>', isLoggedIn)}
       {console.log('isAuthenticated>>', isAuthenticated)}
-      {console.log('Verification_status>>', retailerData.verification_status)} */}
+      {console.log('Verification_status>>', retailerData.verification_status)}
       {isAuthLoaded ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
