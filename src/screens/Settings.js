@@ -23,6 +23,7 @@ import DocumentPicker from 'react-native-document-picker';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
 import { clearAuthState } from '../context/actions/auth/registerRetailer';
+import EnvironmentVariables from '../config/env';
 
 const Settings = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -80,8 +81,6 @@ const Settings = ({ navigation }) => {
         type: [DocumentPicker.types.images],
       });
 
-      console.log(JSON.stringify(file, null, 2));
-
       // set the result to state
       setSelectedFile(file);
     } catch (err) {
@@ -109,12 +108,13 @@ const Settings = ({ navigation }) => {
         .post('retailer/profile-picture', formData, {
           headers: {
             'Content-Type': 'multipart/form-data;',
+            Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
           },
         })
         .then(res => {
           getRetailerDispatch({
             type: GET_RETAILER,
-            payload: res.data.data.retailer,
+            payload: res.data.data.user,
           });
           Alert.alert(
             'Success.',
