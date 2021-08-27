@@ -66,7 +66,7 @@ const ForgotPassword = ({ navigation }) => {
     <Formik
       initialValues={{
         email: '',
-        callbackUrl: EnvironmentVariables.CALLBACK_URL,
+        callbackUrl: EnvironmentVariables.CONTACT_CALLBACK_URL,
       }}
       validateOnMount={true}
       onSubmit={values => {
