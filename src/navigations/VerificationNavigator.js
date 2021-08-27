@@ -24,7 +24,7 @@ const VerificationNavigator = () => {
       }
       screenOptions={{ headerShown: false }}>
       {/* {console.log('Inside stack', retailerData.verification_status)} */}
-      {retailerData.verification_status === 'pending' ? (
+      {retailerData?.verification_status === 'pending' ? (
         <>
           <Stack.Screen
             name={PENDING_VERIFICATION}

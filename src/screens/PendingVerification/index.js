@@ -59,13 +59,12 @@ const PendingVerification = () => {
       .then(res => {
         getRetailerDispatch({
           type: GET_RETAILER,
-          payload: res.data.data.retailer,
+          payload: res.data.data.user,
         });
-        // console.log(JSON.stringify(res.data.data.retailer, null, 2));
+
         checkStatus();
       })
       .catch(err => {
-        // console.log('Pending Screen, get retailer>>>', err),
         Alert.alert(
           'Error',
           'Please check your internet connection and try again.',

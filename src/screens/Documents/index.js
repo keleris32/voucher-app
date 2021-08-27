@@ -29,8 +29,12 @@ const Documents = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [hasUploaded, setHasUploaded] = useState(false);
   const [refreshState, setRefreshState] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
-  const refreshPage = () => setRefreshState(!refreshState);
+  const refreshPage = () => {
+    setRefreshState(!refreshState);
+    setClicked(true);
+  };
 
   // Retailer global state
   const {
@@ -236,13 +240,13 @@ const Documents = ({ navigation }) => {
     }
   };
 
-  useEffect(async () => {
+  const getRefreshData = async () => {
     await axiosInstance
       .get('retailer/')
       .then(res => {
         getRetailerDispatch({
           type: GET_RETAILER,
-          payload: res.data.data.retailer,
+          payload: res.data.data.user,
         });
       })
       .catch(err => {
@@ -251,6 +255,11 @@ const Documents = ({ navigation }) => {
           'Something went wrong. Please check your internet connection and try again later.',
         );
       });
+  };
+
+  // Only try to fetch Data when refresh button has been clicked (clicked =true)
+  useEffect(() => {
+    clicked && getRefreshData();
   }, [refreshState]);
 
   return (
@@ -273,24 +282,14 @@ const Documents = ({ navigation }) => {
                 Driver's License, International Passport, Social Security
                 Number, Voter's card, National Identification Number etc.
               </Text>
-              {/* <TextInput
-                    style={styles.input}
-                    onChangeText={props.handleChange('documentName')}
-                    value={props.values.documentName}
-                    onBlur={props.handleBlur('documentName')}
-                    errors={props.errors.documentName}
-                    touched={props.touched.documentName}
-                    placeholder="Driver's License etc.."
-                  /> */}
+
               <View>
                 {selectedFile && (
                   <View
                     style={{
-                      // flexDirection: 'row',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
                       marginVertical: wp('1.5%'),
-                      // backgroundColor: COLORS.red,
                     }}>
                     <View
                       style={{
@@ -301,9 +300,6 @@ const Documents = ({ navigation }) => {
                         marginHorizontal: wp('1%'),
                       }}
                     />
-                    {/* <Text style={{ ...FONTS.h4, color: COLORS.red }}>
-                      {selectedFile.length}
-                    </Text> */}
                   </View>
                 )}
                 <TouchableOpacity
