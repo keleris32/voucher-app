@@ -52,7 +52,8 @@ const AccountSettings = ({ navigation }) => {
 
     // Upload form
     const data = new FormData();
-    data.append('name', formData.fullName);
+    data.append('first_name', formData.firstName);
+    data.append('last_name', formData.lastName);
     data.append('email', formData.email);
     data.append('phone_number', formData.phoneNumber);
     data.append('country_id', selectedCountry.id);
@@ -64,7 +65,7 @@ const AccountSettings = ({ navigation }) => {
       .then(res => {
         getRetailerDispatch({
           type: GET_RETAILER,
-          payload: res.data.data.retailer,
+          payload: res.data.data.user,
         });
         Alert.alert('Success', 'Your Profile was updated successfully', [
           {
@@ -115,7 +116,8 @@ const AccountSettings = ({ navigation }) => {
   return (
     <Formik
       initialValues={{
-        fullName: retailerData.name,
+        firstName: retailerData.first_name,
+        lastName: retailerData.last_name,
         email: retailerData.email,
         phoneNumber: retailerData.phone_number,
       }}
@@ -167,28 +169,48 @@ const AccountSettings = ({ navigation }) => {
               )}
               <View style={styles.formContainer}>
                 <View style={{ marginBottom: SIZES.radius }}>
-                  <Text style={styles.label}>Name</Text>
+                  <Text style={styles.label}>First Name</Text>
                   <View style={styles.inputContainer}>
                     <TextInput
                       style={styles.inputField}
-                      placeholder={retailerData.name}
+                      placeholder={retailerData?.first_name}
                       underlineColorAndroid="transparent"
                       placeholderTextColor={COLORS.gray}
-                      onChangeText={props.handleChange('fullName')}
-                      onBlur={props.handleBlur('fullName')}
-                      value={props.values.fullName}
-                      errors={props.errors.fullName}
-                      touched={props.touched.fullName}
+                      onChangeText={props.handleChange('firstName')}
+                      onBlur={props.handleBlur('firstName')}
+                      value={props.values.firstName}
+                      errors={props.errors.firstName}
+                      touched={props.touched.firstName}
                     />
                   </View>
-                  {/* If this field contains an error and it has been touched, then display the error message */}
-                  {/* {props.errors.fullName && props.touched.fullName && (
-                    <Text style={styles.errors}>{props.errors.fullName}</Text>
-                  )} */}
+
                   {/* If the field is not valid, display an error */}
-                  {errorMessage?.name && (
+                  {errorMessage?.first_name && (
                     <Text style={styles.errorMessage}>
-                      {errorMessage?.name}
+                      {errorMessage?.first_name}
+                    </Text>
+                  )}
+                </View>
+                <View style={{ marginBottom: SIZES.radius }}>
+                  <Text style={styles.label}>Last Name</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={retailerData?.last_name}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor={COLORS.gray}
+                      onChangeText={props.handleChange('lastName')}
+                      onBlur={props.handleBlur('lastName')}
+                      value={props.values.lastName}
+                      errors={props.errors.lastName}
+                      touched={props.touched.lastName}
+                    />
+                  </View>
+
+                  {/* If the field is not valid, display an error */}
+                  {errorMessage?.last_name && (
+                    <Text style={styles.errorMessage}>
+                      {errorMessage?.last_name}
                     </Text>
                   )}
                 </View>
@@ -197,7 +219,7 @@ const AccountSettings = ({ navigation }) => {
                   <View style={styles.inputContainer}>
                     <TextInput
                       style={styles.inputField}
-                      placeholder={retailerData.email}
+                      placeholder={retailerData?.email}
                       underlineColorAndroid="transparent"
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('email')}
@@ -223,7 +245,7 @@ const AccountSettings = ({ navigation }) => {
                   <View style={styles.inputContainer}>
                     <TextInput
                       style={styles.inputField}
-                      placeholder={retailerData.phone_number}
+                      placeholder={retailerData?.phone_number}
                       underlineColorAndroid="transparent"
                       placeholderTextColor={COLORS.gray}
                       onChangeText={props.handleChange('phoneNumber')}

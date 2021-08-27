@@ -1,10 +1,13 @@
 import * as yup from 'yup';
 
 export const accountSettingsValidationSchema = yup.object().shape({
-  fullName: yup
+  firstName: yup
     .string()
-    .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
-    .max(40, 'The name is too long!')
+    .matches(/^[A-Za-z ]*$/, 'Please enter a valid name')
+    .required('Name is required'),
+  lastName: yup
+    .string()
+    .matches(/^[A-Za-z ]*$/, 'Please enter a valid name')
     .required('Name is required'),
   // phoneNumber: yup
   //   .string()
