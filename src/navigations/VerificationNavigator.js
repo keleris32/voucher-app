@@ -23,7 +23,6 @@ const VerificationNavigator = () => {
           : Documents
       }
       screenOptions={{ headerShown: false }}>
-      {/* {console.log('Inside stack', retailerData.verification_status)} */}
       {retailerData?.verification_status === 'pending' ? (
         <>
           <Stack.Screen
