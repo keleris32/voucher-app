@@ -4,7 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { COLORS, FONTS } from '../../constants';
+import { COLORS, FONTS, SIZES } from '../../constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ErrorMessage = props => {
@@ -34,11 +34,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('1.5%'),
     backgroundColor: COLORS.red,
     marginBottom: wp('2.5%'),
+    borderRadius: SIZES.base,
   },
 
   text: {
     ...FONTS.h4,
     color: COLORS.white,
+    flex: 1,
   },
 
   icon: {
