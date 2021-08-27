@@ -54,7 +54,7 @@ const AccountSettings = ({ navigation }) => {
     const data = new FormData();
     data.append('first_name', formData.firstName);
     data.append('last_name', formData.lastName);
-    data.append('email', formData.email);
+    data.append('email', retailerData.email);
     data.append('phone_number', formData.phoneNumber);
     data.append('country_id', selectedCountry.id);
     data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
