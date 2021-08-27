@@ -14,6 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 import { COLORS, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
