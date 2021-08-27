@@ -14,13 +14,15 @@ export const clearAuthState = () => dispatch => {
 };
 
 export default ({
-    fullName: name,
+    firstName: first_name,
+    lastName: last_name,
     email,
     password,
     confirmPassword: password_confirmation,
     phoneNumber: phone_number,
     country_id,
     callbackUrl,
+    registration_channel,
   }) =>
   dispatch => {
     dispatch({
@@ -28,23 +30,22 @@ export default ({
     });
     axiosInstance
       .post('retailer/auth/register', {
-        name,
+        first_name,
+        last_name,
         email,
         password,
         password_confirmation,
         phone_number,
         country_id,
         callbackUrl,
+        registration_channel,
       })
       .then(res => {
         // If the Login operation is successfully, store the jwtToken in local storage
         AsyncStorage.setItem('token', res.data.data.jwtToken);
 
         // If the Login operation is successfully, store the retailer object in local storage
-        AsyncStorage.setItem(
-          'retailer',
-          JSON.stringify(res.data.data.retailer),
-        );
+        AsyncStorage.setItem('retailer', JSON.stringify(res.data.data.user));
 
         dispatch({
           type: REGISTER_SUCCESS,

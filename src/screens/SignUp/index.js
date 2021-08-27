@@ -73,13 +73,15 @@ const SignUp = ({ navigation }) => {
   return (
     <Formik
       initialValues={{
-        fullName: '',
+        firstName: '',
+        lastName: '',
         phoneNumber: '',
         email: '',
         password: '',
         confirmPassword: '',
         country_id: '',
         callbackUrl: EnvironmentVariables.EMAIL_CALLBACK_URL,
+        registration_channel: 'mobile',
       }}
       validateOnMount={true}
       onSubmit={values => {
@@ -127,17 +129,31 @@ const SignUp = ({ navigation }) => {
                 )}
 
                 <CustomInput
-                  placeholder="Full Name"
+                  placeholder="First Name"
                   iconType="name"
-                  onChangeText={handleChange('fullName')}
-                  onBlur={handleBlur('fullName')}
-                  value={values.fullName}
-                  errors={errors.fullName}
-                  touched={touched.fullName}
+                  onChangeText={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
+                  value={values.firstName}
+                  errors={errors.firstName}
+                  touched={touched.firstName}
                 />
                 {/* If the field has been touched and it's not valid, display an error */}
-                {errors.fullName && touched.fullName && (
-                  <Text style={styles.errors}>{errors.fullName}</Text>
+                {errors.firstName && touched.firstName && (
+                  <Text style={styles.errors}>{errors.firstName}</Text>
+                )}
+
+                <CustomInput
+                  placeholder="Last Name"
+                  iconType="name"
+                  onChangeText={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
+                  value={values.lastName}
+                  errors={errors.lastName}
+                  touched={touched.lastName}
+                />
+                {/* If the field has been touched and it's not valid, display an error */}
+                {errors.lastName && touched.lastName && (
+                  <Text style={styles.errors}>{errors.lastName}</Text>
                 )}
 
                 <CustomInput

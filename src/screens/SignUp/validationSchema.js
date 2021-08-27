@@ -1,12 +1,16 @@
 import * as yup from 'yup';
 
 export const signUpValidationSchema = yup.object().shape({
-  fullName: yup
+  firstName: yup
     .string()
     // .trim()
-    .matches(/^[A-Z-a-z ]*$/, 'Please enter valid name')
-    .max(40, 'The name is too long!')
-    .required('Name is required'),
+    .matches(/^[A-Z-a-z ]*$/, 'Please enter a valid name')
+    .required('The first name field is required'),
+  lastName: yup
+    .string()
+    // .trim()
+    .matches(/^[A-Z-a-z ]*$/, 'Please enter a valid name')
+    .required('The last name field is required'),
   // phoneNumber: yup
   //   .string()
   //   .required('Please enter a phone number')
