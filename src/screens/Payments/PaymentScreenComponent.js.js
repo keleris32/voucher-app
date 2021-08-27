@@ -59,10 +59,6 @@ const PaymentScreenComponent = ({ navigation }) => {
     const afrocinemaFormData = new FormData();
     afrocinemaFormData.append('video_id', selectedAfrocinemaData.id);
     afrocinemaFormData.append('payment_purpose', 'afrocinema_premier');
-    afrocinemaFormData.append(
-      'cancel_subscription_url',
-      'https://afrocinema.tv/user',
-    );
     afrocinemaFormData.append('is_retailer', '1');
     afrocinemaFormData.append('customer_country_id', selectedCountry.id);
     afrocinemaFormData.append('customer_phone_number', prop);
