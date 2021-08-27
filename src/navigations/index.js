@@ -42,8 +42,9 @@ const AppNavContainer = () => {
               payload: res.data.data.user,
             });
           })
-          .catch(err =>
-            console.log('Main navigation index, get retailer>>>', err),
+          .catch(
+            err => {},
+            // console.log('Main navigation index, get retailer>>>', err),
           );
 
         // if the retailer has been logged in, set authentication state to true
@@ -74,9 +75,9 @@ const AppNavContainer = () => {
 
   return (
     <>
-      {console.log('isLoggedIn>>', isLoggedIn)}
+      {/* {console.log('isLoggedIn>>', isLoggedIn)}
       {console.log('isAuthenticated>>', isAuthenticated)}
-      {console.log('Verification_status>>', retailerData.verification_status)}
+      {console.log('Verification_status>>', retailerData.verification_status)} */}
       {isAuthLoaded ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
