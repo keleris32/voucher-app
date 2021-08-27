@@ -39,7 +39,6 @@ const Login = ({ navigation }) => {
   };
 
   const submitForm = formData => {
-    console.log(formData);
     // If the form is valid, then the form's values are dispatched to the server
     loginRetailer(formData)(authDispatch);
   };
