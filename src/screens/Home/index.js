@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -94,7 +93,7 @@ const Home = () => {
   }, [refresh]);
 
   // To separate Retailer's first name and last name, and return both names in an array
-  const name = retailerData?.name.split(' ');
+  // const name = retailerData?.name.split(' ');
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +103,9 @@ const Home = () => {
         <View style={styles.headerBar}>
           <View>
             <Text style={styles.headerText}>Welcome,</Text>
-            <Text style={styles.headerUsername}>{name[0]}</Text>
+            <Text style={styles.headerUsername}>
+              {retailerData?.first_name}
+            </Text>
           </View>
           <View>
             <Image
