@@ -6,6 +6,7 @@ import {
   STRIPE_PUBLIC_KEY,
   FLUTTERWAVE_PUBLIC_KEY,
   PAYSTACK_PUBLIC_KEY,
+  IMAGES_REFERER_HEADER_URL,
 } from '@env';
 
 const EnvironmentVariables = {
@@ -16,6 +17,7 @@ const EnvironmentVariables = {
   STRIPE_PUBLIC_KEY,
   FLUTTERWAVE_PUBLIC_KEY,
   PAYSTACK_PUBLIC_KEY,
+  IMAGES_REFERER_HEADER_URL,
 };
 
 export default EnvironmentVariables;
