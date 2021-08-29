@@ -12,8 +12,9 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 import { COLORS, FONTS, SIZES } from '../constants';
 
-const CustomInput = ({ iconType, placeholder, ...props }) => {
+const CustomInput = ({ iconType, placeholder, keyboardType, ...props }) => {
   let icon;
+  let keyboard;
 
   if (iconType === 'name') {
     icon = 'user';
@@ -27,6 +28,14 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
     icon = 'lock';
   } else if (iconType === 'loginPassword') {
     icon = 'lock';
+  }
+
+  if (keyboardType === 'phone') {
+    keyboard = 'phone-pad';
+  } else if (keyboardType === 'email') {
+    keyboard = 'email-address';
+  } else {
+    keyboard = 'default';
   }
 
   return (
@@ -58,6 +67,7 @@ const CustomInput = ({ iconType, placeholder, ...props }) => {
       )}
       <TextInput
         underlineColorAndroid="transparent"
+        keyboardType={keyboard}
         style={styles.inputField}
         placeholder={placeholder}
         placeholderTextColor={COLORS.gray}
