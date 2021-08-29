@@ -3,6 +3,7 @@ export default {
   data: {},
   loginLoading: false,
   signUpLoading: false,
+  logoutLoading: false,
   loginError: '',
   signUpError: '',
   logoutError: false,

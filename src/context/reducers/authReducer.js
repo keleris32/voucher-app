@@ -8,6 +8,7 @@ import {
   REGISTER_SUCCESS,
   LOGOUT_RETAILER,
   LOGOUT_RETAILER_ERROR,
+  LOGOUT_LOADING,
 } from '../../constants/actionTypes';
 
 const authReducer = (state, { type, payload }) => {
@@ -24,6 +25,13 @@ const authReducer = (state, { type, payload }) => {
         ...state,
         loginLoading: true,
         loginError: '',
+      };
+
+    case LOGOUT_LOADING:
+      return {
+        ...state,
+        logoutLoading: true,
+        logoutError: false,
       };
 
     case REGISTER_SUCCESS:
@@ -68,12 +76,14 @@ const authReducer = (state, { type, payload }) => {
         data: null,
         isLoggedIn: false,
         isLoggedOut: true,
+        logoutLoading: false,
       };
 
     case LOGOUT_RETAILER_ERROR:
       return {
         ...state,
         logoutError: true,
+        logoutLoading: false,
       };
 
     default:
