@@ -32,7 +32,7 @@ const Settings = ({ navigation }) => {
   // Auth global state variable
   const {
     authDispatch,
-    authState: { logoutError },
+    authState: { logoutError, logoutLoading },
   } = useContext(GlobalContext);
 
   // retailerData global state variable
@@ -44,7 +44,7 @@ const Settings = ({ navigation }) => {
   if (logoutError) {
     Alert.alert(
       'Error.',
-      'Something went wrong. Please check your internet connection and try again.',
+      'Please check your internet connection and try again.',
       [
         {
           text: 'Ok',
@@ -73,6 +73,7 @@ const Settings = ({ navigation }) => {
 
   const selectImage = async () => {
     setIsUpdating(true);
+    let sizeLimit = 2100000;
 
     try {
       // Document Picker to select a file
@@ -81,8 +82,23 @@ const Settings = ({ navigation }) => {
         type: [DocumentPicker.types.images],
       });
 
-      // set the result to state
-      setSelectedFile(file);
+      if (file.size < sizeLimit) {
+        // set the result to state
+        setSelectedFile(file);
+      } else {
+        Alert.alert(
+          'Size Limit.',
+          "Please endeavor that your image isn't larger than 2mb",
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                setIsUpdating(false);
+              },
+            },
+          ],
+        );
+      }
     } catch (err) {
       setSelectedFile(null);
 
@@ -91,7 +107,7 @@ const Settings = ({ navigation }) => {
       } else {
         Alert.alert(
           'Error.',
-          'Something went wrong. Please check your internet connection and try again!',
+          'Please check your internet connection and try again!',
         );
       }
     }
@@ -109,6 +125,7 @@ const Settings = ({ navigation }) => {
           headers: {
             'Content-Type': 'multipart/form-data;',
             Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+            'Referrer-Policy': 'origin',
           },
         })
         .then(res => {
@@ -132,7 +149,7 @@ const Settings = ({ navigation }) => {
         .catch(err => {
           Alert.alert(
             'Error.',
-            'Something went wrong. Please check your internet connection and try again!',
+            'Please check your internet connection and try again!',
             [
               {
                 text: 'Ok',
@@ -143,6 +160,8 @@ const Settings = ({ navigation }) => {
             ],
           );
         });
+    } else {
+      return;
     }
   };
 
@@ -190,7 +209,7 @@ const Settings = ({ navigation }) => {
                 style={[styles.cardIcon, { color: COLORS.red }]}
               />
               <Text style={[styles.cardText, { color: COLORS.red }]}>
-                Log Out
+                {logoutLoading ? 'Logging Out...' : 'Log Out'}
               </Text>
             </View>
             <Icon name="chevron-right" style={styles.rightArrowIcon} />
