@@ -212,6 +212,8 @@ const Documents = ({ navigation }) => {
 
   // function to select a file from device
   const selectDocument = async () => {
+    let sizeLimit = 2100000;
+
     try {
       // Document Picker to select a file
       const file = await DocumentPicker.pickMultiple({
@@ -224,8 +226,17 @@ const Documents = ({ navigation }) => {
         ],
       });
 
-      // set the result to state
-      setSelectedFile(file);
+      file.forEach(oneFile => {
+        if (oneFile.size < sizeLimit) {
+          // set the result to state
+          setSelectedFile(file);
+        } else {
+          Alert.alert(
+            'Size Limit.',
+            "Please endeavor that your image isn't larger than 2mb",
+          );
+        }
+      });
     } catch (err) {
       setSelectedFile(null);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef, useMemo } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -27,6 +27,10 @@ import {
 const Home = () => {
   const [fetchError, setFetchError] = useState(false);
   const [refresh, setRefresh] = useState(false);
+
+  const renders = useRef(0);
+  // const cinemaRenders = useRef(0);
+  // const streamRenders = useRef(0);
 
   const refreshComp = () => setRefresh(!refresh);
 
@@ -57,7 +61,6 @@ const Home = () => {
     await axiosInstance
       .get('retailer/videos')
       .then(res => {
-        // console.log(JSON.stringify(res.data.data.videos, null, 2));
         getAfrocinemaDispatch({
           type: GET_AFROCINEMA_DATA,
           payload: res.data.data.videos,
@@ -75,7 +78,6 @@ const Home = () => {
     await axiosInstance
       .get('retailer/subscription-plans')
       .then(res => {
-        // console.log(JSON.stringify(res.data.data.subscription_plans, null, 2));
         getAfrostreamDispatch({
           type: GET_AFROSTREAM_DATA,
           payload: res.data.data.subscription_plans,

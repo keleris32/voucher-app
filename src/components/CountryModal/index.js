@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import {
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
+import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import SearchBar from '../AfrocinemaComponent/SearchBar';
 import ErrorPageComponent from '../ErrorPageComponent';
@@ -23,12 +24,12 @@ const CountryModal = props => {
   const [countryData, setCountryData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
-  // const [refreshLoading, setRefreshLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   const refreshComp = () => setRefresh(!refresh);
 
-  const isCurrent = useRef(true);
+  // To vcheck if component is mounted
+  let mounted = true;
 
   // State variable for filtered search data
   const [filteredData, setFilteredData] = useState({});
@@ -39,16 +40,19 @@ const CountryModal = props => {
     setLoading(true);
     try {
       const request = await axiosInstance.get('countries');
-      // if (isCurrent.current) {
-      setCountryData(request.data.data.countries);
-      setFilteredData(request.data.data.countries);
-      setLoading(false);
-      // }
+
+      // set state if component is mounted
+      if (mounted) {
+        setCountryData(request.data.data.countries);
+        setFilteredData(request.data.data.countries);
+        setLoading(false);
+      }
     } catch (err) {
-      // if (isCurrent.current) {
-      props.setFetchError(true);
-      setLoading(false);
-      // }
+      // set state if component is mounted
+      if (mounted) {
+        props.setFetchError(true);
+        setLoading(false);
+      }
     }
   };
 
@@ -73,29 +77,40 @@ const CountryModal = props => {
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
-      setFilteredData(newData);
-      setSearchValue(text);
+
+      // set state if component is mounted
+      if (mounted) {
+        setFilteredData(newData);
+        setSearchValue(text);
+      }
     } else {
-      // if it is empty, update filteredData with afrocinemaData
-      setFilteredData(countryData);
-      setSearchValue(text);
+      // if it is empty & component is mounted, update filteredData with afrocinemaData
+      if (mounted) {
+        setFilteredData(countryData);
+        setSearchValue(text);
+      }
     }
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     isCurrent.current = false;
-  //   };
-  // }, []);
-
   useEffect(() => {
     fetchCountryData();
+
+    return () => {
+      // set variable to false to avoiding setting state on an unmounted component
+      // inorder to prevent memory leaks
+      mounted = false;
+    };
   }, [refresh]);
 
   return (
     <View>
       <View style={styles.countryBar}>
-        <Text style={styles.countryBarText}>{props.selectedCountry.name}</Text>
+        <Text style={styles.countryBarText}>
+          {props.newCountryData &&
+          props.selectedCountry.name === 'Select your country'
+            ? props.newCountryData
+            : props.selectedCountry.name}
+        </Text>
         <Icons name="chevron-circle-down" style={styles.icon} />
       </View>
 

@@ -30,8 +30,10 @@ const PendingVerification = () => {
   } = useContext(GlobalContext);
 
   // After data has been fetched, check the verification status of the retailer
-  const checkStatus = () => {
-    if (retailerData.verification_status !== 'approved') {
+  const checkStatus = async () => {
+    let status = await retailerData.verification_status;
+
+    if (status !== 'approved') {
       Alert.alert(
         'Pending',
         'You would be notified once the vetting process has been completed',
