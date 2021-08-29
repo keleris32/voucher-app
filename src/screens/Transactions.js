@@ -14,7 +14,6 @@ import SearchBar from '../components/AfrocinemaComponent/SearchBar';
 import TransactionsCard from '../components/TransactionsCard';
 import { COLORS, FONTS } from '../constants';
 import {
-  GET_SEARCH_DATA,
   GET_TRANSACTIONS,
   GET_TRANSACTIONS_ERROR,
   GET_TRANSACTIONS_LOADING,
@@ -37,19 +36,12 @@ const Transactions = () => {
     getTransactionsState: { transactionsData, loading },
   } = useContext(GlobalContext);
 
-  // Search Filter global state variable
-  const {
-    searchDispatch,
-    searchState: { searchFilterData },
-  } = useContext(GlobalContext);
-
   // get transactions data from api
   const getTransactionsData = async () => {
     setFetchError(false);
     getTransactionsDispatch({
       type: GET_TRANSACTIONS_LOADING,
     });
-    // console.log('gets here');
     await axiosInstance
       .get('retailer/payment-transactions?include=model')
       .then(res => {
@@ -58,28 +50,15 @@ const Transactions = () => {
           type: GET_TRANSACTIONS,
           payload: res.data.data.payment_transactions,
         });
-
-        // searchDispatch({
-        //   type: GET_SEARCH_DATA,
-        //   payload: res.data.data.payment_transactions,
-        // });
-        // console.log('Transaction Stack>>', JSON.stringify(res.data, null, 2));
       })
       .catch(err => {
-        // console.log('never gets here');
-        // console.log(err.message);
         getTransactionsDispatch({
           type: GET_TRANSACTIONS_ERROR,
         });
         setFetchError(true);
-        // getTransactionsDispatch({
-        //   type: GET_TRANSACTIONS_ERROR,
-        // });
-        // console.log('Transaction Stack>>', JSON.stringify(err, null, 2));
       });
   };
 
-  // console.log(JSON.stringify(transactionsData, null, 2));
   const searchFilterFunction = text => {
     // Check if inserted text is not empty
     if (text) {
@@ -94,18 +73,12 @@ const Transactions = () => {
       });
 
       setFilteredData(newData);
-      // searchDispatch({
-      //   type: GET_SEARCH_DATA,
-      //   payload: newData,
-      // });
+
       setSearchValue(text);
     } else {
       // if it is empty, update filteredData with afrocinemaData
       setFilteredData(transactionsData);
-      // searchDispatch({
-      //   type: GET_SEARCH_DATA,
-      //   payload: transactionsData,
-      // });
+
       setSearchValue(text);
     }
   };
