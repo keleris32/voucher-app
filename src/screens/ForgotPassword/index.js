@@ -26,11 +26,10 @@ const ForgotPassword = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
 
-  const submitForm = ({ email, callbackUrl }) => {
+  const submitForm = async ({ email, callbackUrl }) => {
     setLoading(true);
-
     // If the form is valid, then the form's values are dispatched to the server
-    axiosInstance
+    await axiosInstance
       .post('retailer/auth/password/forgot', {
         email,
         callbackUrl,
@@ -46,8 +45,6 @@ const ForgotPassword = ({ navigation }) => {
             },
           ],
         );
-
-        setLoading(false);
       })
       .catch(err => {
         if (err.response) {
@@ -57,7 +54,8 @@ const ForgotPassword = ({ navigation }) => {
             'Error',
             'Please check your internet connection and try again!',
           );
-
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -66,7 +64,7 @@ const ForgotPassword = ({ navigation }) => {
     <Formik
       initialValues={{
         email: '',
-        callbackUrl: EnvironmentVariables.CONTACT_CALLBACK_URL,
+        callbackUrl: EnvironmentVariables.RESET_PASSWORD_CALLBACK_URL,
       }}
       validateOnMount={true}
       onSubmit={values => {
@@ -103,6 +101,7 @@ const ForgotPassword = ({ navigation }) => {
               <CustomInput
                 placeholder="Email"
                 iconType="email"
+                keyboardType="email"
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}

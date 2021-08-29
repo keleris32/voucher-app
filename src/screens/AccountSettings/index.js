@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -27,6 +28,8 @@ import { GET_RETAILER } from '../../constants/actionTypes';
 
 const AccountSettings = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  const [countryLoading, setCountryLoading] = useState(false);
+  const [newCountryData, setNewCountryData] = useState();
   const [fetchError, setFetchError] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorComponent, setErrorComponent] = useState(false);
@@ -40,7 +43,7 @@ const AccountSettings = ({ navigation }) => {
 
   // Selected country state variable
   const [selectedCountry, setSelectedCountry] = useState({
-    id: 'retailerData.country_id',
+    id: retailerData.country_id,
     name: 'Select your country',
     code: '0',
   });
@@ -54,7 +57,7 @@ const AccountSettings = ({ navigation }) => {
     const data = new FormData();
     data.append('first_name', formData.firstName);
     data.append('last_name', formData.lastName);
-    data.append('email', retailerData.email);
+    data.append('email', formData.email);
     data.append('phone_number', formData.phoneNumber);
     data.append('country_id', selectedCountry.id);
     data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
@@ -89,6 +92,23 @@ const AccountSettings = ({ navigation }) => {
       });
   };
 
+  const fetchCountries = async () => {
+    let newData = [];
+    setCountryLoading(true);
+
+    await axiosInstance
+      .get('countries')
+      .then(res => {
+        newData = res.data.data.countries.filter(
+          country => country.id === retailerData.country_id,
+        );
+
+        setNewCountryData(newData[0].name);
+      })
+      .catch(err => {})
+      .finally(() => setCountryLoading(false));
+  };
+
   const checkForEmail = formProp => {
     // Check if the previous email is different from the new one
     if (retailerData.email !== formProp.email) {
@@ -112,6 +132,10 @@ const AccountSettings = ({ navigation }) => {
       updateRetailerProfile(formProp);
     }
   };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   return (
     <Formik
@@ -141,141 +165,140 @@ const AccountSettings = ({ navigation }) => {
               <Text style={styles.title}>Account Settings</Text>
             </View>
 
-            <View style={styles.wrapper}>
-              {errorComponent && (
-                <ErrorMessage
-                  errorMessage="Please check your internet connection!"
-                  setErrorComponent={setErrorComponent}
-                />
-              )}
-
-              <TouchableOpacity
-                // disabled={fetchError}
-                onPress={() => setIsModalVisible(true)}>
-                <CountryModal
-                  isModalVisible={isModalVisible}
-                  setIsModalVisible={setIsModalVisible}
-                  selectedCountry={selectedCountry}
-                  setSelectedCountry={setSelectedCountry}
-                  fetchError={fetchError}
-                  setFetchError={setFetchError}
-                />
-              </TouchableOpacity>
-              {/* If the field is not valid, display an error */}
-              {errorMessage?.country_id && (
-                <Text style={styles.errorMessage}>
-                  Please select your country
-                </Text>
-              )}
-              <View style={styles.formContainer}>
-                <View style={{ marginBottom: SIZES.radius }}>
-                  <Text style={styles.label}>First Name</Text>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.inputField}
-                      placeholder={retailerData?.first_name}
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor={COLORS.gray}
-                      onChangeText={props.handleChange('firstName')}
-                      onBlur={props.handleBlur('firstName')}
-                      value={props.values.firstName}
-                      errors={props.errors.firstName}
-                      touched={props.touched.firstName}
-                    />
-                  </View>
-
-                  {/* If the field is not valid, display an error */}
-                  {errorMessage?.first_name && (
-                    <Text style={styles.errorMessage}>
-                      {errorMessage?.first_name}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginBottom: SIZES.radius }}>
-                  <Text style={styles.label}>Last Name</Text>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.inputField}
-                      placeholder={retailerData?.last_name}
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor={COLORS.gray}
-                      onChangeText={props.handleChange('lastName')}
-                      onBlur={props.handleBlur('lastName')}
-                      value={props.values.lastName}
-                      errors={props.errors.lastName}
-                      touched={props.touched.lastName}
-                    />
-                  </View>
-
-                  {/* If the field is not valid, display an error */}
-                  {errorMessage?.last_name && (
-                    <Text style={styles.errorMessage}>
-                      {errorMessage?.last_name}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginBottom: SIZES.radius }}>
-                  <Text style={styles.label}>Email</Text>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.inputField}
-                      placeholder={retailerData?.email}
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor={COLORS.gray}
-                      onChangeText={props.handleChange('email')}
-                      onBlur={props.handleBlur('email')}
-                      value={props.values.email.trim()}
-                      errors={props.errors.email}
-                      touched={props.touched.email}
-                    />
-                  </View>
-                  {/* If this field contains an error and it has been touched, then display the error message */}
-                  {/* {props.errors.email && props.touched.email && (
-                    <Text style={styles.errors}>{props.errors.email}</Text>
-                  )} */}
-                  {/* If the field is not valid, display an error */}
-                  {errorMessage?.email && (
-                    <Text style={styles.errorMessage}>
-                      {errorMessage?.email}
-                    </Text>
-                  )}
-                </View>
-                <View style={{ marginBottom: SIZES.radius }}>
-                  <Text style={styles.label}>Phone Number</Text>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.inputField}
-                      placeholder={retailerData?.phone_number}
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor={COLORS.gray}
-                      onChangeText={props.handleChange('phoneNumber')}
-                      onBlur={props.handleBlur('phoneNumber')}
-                      value={props.values.phoneNumber.trim()}
-                      errors={props.errors.phoneNumber}
-                      touched={props.touched.phoneNumber}
-                    />
-                  </View>
-
-                  {/* If this field contains an error and it has been touched, then display the error message */}
-                  {/* {props.errors.phoneNumber && props.touched.phoneNumber && (
-                    <Text style={styles.errors}>
-                      {props.errors.phoneNumber}
-                    </Text>
-                  )} */}
-                  {/* If the field is not valid, display an error */}
-                  {errorMessage?.phone_number && !errorMessage?.country_id && (
-                    <Text style={styles.errorMessage}>
-                      {errorMessage?.phone_number}
-                    </Text>
-                  )}
-                </View>
-                <CustomButton
-                  buttonText={loading ? 'Updating' : 'Update Profile'}
-                  disabled={loading}
-                  onPress={props.handleSubmit}
-                />
+            {countryLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
               </View>
-            </View>
+            ) : (
+              <View style={styles.wrapper}>
+                {errorComponent && (
+                  <ErrorMessage
+                    errorMessage="Please check your internet connection!"
+                    setErrorComponent={setErrorComponent}
+                  />
+                )}
+
+                <TouchableOpacity
+                  // disabled={fetchError}
+                  onPress={() => setIsModalVisible(true)}>
+                  <CountryModal
+                    isModalVisible={isModalVisible}
+                    setIsModalVisible={setIsModalVisible}
+                    selectedCountry={selectedCountry}
+                    setSelectedCountry={setSelectedCountry}
+                    fetchError={fetchError}
+                    setFetchError={setFetchError}
+                    newCountryData={newCountryData}
+                  />
+                </TouchableOpacity>
+                {/* If the field is not valid, display an error */}
+                {errorMessage?.country_id && (
+                  <Text style={styles.errorMessage}>
+                    Please select your country
+                  </Text>
+                )}
+                <View style={styles.formContainer}>
+                  <View style={{ marginBottom: SIZES.radius }}>
+                    <Text style={styles.label}>First Name</Text>
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={retailerData?.first_name}
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor={COLORS.gray}
+                        onChangeText={props.handleChange('firstName')}
+                        onBlur={props.handleBlur('firstName')}
+                        value={props.values.firstName}
+                        errors={props.errors.firstName}
+                        touched={props.touched.firstName}
+                      />
+                    </View>
+
+                    {/* If the field is not valid, display an error */}
+                    {errorMessage?.first_name && (
+                      <Text style={styles.errorMessage}>
+                        {errorMessage?.first_name}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={{ marginBottom: SIZES.radius }}>
+                    <Text style={styles.label}>Last Name</Text>
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={retailerData?.last_name}
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor={COLORS.gray}
+                        onChangeText={props.handleChange('lastName')}
+                        onBlur={props.handleBlur('lastName')}
+                        value={props.values.lastName}
+                        errors={props.errors.lastName}
+                        touched={props.touched.lastName}
+                      />
+                    </View>
+
+                    {/* If the field is not valid, display an error */}
+                    {errorMessage?.last_name && (
+                      <Text style={styles.errorMessage}>
+                        {errorMessage?.last_name}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={{ marginBottom: SIZES.radius }}>
+                    <Text style={styles.label}>Email</Text>
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={retailerData?.email}
+                        keyboardType="email-address"
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor={COLORS.gray}
+                        onChangeText={props.handleChange('email')}
+                        onBlur={props.handleBlur('email')}
+                        value={props.values.email.trim()}
+                        errors={props.errors.email}
+                        touched={props.touched.email}
+                      />
+                    </View>
+
+                    {errorMessage?.email && (
+                      <Text style={styles.errorMessage}>
+                        {errorMessage?.email}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={{ marginBottom: SIZES.radius }}>
+                    <Text style={styles.label}>Phone Number</Text>
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={retailerData?.phone_number}
+                        keyboardType="phone-pad"
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor={COLORS.gray}
+                        onChangeText={props.handleChange('phoneNumber')}
+                        onBlur={props.handleBlur('phoneNumber')}
+                        value={props.values.phoneNumber.trim()}
+                        errors={props.errors.phoneNumber}
+                        touched={props.touched.phoneNumber}
+                      />
+                    </View>
+
+                    {errorMessage?.phone_number &&
+                      !errorMessage?.country_id && (
+                        <Text style={styles.errorMessage}>
+                          {errorMessage?.phone_number}
+                        </Text>
+                      )}
+                  </View>
+                  <CustomButton
+                    buttonText={loading ? 'Updating' : 'Update Profile'}
+                    disabled={loading}
+                    onPress={props.handleSubmit}
+                  />
+                </View>
+              </View>
+            )}
           </View>
         </ScrollView>
       )}
@@ -353,5 +376,12 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.radius,
     color: COLORS.red,
     ...FONTS.h4,
+  },
+
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
 });

@@ -8,7 +8,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -68,7 +67,6 @@ const SignUp = ({ navigation }) => {
     // If the form is valid, then the form's values are dispatched to the server
     registerRetailer(formData)(authDispatch);
   };
-  // console.log('Sign up error>>>>>', JSON.stringify(error, null, 2));
 
   return (
     <Formik
@@ -131,6 +129,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="First Name"
                   iconType="name"
+                  keyboardType="default"
                   onChangeText={handleChange('firstName')}
                   onBlur={handleBlur('firstName')}
                   value={values.firstName}
@@ -145,6 +144,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Last Name"
                   iconType="name"
+                  keyboardType="default"
                   onChangeText={handleChange('lastName')}
                   onBlur={handleBlur('lastName')}
                   value={values.lastName}
@@ -159,6 +159,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Phone Number"
                   iconType="phone"
+                  keyboardType="phone"
                   selectedCountry={selectedCountry}
                   onChangeText={handleChange('phoneNumber')}
                   onBlur={handleBlur('phoneNumber')}
@@ -179,6 +180,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Email"
                   iconType="email"
+                  keyboardType="email"
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
                   value={values.email.trim()}
@@ -198,6 +200,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Password"
                   iconType="password"
+                  keyboardType="default"
                   secureTextEntry={isPasswordHidden}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
@@ -215,6 +218,7 @@ const SignUp = ({ navigation }) => {
                 <CustomInput
                   placeholder="Confirm Password"
                   iconType="passwordConfirm"
+                  keyboardType="default"
                   secureTextEntry={isPasswordConfirmHidden}
                   onChangeText={handleChange('confirmPassword')}
                   onBlur={handleBlur('confirmPassword')}

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -23,7 +23,6 @@ import loginRetailer from '../../context/actions/auth/loginRetailer';
 import { useFocusEffect } from '@react-navigation/native';
 import { clearAuthState } from '../../context/actions/auth/registerRetailer';
 import ErrorMessage from '../../components/ErrorMessage';
-import EnvironmentVariables from '../../config/env';
 
 const Login = ({ navigation }) => {
   const [isLoginPasswordHidden, setIsLoginPasswordHidden] = useState(true);
@@ -99,6 +98,7 @@ const Login = ({ navigation }) => {
                 <CustomInput
                   placeholder="Email"
                   iconType="email"
+                  keyboardType="email"
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
                   value={values.email.trim()}
@@ -112,6 +112,7 @@ const Login = ({ navigation }) => {
                 <CustomInput
                   placeholder="Password"
                   iconType="loginPassword"
+                  keyboardType="default"
                   secureTextEntry={isLoginPasswordHidden}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
