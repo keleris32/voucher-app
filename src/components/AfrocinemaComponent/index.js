@@ -60,8 +60,6 @@ const AfrocinemaComponent = ({
     }
   };
 
-  // console.log('afrocinemaData>>', JSON.stringify(afrocinemaData, null, 2));
-
   // ------------------------------------------------------- >
   // Animations
 
@@ -69,7 +67,7 @@ const AfrocinemaComponent = ({
   const fall = new Value(1);
 
   // ------------------------------------------------------- >
-  // console.log(JSON.stringify(afrocinemaData.charging_currency_symbol, null, 2));
+
   return (
     <>
       {fetchError ? (
