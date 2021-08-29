@@ -18,7 +18,9 @@ const AppNavContainer = () => {
   } = useContext(GlobalContext);
 
   // Auth state management
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState({
+    verified: false,
+  });
   const [isAuthLoaded, setIsAuthLoaded] = useState(false);
 
   // getRetailer global state
@@ -42,10 +44,7 @@ const AppNavContainer = () => {
               payload: res.data.data.user,
             });
           })
-          .catch(
-            err => {},
-            // console.log('Main navigation index, get retailer>>>', err),
-          );
+          .catch(err => {});
 
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
@@ -75,15 +74,13 @@ const AppNavContainer = () => {
 
   return (
     <>
-      {/* {console.log('isLoggedIn>>', isLoggedIn)}
-      {console.log('isAuthenticated>>', isAuthenticated)}
-      {console.log('Verification_status>>', retailerData.verification_status)} */}
       {isAuthLoaded ? (
         // Navigation Container to house all the navigator components
         <NavigationContainer>
           {/* If the retailer has been authenticated but not verified, then redirect to the Verification Navigator to be verified */}
           {/* Else-if the retailer has been authenticated and also verified, then redirect to the Tab Navigator (Home) */}
           {/* Else redirect the retailer to the AuthNavigator to be authenticated. */}
+
           {isLoggedIn &&
           isAuthenticated &&
           retailerData?.verification_status !== 'approved' ? (
@@ -95,7 +92,6 @@ const AppNavContainer = () => {
           ) : (
             <AuthNavigator />
           )}
-          {/* <TabNavigator /> */}
         </NavigationContainer>
       ) : (
         <ActivityIndicator />

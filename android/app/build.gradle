@@ -142,8 +142,8 @@ android {
         applicationId "com.voucherapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.0"
+        versionCode 5
+        versionName "4.0"
     }
 
 
@@ -184,18 +184,19 @@ android {
         }
     }
 
-    //  flavorDimensions "version"
-    // productFlavors {
-    //     demo {
-    //         // Assigns this product flavor to the "version" flavor dimension.
-    //         // If you are using only one dimension, this property is optional,
-    //         // and the plugin automatically assigns all the module's flavors to
-    //         // that dimension.
-    //         dimension "version"
-    //         applicationIdSuffix ".demo"
-    //         versionNameSuffix "-demo"
-    //     }
-    // }
+    // Specifies one flavor dimension.
+     flavorDimensions "version3"
+    productFlavors {
+        demo {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "version3"
+            applicationIdSuffix ".demo"
+            versionNameSuffix "-demo"
+        }
+    }
     
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
