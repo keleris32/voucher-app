@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -27,10 +27,6 @@ import {
 const Home = () => {
   const [fetchError, setFetchError] = useState(false);
   const [refresh, setRefresh] = useState(false);
-
-  const renders = useRef(0);
-  // const cinemaRenders = useRef(0);
-  // const streamRenders = useRef(0);
 
   const refreshComp = () => setRefresh(!refresh);
 
@@ -94,14 +90,9 @@ const Home = () => {
     getAfrostreamData();
   }, [refresh]);
 
-  // To separate Retailer's first name and last name, and return both names in an array
-  // const name = retailerData?.name.split(' ');
-
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={images.splashScreenBg2}
-        style={styles.headerImgBg}>
+      <ImageBackground source={images.homeDashboard} style={styles.headerImgBg}>
         <View style={styles.headerBar}>
           <View>
             <Text style={styles.headerText}>Welcome,</Text>
