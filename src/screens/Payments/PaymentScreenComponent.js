@@ -394,7 +394,13 @@ const PaymentScreenComponent = ({ navigation }) => {
                             Pay with {gateway.name}
                           </Text>
                           <Image
-                            source={{ uri: gateway.logo_url }}
+                            source={{
+                              uri: gateway.logo_url,
+                              headers: {
+                                Referer:
+                                  EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+                              },
+                            }}
                             style={{ height: hp('2%'), width: wp('5%') }}
                           />
                         </View>

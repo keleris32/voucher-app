@@ -124,8 +124,6 @@ const Settings = ({ navigation }) => {
         .post('retailer/profile-picture', formData, {
           headers: {
             'Content-Type': 'multipart/form-data;',
-            Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
-            'Referrer-Policy': 'origin',
           },
         })
         .then(res => {
@@ -171,7 +169,15 @@ const Settings = ({ navigation }) => {
         <View>
           <View style={{ marginBottom: wp('12.5%') }}>
             <Image
-              source={{ uri: retailerData?.profile_picture }}
+              source={{
+                uri: retailerData?.profile_picture,
+                method: 'POST',
+                headers: {
+                  // Pragma: 'no-cache',
+                  Referrer: 'https://retailtest.acomart.tv',
+                  // 'Referrer-Policy': 'origin',
+                },
+              }}
               style={styles.image}
             />
             <TouchableOpacity onPress={() => uploadImage()}>
