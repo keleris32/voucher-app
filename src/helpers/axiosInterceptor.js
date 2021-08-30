@@ -15,8 +15,8 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    config.headers.Origin = EnvironmentVariables.IMAGES_REFERER_HEADER_URL;
 
-    // console.log(token);
     return config;
   },
   error => {
