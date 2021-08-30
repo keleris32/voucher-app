@@ -3,10 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ImageBackground,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -15,19 +15,24 @@ import {
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { images, icons, COLORS, FONTS, SIZES } from '../../constants';
+import { images, COLORS, FONTS, SIZES } from '../../constants';
 import { CustomInput, CustomButton } from '../../components';
 import { LOGIN } from '../../constants/routeNames';
 import { validationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
 import axiosInstance from '../../helpers/axiosInterceptor';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const ForgotPassword = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const [invalidEmail, setInvalidEmail] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorComponent, setErrorComponent] = useState(false);
 
   const submitForm = async ({ email, callbackUrl }) => {
     setLoading(true);
+    setErrorComponent(false);
+    setErrorMessage('');
+
     // If the form is valid, then the form's values are dispatched to the server
     await axiosInstance
       .post('retailer/auth/password/forgot', {
@@ -48,7 +53,8 @@ const ForgotPassword = ({ navigation }) => {
       })
       .catch(err => {
         if (err.response) {
-          setInvalidEmail(true);
+          setErrorMessage(err.response?.data?.message);
+          setErrorComponent(true);
         } else
           Alert.alert(
             'Error',
@@ -79,55 +85,59 @@ const ForgotPassword = ({ navigation }) => {
         touched,
         errors,
       }) => (
-        <View style={styles.container}>
-          <ImageBackground source={images.loginBg} style={styles.bgImage}>
-            {/* <Image source={icons.fullAcomart} style={styles.logo} /> */}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          alwaysBounceVertical={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}>
+          <View style={styles.container}>
+            <ImageBackground source={images.loginBg} style={styles.bgImage}>
+              <View style={styles.screenTitleCon}>
+                <Text style={styles.screenTitle}>Password Recovery</Text>
+                <Text style={styles.screenSubTitle}>
+                  Enter your email and instructions will be sent to you.
+                </Text>
+              </View>
+              <View style={styles.formContainer}>
+                {/* Display an error message, if the form's data is deemed invalid by the server */}
+                {errorComponent && (
+                  <ErrorMessage
+                    errorMessage={errorMessage}
+                    setErrorComponent={setErrorComponent}
+                  />
+                )}
+                <CustomInput
+                  placeholder="Email"
+                  iconType="email"
+                  keyboardType="email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  errors={errors.email}
+                  touched={touched.email}
+                />
+                {/* If this field contains an error and it has been touched, then display the error message */}
+                {errors.email && touched.email && (
+                  <Text style={styles.errors}>{errors.email}</Text>
+                )}
 
-            <View style={styles.screenTitleCon}>
-              <Text style={styles.screenTitle}>Password Recovery</Text>
-              <Text style={styles.screenSubTitle}>
-                Enter your email and instructions will be sent to you.
-              </Text>
-            </View>
-            <View style={styles.formContainer}>
-              {/* Display an error message, if the form's data is deemed invalid by the server */}
-              {invalidEmail && (
-                <View style={styles.invalidErrorMessage}>
-                  <Text style={styles.invalidErrorText}>
-                    Invalid credentials provided!
-                  </Text>
-                </View>
-              )}
-              <CustomInput
-                placeholder="Email"
-                iconType="email"
-                keyboardType="email"
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
-                errors={errors.email}
-                touched={touched.email}
-              />
-              {/* If this field contains an error and it has been touched, then display the error message */}
-              {errors.email && touched.email && (
-                <Text style={styles.errors}>{errors.email}</Text>
-              )}
+                <CustomButton
+                  buttonText="Reset Password"
+                  disabled={loading}
+                  onPress={handleSubmit}
+                />
 
-              <CustomButton
-                buttonText="Reset Password"
-                disabled={loading}
-                onPress={handleSubmit}
-              />
-
-              <TouchableOpacity
-                style={styles.backBtn}
-                onPress={() => navigation.replace(LOGIN)}>
-                <Icon name="chevron-left" style={styles.rightArrowIcon} />
-                <Text style={styles.signUpText}>Go Back</Text>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-        </View>
+                <TouchableOpacity
+                  style={styles.backBtn}
+                  onPress={() => navigation.replace(LOGIN)}>
+                  <Icon name="chevron-left" style={styles.rightArrowIcon} />
+                  <Text style={styles.signUpText}>Go Back</Text>
+                </TouchableOpacity>
+              </View>
+            </ImageBackground>
+          </View>
+        </ScrollView>
       )}
     </Formik>
   );
