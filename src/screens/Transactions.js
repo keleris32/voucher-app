@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: wp('10%'),
-    paddingBottom: wp('5%'),
+    paddingBottom: wp('20%'),
     alignItems: 'center',
     backgroundColor: COLORS.offWhite,
   },
