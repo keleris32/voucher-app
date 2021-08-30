@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { StyleSheet, Text, View, Alert, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,
@@ -49,9 +42,8 @@ const AfrocinemaPanelData = ({ bs }) => {
   // Initialize a variable and store Global state
   const data = selectedAfrocinemaData;
 
-  // // if (selectedAfrocinemaData.premier.charging_currency_symbol) {
+  // Initialize a variable to store currency symbol
   const symbol = selectedAfrocinemaData?.premier.charging_currency_symbol;
-  // // }
 
   const price = selectedAfrocinemaData.premier.discounted_charging_price;
 
@@ -158,12 +150,6 @@ const AfrocinemaPanelData = ({ bs }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.wrapper}>
-            <Image
-              source={{
-                uri: data.landscape_image,
-              }}
-              style={styles.image}
-            />
             <View style={styles.titleWrapper}>
               <Text style={styles.title}>{data.title}</Text>
             </View>
@@ -252,20 +238,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('2.5%'),
   },
 
-  image: {
-    width: wp('70%'),
-    height: hp('25%'),
-  },
-
   titleWrapper: {
     width: '100%',
-    marginVertical: hp('2.5%'),
+    marginVertical: hp('5%'),
   },
 
   title: {
     textAlign: 'center',
     color: COLORS.black,
-    ...FONTS.h3,
+    fontFamily: 'Raleway-Bold',
+    lineHeight: 30,
+    fontSize: wp('5.5%'),
   },
 
   detailsWrapper: {

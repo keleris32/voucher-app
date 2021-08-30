@@ -6,7 +6,6 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -100,12 +99,6 @@ const Home = () => {
               {retailerData?.first_name}
             </Text>
           </View>
-          <View>
-            <Image
-              source={{ uri: retailerData?.profile_picture }}
-              style={styles.userIcon}
-            />
-          </View>
         </View>
       </ImageBackground>
       <View style={styles.subcriptionTab}>
@@ -194,12 +187,6 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     marginTop: SIZES.base,
     ...FONTS.h1,
-  },
-
-  userIcon: {
-    width: wp('20%'),
-    height: wp('20%'),
-    borderRadius: wp('10%'),
   },
 
   subcriptionTab: {

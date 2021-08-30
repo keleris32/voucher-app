@@ -6,7 +6,6 @@ import {
   View,
   FlatList,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import SearchBar from '../components/AfrocinemaComponent/SearchBar';

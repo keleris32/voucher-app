@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  Image,
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,7 +22,6 @@ import DocumentPicker from 'react-native-document-picker';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
 import { clearAuthState } from '../context/actions/auth/registerRetailer';
-import EnvironmentVariables from '../config/env';
 
 const Settings = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -167,25 +165,6 @@ const Settings = ({ navigation }) => {
     <SafeAreaView>
       <View style={styles.container}>
         <View>
-          <View style={{ marginBottom: wp('12.5%') }}>
-            <Image
-              source={{
-                uri: retailerData?.profile_picture,
-                method: 'POST',
-                headers: {
-                  // Pragma: 'no-cache',
-                  Referrer: 'https://retailtest.acomart.tv',
-                  // 'Referrer-Policy': 'origin',
-                },
-              }}
-              style={styles.image}
-            />
-            <TouchableOpacity onPress={() => uploadImage()}>
-              <Text style={styles.imageText}>
-                {isUpdating ? 'Updating...' : 'Update image'}
-              </Text>
-            </TouchableOpacity>
-          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate(ACCOUNT_SETTINGS)}>
             <View style={[styles.cardWrapper, { marginBottom: wp('7.5%') }]}>
@@ -235,14 +214,6 @@ const styles = StyleSheet.create({
     paddingVertical: wp('10%'),
     justifyContent: 'space-between',
     backgroundColor: COLORS.offWhite,
-  },
-
-  image: {
-    width: wp('40%'),
-    height: wp('40%'),
-    borderRadius: wp('20%'),
-    alignSelf: 'center',
-    marginBottom: wp('2.5%'),
   },
 
   imageText: {

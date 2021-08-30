@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { decode } from 'html-entities';
 import NumberFormat from 'react-number-format';
@@ -13,12 +13,6 @@ const MovieCard = props => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Image
-          source={{
-            uri: props.image,
-          }}
-          style={styles.image}
-        />
         <View style={styles.descriptionWrapper}>
           <Text style={styles.title} numberOfLines={1}>
             {props.title}
@@ -67,13 +61,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  image: {
-    width: wp('21.25%'),
-    height: wp('21.25%'),
-  },
-
   descriptionWrapper: {
     flex: 0.75,
+    height: wp('21.25%'),
     justifyContent: 'space-between',
     paddingVertical: wp('2.5%'),
     marginHorizontal: wp('2.5%'),
