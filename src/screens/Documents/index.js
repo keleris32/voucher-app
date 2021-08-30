@@ -4,7 +4,6 @@ import {
   Text,
   View,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -15,7 +14,7 @@ import {
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import DocumentPicker from 'react-native-document-picker';
 
-import { images, COLORS, SIZES, FONTS } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 import { CustomButton } from '../../components';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import EnvironmentVariables from '../../config/env';
@@ -275,71 +274,69 @@ const Documents = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={images.mainBg} style={styles.bgImage}>
-        <View style={styles.screenWrapper}>
-          <View>
-            <Text style={styles.title}>
-              Kindly upload a means of identification and initiate the
-              verification process.
-            </Text>
-          </View>
+      <View style={styles.screenWrapper}>
+        <View>
+          <Text style={styles.title}>
+            Kindly upload a means of identification and initiate the
+            verification process.
+          </Text>
+        </View>
 
-          <View style={styles.formContainer}>
-            <Text style={styles.formText}>
-              Indicate your means of identification and select a file.
+        <View style={styles.formContainer}>
+          <Text style={styles.formText}>
+            Indicate your means of identification and select a file.
+          </Text>
+          <View style={styles.inputWrapper}>
+            <Text style={{ flex: 1, ...FONTS.italic4, color: COLORS.gray }}>
+              Driver's License, International Passport, Social Security Number,
+              Voter's card, National Identification Number etc.
             </Text>
-            <View style={styles.inputWrapper}>
-              <Text style={{ flex: 1, ...FONTS.italic4, color: COLORS.gray }}>
-                Driver's License, International Passport, Social Security
-                Number, Voter's card, National Identification Number etc.
-              </Text>
 
-              <View>
-                {selectedFile && (
+            <View>
+              {selectedFile && (
+                <View
+                  style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginVertical: wp('1.5%'),
+                  }}>
                   <View
                     style={{
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      marginVertical: wp('1.5%'),
-                    }}>
-                    <View
-                      style={{
-                        width: wp('2%'),
-                        height: wp('2%'),
-                        borderRadius: wp('50%'),
-                        backgroundColor: COLORS.red,
-                        marginHorizontal: wp('1%'),
-                      }}
-                    />
-                  </View>
-                )}
-                <TouchableOpacity
-                  style={[
-                    styles.pickerBtn,
-                    {
-                      borderWidth: selectedFile ? 4 : 0,
-                      borderColor: selectedFile ? COLORS.acomartBlue2 : '',
-                    },
-                  ]}
-                  onPress={selectDocument}>
-                  <Icons name="file-upload" style={styles.icon} />
-                </TouchableOpacity>
-              </View>
+                      width: wp('2%'),
+                      height: wp('2%'),
+                      borderRadius: wp('50%'),
+                      backgroundColor: COLORS.red,
+                      marginHorizontal: wp('1%'),
+                    }}
+                  />
+                </View>
+              )}
+              <TouchableOpacity
+                style={[
+                  styles.pickerBtn,
+                  {
+                    borderWidth: selectedFile ? 4 : 0,
+                    borderColor: selectedFile ? COLORS.acomartBlue2 : '',
+                  },
+                ]}
+                onPress={selectDocument}>
+                <Icons name="file-upload" style={styles.icon} />
+              </TouchableOpacity>
             </View>
-
-            <CustomButton
-              buttonText={uploading ? 'Uploading' : 'Upload'}
-              disabled={uploading}
-              onPress={uploadFile}
-            />
           </View>
+
           <CustomButton
-            buttonText={initializing ? 'Initializing' : 'Initiate Verification'}
-            disabled={initializing}
-            onPress={initiateVerification}
+            buttonText={uploading ? 'Uploading' : 'Upload'}
+            disabled={uploading}
+            onPress={uploadFile}
           />
         </View>
-      </ImageBackground>
+        <CustomButton
+          buttonText={initializing ? 'Initializing' : 'Initiate Verification'}
+          disabled={initializing}
+          onPress={initiateVerification}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -349,12 +346,8 @@ export default Documents;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-
-  bgImage: {
-    flex: 1,
-    resizeMode: 'cover',
     alignItems: 'center',
+    backgroundColor: COLORS.white,
   },
 
   screenWrapper: {

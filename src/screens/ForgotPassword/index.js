@@ -20,7 +20,7 @@ import { CustomInput, CustomButton } from '../../components';
 import { LOGIN } from '../../constants/routeNames';
 import { validationSchema } from './validationSchema';
 import EnvironmentVariables from '../../config/env';
-import axiosInstance from '../../helpers/axiosInterceptor';
+import axios from 'axios';
 import ErrorMessage from '../../components/ErrorMessage';
 
 const ForgotPassword = ({ navigation }) => {
@@ -34,8 +34,8 @@ const ForgotPassword = ({ navigation }) => {
     setErrorMessage('');
 
     // If the form is valid, then the form's values are dispatched to the server
-    await axiosInstance
-      .post('retailer/auth/password/forgot', {
+    await axios
+      .post(`${EnvironmentVariables.BASE_URL}retailer/auth/password/forgot`, {
         email,
         callbackUrl,
       })
