@@ -102,13 +102,24 @@ const Transactions = () => {
         </View>
       ) : (
         <View style={styles.wrapper}>
-          <View style={{ width: wp('100%'), paddingHorizontal: wp('5%') }}>
+          <View
+            style={{
+              width: wp('100%'),
+              paddingHorizontal: wp('5%'),
+              alignItems: 'center',
+            }}>
             <SearchBar
               searchValue={searchValue}
               searchFilterFunction={searchFilterFunction}
               placeholder="Search phone numbers"
             />
+            {filteredData.length === 0 && (
+              <View style={{ marginVertical: wp('5%') }}>
+                <Text style={{ ...FONTS.h4 }}>There are no transactions</Text>
+              </View>
+            )}
           </View>
+
           <View>
             <FlatList
               data={filteredData}

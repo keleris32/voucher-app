@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Value } from 'react-native-reanimated';
@@ -15,6 +16,7 @@ import { SELECTED_AFROCINEMA_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 import ErrorPageComponent from '../ErrorPageComponent';
+import { FONTS } from '../../constants';
 
 const AfrocinemaComponent = ({
   filteredData,
@@ -87,6 +89,16 @@ const AfrocinemaComponent = ({
               searchFilterFunction={searchFilterFunction}
               placeholder="Search movies"
             />
+            {filteredData.length === 0 && (
+              <View
+                style={{
+                  marginVertical: wp('5%'),
+                  with: '100%',
+                  alignItems: 'center',
+                }}>
+                <Text style={{ ...FONTS.h4 }}>No results found</Text>
+              </View>
+            )}
             <FlatList
               data={filteredData}
               keyExtractor={item => item.id}

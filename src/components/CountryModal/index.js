@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,6 @@ import {
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 import { COLORS, SIZES, FONTS } from '../../constants';
-import { GlobalContext } from '../../context/Provider';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import SearchBar from '../AfrocinemaComponent/SearchBar';
 import ErrorPageComponent from '../ErrorPageComponent';
