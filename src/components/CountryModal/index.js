@@ -178,11 +178,14 @@ const styles = StyleSheet.create({
   },
 
   countryBarText: {
+    // paddingVertical: 12.5,
+    flex: 1,
     color: COLORS.white,
     ...FONTS.h3,
   },
 
   icon: {
+    // paddingVertical: 12.5,
     color: COLORS.white,
     ...FONTS.h3,
   },

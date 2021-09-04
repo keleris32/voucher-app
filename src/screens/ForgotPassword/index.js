@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   },
 
   screenTitle: {
+    // paddingVertical: 12.5,
     ...FONTS.h1,
   },
 

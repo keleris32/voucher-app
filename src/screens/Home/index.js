@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
   },
 
   headerUsername: {
+    // paddingVertical: 10,
     color: COLORS.white,
     marginTop: SIZES.base,
     ...FONTS.h1,

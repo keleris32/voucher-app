@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 
   title: {
     ...FONTS.h2,
+    // paddingVertical: 3.5,
     marginBottom: wp('1.25%'),
     color: COLORS.acomartBlue2,
   },

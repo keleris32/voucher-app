@@ -332,6 +332,7 @@ const styles = StyleSheet.create({
 
   title: {
     flex: 1,
+    // paddingVertical: 5,
     marginBottom: wp('12.5%'),
     textAlign: 'center',
     marginRight: wp('5%'),

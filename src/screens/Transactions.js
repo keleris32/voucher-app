@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    // paddingVertical: 5,
     color: COLORS.black,
     marginBottom: wp('10%'),
     ...FONTS.h2,

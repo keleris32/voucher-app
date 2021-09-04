@@ -32,6 +32,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   text: {
+    // paddingVertical: 12.5,
     color: COLORS.white,
     ...FONTS.h3,
   },

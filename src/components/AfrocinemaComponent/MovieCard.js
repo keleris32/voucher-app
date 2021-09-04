@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    // paddingVertical: 3.5,
     color: COLORS.acomartBlue2,
     ...FONTS.h3,
   },
