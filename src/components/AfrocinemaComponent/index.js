@@ -111,7 +111,7 @@ const AfrocinemaComponent = ({
                   }}>
                   <MovieCard
                     title={item.title}
-                    image={item.landscape_image}
+                    image={item.featured_image}
                     parentalGuidance={item.parental_guidance_age}
                     discountedPrice={item.premier.discounted_charging_price}
                     chargingPrice={item.premier.charging_price}

@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { decode } from 'html-entities';
 import NumberFormat from 'react-number-format';
 
 import { FONTS, SIZES, COLORS } from '../../constants';
+import EnvironmentVariables from '../../config/env';
 
 const MovieCard = props => {
   // Decode the HTML code gotten from data to it's appropraite symbol
@@ -13,6 +14,15 @@ const MovieCard = props => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
+        <Image
+          source={{
+            uri: props.image,
+            headers: {
+              Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+            },
+          }}
+          style={styles.image}
+        />
         <View style={styles.descriptionWrapper}>
           <Text style={styles.title} numberOfLines={1}>
             {props.title}
@@ -61,9 +71,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
+  image: {
+    width: wp('21.25%'),
+    height: wp('21.25%'),
+  },
+
   descriptionWrapper: {
     flex: 0.75,
-    height: wp('21.25%'),
+    // height: wp('21.25%'),
     justifyContent: 'space-between',
     paddingVertical: wp('2.5%'),
     marginHorizontal: wp('2.5%'),

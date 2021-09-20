@@ -171,9 +171,8 @@ const Settings = ({ navigation }) => {
             <Image
               source={{
                 uri: retailerData?.profile_picture,
-                method: 'POST',
                 headers: {
-                  Referrer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+                  Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
                 },
               }}
               style={styles.image}

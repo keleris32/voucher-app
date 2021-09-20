@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Alert, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,
@@ -150,6 +157,15 @@ const AfrocinemaPanelData = ({ bs }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.wrapper}>
+            <Image
+              source={{
+                uri: data.featured_image,
+                headers: {
+                  Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+                },
+              }}
+              style={styles.image}
+            />
             <View style={styles.titleWrapper}>
               <Text style={styles.title}>{data.title}</Text>
             </View>
@@ -238,17 +254,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('2.5%'),
   },
 
+  image: {
+    width: wp('70%'),
+    height: hp('25%'),
+  },
+
   titleWrapper: {
     width: '100%',
-    marginVertical: hp('5%'),
+    marginVertical: hp('2.5%'),
   },
 
   title: {
     textAlign: 'center',
     color: COLORS.black,
-    fontFamily: 'Raleway-Bold',
-    lineHeight: 30,
-    fontSize: wp('5.5%'),
+    ...FONTS.h3,
   },
 
   detailsWrapper: {
