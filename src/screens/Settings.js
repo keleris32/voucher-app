@@ -6,6 +6,7 @@ import {
   View,
   Alert,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Feather';
@@ -22,6 +23,7 @@ import DocumentPicker from 'react-native-document-picker';
 import axiosInstance from '../helpers/axiosInterceptor';
 import { GET_RETAILER } from '../constants/actionTypes';
 import { clearAuthState } from '../context/actions/auth/registerRetailer';
+import EnvironmentVariables from '../config/env';
 
 const Settings = ({ navigation }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -86,7 +88,7 @@ const Settings = ({ navigation }) => {
       } else {
         Alert.alert(
           'Size Limit.',
-          "Please endeavor that your image isn't larger than 2mb",
+          "Please endeavor that your image isn't larger than 2 MB",
           [
             {
               text: 'Ok',
@@ -165,6 +167,23 @@ const Settings = ({ navigation }) => {
     <SafeAreaView>
       <View style={styles.container}>
         <View>
+          <View style={{ marginBottom: wp('12.5%') }}>
+            <Image
+              source={{
+                uri: retailerData?.profile_picture,
+                method: 'POST',
+                headers: {
+                  Referrer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+                },
+              }}
+              style={styles.image}
+            />
+            <TouchableOpacity onPress={() => uploadImage()}>
+              <Text style={styles.imageText}>
+                {isUpdating ? 'Updating...' : 'Update image'}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate(ACCOUNT_SETTINGS)}>
             <View style={[styles.cardWrapper, { marginBottom: wp('7.5%') }]}>
@@ -216,6 +235,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.offWhite,
   },
 
+  image: {
+    width: wp('40%'),
+    height: wp('40%'),
+    borderRadius: wp('20%'),
+    alignSelf: 'center',
+    marginBottom: wp('2.5%'),
+  },
+
   imageText: {
     alignSelf: 'center',
     color: COLORS.acomartBlue2,
@@ -244,7 +271,7 @@ const styles = StyleSheet.create({
   },
 
   cardText: {
-    marginHorizontal: wp('2%'),
+    marginHorizontal: wp('5%'),
     color: COLORS.black,
     ...FONTS.h4,
   },
