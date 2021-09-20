@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -22,6 +23,7 @@ import {
   GET_AFROCINEMA_DATA,
   GET_AFROSTREAM_DATA,
 } from '../../constants/actionTypes';
+import EnvironmentVariables from '../../config/env';
 
 const Home = () => {
   const [fetchError, setFetchError] = useState(false);
@@ -98,6 +100,17 @@ const Home = () => {
             <Text style={styles.headerUsername}>
               {retailerData?.first_name}
             </Text>
+          </View>
+          <View>
+            <Image
+              source={{
+                uri: retailerData?.profile_picture,
+                headers: {
+                  Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
+                },
+              }}
+              style={styles.userIcon}
+            />
           </View>
         </View>
       </ImageBackground>
@@ -188,6 +201,12 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     marginTop: SIZES.base,
     ...FONTS.h1,
+  },
+
+  userIcon: {
+    width: wp('20%'),
+    height: wp('20%'),
+    borderRadius: wp('10%'),
   },
 
   subcriptionTab: {
