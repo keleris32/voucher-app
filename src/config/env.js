@@ -7,6 +7,7 @@ import {
   FLUTTERWAVE_PUBLIC_KEY,
   PAYSTACK_PUBLIC_KEY,
   IMAGES_REFERER_HEADER_URL,
+  PAYSTACK_CALLBACK_URL,
 } from '@env';
 
 const EnvironmentVariables = {
@@ -18,6 +19,7 @@ const EnvironmentVariables = {
   FLUTTERWAVE_PUBLIC_KEY,
   PAYSTACK_PUBLIC_KEY,
   IMAGES_REFERER_HEADER_URL,
+  PAYSTACK_CALLBACK_URL,
 };
 
 export default EnvironmentVariables;
