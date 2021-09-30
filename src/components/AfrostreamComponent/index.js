@@ -61,6 +61,7 @@ const AfrostreamComponent = ({ refreshComp, fetchError }) => {
             <FlatList
               keyExtractor={item => item.id}
               data={afrostreamData}
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   activeOpacity={0.6}
