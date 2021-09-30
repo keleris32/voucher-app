@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, createRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,6 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
   ScrollView,
 } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
@@ -17,17 +16,20 @@ import {
 } from 'react-native-responsive-screen';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { Value } from 'react-native-reanimated';
 
 import { COLORS, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
 import { GlobalContext } from '../../context/Provider';
-import { CustomButton, CustomInput } from '../../components';
+import { CustomButton, CustomInput, RadioButtonComp } from '../../components';
 import EnvironmentVariables from '../../config/env';
 import CountryModal from '../../components/CountryModal';
 import { validationSchema } from './validationSchema';
 import ErrorMessage from '../../components/ErrorMessage';
 import ErrorPageComponent from '../../components/ErrorPageComponent';
+import PaystackWebView from './Paystack/PaystackWebview';
+import { AfrocinemaFormData } from './Paystack/AfrocinemaFormData';
+import { AfrostreamFormData } from './Paystack/AfrostreamFormData';
 
 const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -43,6 +45,8 @@ const PaymentScreenComponent = ({ navigation }) => {
     flutterwave: false,
     paystack: false,
   });
+  const [processPaystack, setProcessPaystack] = useState(false);
+  const [paystackAuthorizationUrl, setPaystackAuthorizationUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     id: '',
@@ -64,6 +68,14 @@ const PaymentScreenComponent = ({ navigation }) => {
       selectedAfrostreamData,
     },
   } = useContext(GlobalContext);
+
+  // ------------------------------------------------------- >
+  // Animations
+
+  const bs = createRef();
+  const fall = new Value(1);
+
+  // ------------------------------------------------------- >
 
   const fetchPaymentGateways = async () => {
     setFetchGatewayLoading(true);
@@ -88,7 +100,7 @@ const PaymentScreenComponent = ({ navigation }) => {
     afrocinemaFormData.append('payment_purpose', 'afrocinema_premier');
     afrocinemaFormData.append('is_retailer', '1');
     afrocinemaFormData.append('customer_country_id', selectedCountry.id);
-    afrocinemaFormData.append('customer_phone_number', prop);
+    afrocinemaFormData.append('customer_email', prop);
 
     var customer;
     var paymentIntent;
@@ -138,7 +150,7 @@ const PaymentScreenComponent = ({ navigation }) => {
     );
     afrostreamFormData.append('is_retailer', '1');
     afrostreamFormData.append('customer_country_id', selectedCountry.id);
-    afrostreamFormData.append('customer_phone_number', prop);
+    afrostreamFormData.append('customer_email', prop);
 
     var customer;
     var paymentIntent;
@@ -191,7 +203,7 @@ const PaymentScreenComponent = ({ navigation }) => {
 
       if (error) {
         Alert.alert(
-          'Error',
+          'Something went wrong',
           'Please check your internet connection and try again later.',
           [
             {
@@ -224,7 +236,7 @@ const PaymentScreenComponent = ({ navigation }) => {
 
       if (error) {
         Alert.alert(
-          'Error',
+          'Something went wrong',
           'Please check your internet connection and try again later.',
           [
             {
@@ -241,6 +253,72 @@ const PaymentScreenComponent = ({ navigation }) => {
       // END OF ELSE STATEMENT
       // ----------------------------------------------->
       // ----------------------------------------------->
+    }
+  };
+
+  const PaystackPayment = async customerEmail => {
+    setLoading(true);
+
+    if (isAfrocinemaActive) {
+      // ----- Start of IF::> Afrocinema ---------->
+
+      const { paystackFormData } = await AfrocinemaFormData([
+        selectedAfrocinemaData.id,
+        selectedCountry.id,
+        customerEmail,
+      ]);
+
+      try {
+        let response = await axiosInstance.post(
+          'paystack/get-payment-intent',
+          paystackFormData,
+        );
+
+        setPaystackAuthorizationUrl(
+          response.data.data.payment_intent.authorization_url,
+        );
+
+        setProcessPaystack(true);
+      } catch (error) {
+        Alert.alert(
+          'Something went wrong',
+          'Please check your internet connection and try again later.',
+        );
+      } finally {
+        setLoading(false);
+      }
+
+      // ----- End of IF::> Afrocinema ---------->
+    } else {
+      // ----- Start of ELSE::> Afrostream ---------->
+
+      const { paystackFormData } = await AfrostreamFormData([
+        selectedAfrostreamData.id,
+        selectedCountry.id,
+        customerEmail,
+      ]);
+
+      try {
+        let response = await axiosInstance.post(
+          'paystack/get-payment-intent',
+          paystackFormData,
+        );
+
+        setPaystackAuthorizationUrl(
+          response.data.data.payment_intent.authorization_url,
+        );
+
+        setProcessPaystack(true);
+      } catch (error) {
+        Alert.alert(
+          'Something went wrong',
+          'Please check your internet connection and try again later.',
+        );
+      } finally {
+        setLoading(false);
+      }
+
+      // ----- End of ELSE::> Afrostream ---------->
     }
   };
 
@@ -271,155 +349,143 @@ const PaymentScreenComponent = ({ navigation }) => {
     }
   };
 
+  const paymentMethodHandler = email => {
+    // Check if Stripe payment gateway has been selected then proceed
+    isPaymentChecked.stripe && openPaymentSheet(email);
+
+    // Check if Paystack payment gateway has been selected then proceed
+    isPaymentChecked.paystack && PaystackPayment(email);
+  };
+
   useEffect(() => {
     fetchPaymentGateways();
   }, [refresh]);
 
   return (
-    <Formik
-      initialValues={{
-        phoneNumber: '',
-      }}
-      validateOnMount={true}
-      onSubmit={values => {
-        openPaymentSheet(values.phoneNumber);
-      }}
-      validationSchema={validationSchema}>
-      {props => (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          alwaysBounceVertical={true}
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}>
-          <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
-              <View style={styles.headerWrapper}>
-                <TouchableOpacity
-                  style={styles.iconCon}
-                  onPress={() => navigation.goBack()}>
-                  <Icon name="chevron-left" style={styles.leftArrowIcon} />
-                </TouchableOpacity>
-                <Text style={styles.screenTitle}>Checkout</Text>
-              </View>
-
-              {fetchGatewayError ? (
-                <ErrorPageComponent
-                  text="Ops! Please check your internet connection and try again."
-                  refreshComp={refreshComp}
-                />
-              ) : fetchGatewayLoading ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator color={COLORS.acomartBlue2} size="large" />
-                </View>
-              ) : (
-                <View style={styles.wrapper}>
-                  <Text style={styles.title}>
-                    Fill in the customer's Details
-                  </Text>
-                  {errorComponent && (
-                    <ErrorMessage
-                      errorMessage="Please check your internet connection!"
-                      setErrorComponent={setErrorComponent}
-                    />
-                  )}
+    <>
+      <Formik
+        initialValues={{
+          email: '',
+        }}
+        validateOnMount={true}
+        onSubmit={values => {
+          paymentMethodHandler(values.email);
+        }}
+        validationSchema={validationSchema}>
+        {props => (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}>
+            <SafeAreaView style={{ flex: 1 }}>
+              <View style={styles.container}>
+                <View style={styles.headerWrapper}>
                   <TouchableOpacity
-                    // disabled={fetchError}
-                    onPress={() => setIsModalVisible(true)}>
-                    <CountryModal
-                      isModalVisible={isModalVisible}
-                      setIsModalVisible={setIsModalVisible}
-                      selectedCountry={selectedCountry}
-                      setSelectedCountry={setSelectedCountry}
-                      fetchError={fetchError}
-                      setFetchError={setFetchError}
-                    />
+                    style={styles.iconCon}
+                    onPress={() => navigation.goBack()}>
+                    <Icon name="chevron-left" style={styles.leftArrowIcon} />
                   </TouchableOpacity>
+                  <Text style={styles.screenTitle}>Checkout</Text>
+                </View>
 
-                  {/* Display error message from server */}
-                  {errorMessage?.customer_country_id && (
-                    <Text style={styles.errorMessage}>
-                      Please select your country
-                    </Text>
-                  )}
-                  <View style={{ marginVertical: wp('5%') }}>
-                    <CustomInput
-                      placeholder="Phone Number"
-                      iconType="phone"
-                      keyboardType="phone"
-                      selectedCountry={selectedCountry}
-                      onChangeText={props.handleChange('phoneNumber')}
-                      onBlur={props.handleBlur('phoneNumber')}
-                      value={props.values.phoneNumber.trim()}
-                      errors={props.errors.phoneNumber}
-                      touched={props.touched.phoneNumber}
+                {fetchGatewayError ? (
+                  <ErrorPageComponent
+                    text="Ops! Please check your internet connection and try again."
+                    refreshComp={refreshComp}
+                  />
+                ) : fetchGatewayLoading ? (
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator
+                      color={COLORS.acomartBlue2}
+                      size="large"
                     />
+                  </View>
+                ) : (
+                  <View style={styles.wrapper}>
+                    <Text style={styles.title}>
+                      Fill in the customer's Details
+                    </Text>
+                    {errorComponent && (
+                      <ErrorMessage
+                        errorMessage="Please check your internet connection!"
+                        setErrorComponent={setErrorComponent}
+                      />
+                    )}
+                    <TouchableOpacity
+                      // disabled={fetchError}
+                      onPress={() => setIsModalVisible(true)}>
+                      <CountryModal
+                        isModalVisible={isModalVisible}
+                        setIsModalVisible={setIsModalVisible}
+                        selectedCountry={selectedCountry}
+                        setSelectedCountry={setSelectedCountry}
+                        fetchError={fetchError}
+                        setFetchError={setFetchError}
+                      />
+                    </TouchableOpacity>
 
-                    {/* If this field contains an error and it has been touched, then display the error message */}
-                    {!errorMessage?.customer_phone_number &&
-                      props.errors.phoneNumber &&
-                      props.touched.phoneNumber && (
-                        <Text style={styles.errors}>
-                          {props.errors.phoneNumber}
+                    {/* Display error message from server */}
+                    {errorMessage?.customer_country_id && (
+                      <Text style={styles.errorMessage}>
+                        Please select a country
+                      </Text>
+                    )}
+                    <View style={{ marginVertical: wp('5%') }}>
+                      <CustomInput
+                        placeholder="Email"
+                        iconType="email"
+                        keyboardType="email"
+                        // selectedCountry={selectedCountry}
+                        onChangeText={props.handleChange('email')}
+                        onBlur={props.handleBlur('email')}
+                        value={props.values.email.trim()}
+                        errors={props.errors.email}
+                        touched={props.touched.email}
+                      />
+
+                      {/* If this field contains an error and it has been touched, then display the error message */}
+                      {props.errors.email && props.touched.email && (
+                        <Text style={styles.errorMessage}>
+                          {props.errors.email}
                         </Text>
                       )}
 
-                    {/* Display error message from server */}
-                    {errorMessage?.customer_phone_number && (
-                      <Text style={styles.errorMessage}>
-                        {errorMessage?.customer_phone_number}
-                      </Text>
-                    )}
-
-                    {paymentGateway?.map((gateway, index) => (
-                      <View key={index} style={{ marginVertical: wp('2.5%') }}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginVertical: wp('7.5%'),
-                          }}>
-                          <BouncyCheckbox
-                            size={25}
-                            fillColor={COLORS.acomartBlue2}
-                            unfillColor="#FFFFFF"
-                            iconStyle={{ borderColor: COLORS.acomartBlue2 }}
-                            disableBuiltInState={true}
-                            isChecked={
-                              isPaymentChecked.stripe && isPaymentChecked.stripe
-                            }
-                            onPress={isChecked => {}}
-                          />
-                          <Text style={{ ...FONTS.h4 }}>
-                            Pay with {gateway.name}
-                          </Text>
-                          <Image
-                            source={{
-                              uri: gateway.logo_url,
-                              headers: {
-                                Referer:
-                                  EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
-                              },
-                            }}
-                            style={{ height: hp('2%'), width: wp('5%') }}
-                          />
-                        </View>
+                      <View style={{ paddingVertical: wp('2.5%') }}>
+                        {paymentGateway?.map((gateway, index) => (
+                          <View key={gateway.id}>
+                            <RadioButtonComp
+                              data={gateway}
+                              isPaymentChecked={isPaymentChecked}
+                              setIsPaymentChecked={setIsPaymentChecked}
+                              index={index}
+                            />
+                          </View>
+                        ))}
                       </View>
-                    ))}
 
-                    <CustomButton
-                      disabled={loading}
-                      buttonText={loading ? 'Processing' : 'Proceed'}
-                      onPress={props.handleSubmit}
-                    />
+                      <CustomButton
+                        disabled={loading}
+                        buttonText={loading ? 'Processing' : 'Proceed'}
+                        onPress={props.handleSubmit}
+                      />
+                    </View>
                   </View>
-                </View>
-              )}
-            </View>
-          </SafeAreaView>
-        </ScrollView>
+                )}
+              </View>
+            </SafeAreaView>
+          </ScrollView>
+        )}
+      </Formik>
+      {processPaystack && (
+        <PaystackWebView
+          authorization_url={paystackAuthorizationUrl}
+          navigation={navigation}
+          setProcessPaystack={setProcessPaystack}
+        />
       )}
-    </Formik>
+    </>
   );
 };
 
@@ -449,7 +515,7 @@ const styles = StyleSheet.create({
 
   screenTitle: {
     flex: 1,
-    marginBottom: wp('12.5%'),
+    marginBottom: wp('10%'),
     textAlign: 'center',
     marginRight: wp('5%'),
     ...FONTS.h2,
@@ -457,7 +523,7 @@ const styles = StyleSheet.create({
 
   wrapper: {
     width: wp('85%'),
-    marginVertical: wp('10%'),
+    marginVertical: wp('7.5%'),
   },
 
   title: {
