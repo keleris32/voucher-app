@@ -36,15 +36,12 @@ const AppNavContainer = () => {
 
       // If the object is present, set the authenication state variable to true, else false
       if (retailer) {
-        await axiosInstance
-          .get('retailer')
-          .then(res => {
-            getRetailerDispatch({
-              type: GET_RETAILER,
-              payload: res.data.data.user,
-            });
-          })
-          .catch(err => {});
+        const parsedRetailerData = JSON.parse(retailer);
+
+        getRetailerDispatch({
+          type: GET_RETAILER,
+          payload: parsedRetailerData,
+        });
 
         // if the retailer has been logged in, set authentication state to true
         setIsAuthenticated(true);
@@ -52,6 +49,7 @@ const AppNavContainer = () => {
         setIsAuthLoaded(true);
       } else {
         // if the retailer isn't logged in, set authentication state to false
+
         setIsAuthenticated(false);
 
         setIsAuthLoaded(true);

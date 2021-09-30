@@ -1,5 +1,9 @@
 import * as yup from 'yup';
 
 export const validationSchema = yup.object().shape({
-  phoneNumber: yup.string().required('Please enter a phone number').trim(),
+  email: yup
+    .string()
+    .email('Please enter a valid Email address')
+    .trim()
+    .required('The Email address field is required'),
 });

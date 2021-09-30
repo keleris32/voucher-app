@@ -14,7 +14,6 @@ import axiosInstance from '../../helpers/axiosInterceptor';
 const PendingVerification = () => {
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [hasBeenFetched, setHasBeenFetched] = useState(false);
   const [refreshState, setRefreshState] = useState(false);
 
   // function to refresh page
@@ -30,6 +29,12 @@ const PendingVerification = () => {
     getRetailerState: { retailerData },
   } = useContext(GlobalContext);
 
+  // Reset state
+  const resetState = () => {
+    setLoading(false);
+    setClicked(false);
+  };
+
   // After data has been fetched, check the verification status of the retailer
   const checkStatus = async () => {
     let status = await retailerData.verification_status;
@@ -42,17 +47,13 @@ const PendingVerification = () => {
           {
             text: 'Ok',
             onPress: () => {
-              setLoading(false);
-              setClicked(false);
-              setHasBeenFetched(false);
+              resetState();
             },
           },
         ],
       );
     } else {
-      setLoading(false);
-      setClicked(false);
-      setHasBeenFetched(false);
+      resetState();
     }
   };
 
@@ -66,7 +67,8 @@ const PendingVerification = () => {
           type: GET_RETAILER,
           payload: res.data.data.user,
         });
-        setHasBeenFetched(true);
+
+        checkStatus();
       })
       .catch(err => {
         Alert.alert(
@@ -84,14 +86,6 @@ const PendingVerification = () => {
         );
       });
   };
-
-  if (
-    clicked &&
-    hasBeenFetched &&
-    retailerData.verification_status !== 'approved'
-  ) {
-    checkStatus();
-  }
 
   // Only try to fetch Data when refresh button has been clicked (clicked =true)
   useEffect(() => {
