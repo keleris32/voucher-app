@@ -5,6 +5,7 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import PasswordIcon from 'react-native-vector-icons/Ionicons';
@@ -45,6 +46,8 @@ const CustomInput = ({ iconType, placeholder, keyboardType, ...props }) => {
         {
           borderColor:
             props.errors && props.touched ? COLORS.red : COLORS.black,
+          paddingVertical:
+            Platform.OS === 'ios' && iconType !== 'phone' ? SIZES.base : 0,
         },
       ]}>
       {iconType === 'phone' ? (
@@ -54,7 +57,9 @@ const CustomInput = ({ iconType, placeholder, keyboardType, ...props }) => {
               styles.phoneText,
               {
                 marginTop:
-                  props.selectedCountry.name === 'Select your country'
+                  Platform.OS === 'ios'
+                    ? 0
+                    : props.selectedCountry.name === 'Select your country'
                     ? '30%'
                     : '20%',
               },
@@ -137,14 +142,14 @@ const styles = StyleSheet.create({
 
   phoneContainter: {
     height: '100%',
-    marginRight: SIZES.base * 1.5,
+    marginRight: SIZES.base * 1.75,
     borderTopLeftRadius: SIZES.base,
     borderBottomLeftRadius: SIZES.base,
     backgroundColor: COLORS.acomartBlue2,
   },
 
   phoneText: {
-    position: 'relative',
+    paddingVertical: Platform.OS === 'ios' ? SIZES.base : 0,
     paddingHorizontal: SIZES.base * 1.5,
     color: COLORS.white,
     ...FONTS.h3,

@@ -5,7 +5,9 @@ import {
   Text,
   View,
   FlatList,
+  SafeAreaView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import SearchBar from '../components/AfrocinemaComponent/SearchBar';
@@ -89,7 +91,7 @@ const Transactions = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Transactions</Text>
       {fetchError ? (
         <ErrorPageComponent
@@ -141,7 +143,7 @@ const Transactions = () => {
           </View>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -157,7 +159,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    // paddingVertical: 5,
+    paddingTop: Platform.OS === 'ios' ? wp('7.5%') : 0,
     color: COLORS.black,
     marginBottom: wp('10%'),
     ...FONTS.h2,

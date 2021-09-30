@@ -8,6 +8,7 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -326,6 +327,7 @@ const styles = StyleSheet.create({
   },
 
   leftArrowIcon: {
+    paddingTop: Platform.OS === 'ios' ? wp('6.5%') : 0,
     fontSize: hp('4.75%'),
     color: COLORS.black,
   },
@@ -333,6 +335,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     // paddingVertical: 5,
+    paddingTop: Platform.OS === 'ios' ? wp('7.5%') : 0,
     marginBottom: wp('12.5%'),
     textAlign: 'center',
     marginRight: wp('5%'),
@@ -359,6 +362,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: SIZES.base,
     paddingHorizontal: SIZES.radius / 2,
+    paddingVertical: Platform.OS === 'ios' ? SIZES.base : 0,
     marginVertical: SIZES.base,
   },
 

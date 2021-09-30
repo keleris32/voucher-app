@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {
   widthPercentageToDP as wp,
@@ -11,6 +17,9 @@ import AfrocinemaPanelData from '../PanelData/AfrocinemaPanelData';
 import AfrostreamPanelData from '../PanelData/AfrostreamPanelData';
 import { GlobalContext } from '../../context/Provider';
 
+// get device screen size
+const { height, width } = Dimensions.get('window');
+
 const AnimatedBottomSheet = ({ bs, fall }) => {
   const {
     selectedCardState: { isAfrocinemaActive },
@@ -20,7 +29,15 @@ const AnimatedBottomSheet = ({ bs, fall }) => {
   const renderContent = () => (
     <>
       <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
-        <View style={styles.panel} />
+        <View
+          style={[
+            styles.panel,
+            {
+              backgroundColor:
+                Platform.OS === 'ios' ? COLORS.offWhite : COLORS.backDrop,
+            },
+          ]}
+        />
       </TouchableOpacity>
       <View style={styles.contentContainer}>
         <View style={styles.panelHeader}>
@@ -56,7 +73,7 @@ export default AnimatedBottomSheet;
 const styles = StyleSheet.create({
   panel: {
     height: hp('100%'),
-    backgroundColor: COLORS.backDrop,
+    // backgroundColor: COLORS.backDrop,
   },
 
   contentContainer: {

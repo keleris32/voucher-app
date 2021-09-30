@@ -6,6 +6,7 @@ import {
   View,
   Alert,
   SafeAreaView,
+  StatusBar,
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -165,6 +166,7 @@ const Settings = ({ navigation }) => {
 
   return (
     <SafeAreaView>
+      <StatusBar barStyle={'dark-content'} backgroundColor="#f8f8ff" />
       <View style={styles.container}>
         <View>
           <View style={{ marginBottom: wp('12.5%') }}>

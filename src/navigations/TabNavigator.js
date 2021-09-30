@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -17,6 +17,8 @@ import TransactionsStack from '../ScreenStacks/TransactionsStack';
 import SettingsStack from '../ScreenStacks/SettingsStack';
 
 const Tab = createBottomTabNavigator();
+
+const { height, width } = Dimensions.get('window');
 
 const TabNavigator = () => {
   return (
@@ -53,7 +55,8 @@ const TabNavigator = () => {
             marginTop: hp('-1.25%'),
           },
           style: {
-            height: hp('10%'),
+            height:
+              (Platform.OS === 'ios') & (height > 700) ? hp('15%') : hp('10%'),
           },
         }}>
         <Tab.Screen

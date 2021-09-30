@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover',
-    // paddingVertical: wp('1.25%'),
+    paddingVertical: Platform.OS === 'ios' ? wp('12.5%') : 0,
   },
 
   logo: {
