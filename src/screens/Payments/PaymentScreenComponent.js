@@ -41,10 +41,10 @@ const PaymentScreenComponent = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [fetchError, setFetchError] = useState(false);
   const [isPaymentChecked, setIsPaymentChecked] = useState({
-    stripe: true,
-    flutterwave: false,
+    stripe: false,
     paystack: false,
   });
+  // const [isPaymentChecked, setIsPaymentChecked] = useState();
   const [processPaystack, setProcessPaystack] = useState(false);
   const [paystackAuthorizationUrl, setPaystackAuthorizationUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -81,9 +81,26 @@ const PaymentScreenComponent = ({ navigation }) => {
     setFetchGatewayLoading(true);
     setFetchGatewayError(false);
 
+    var paymentGateways;
+
     await axiosInstance
       .get('payment-gateways?appName=ACOMART RETAIL')
-      .then(res => setPaymentGateway(res.data.data.payment_gateways))
+      .then(res => {
+        paymentGateways = res.data.data.payment_gateways;
+
+        if (paymentGateways[0].name === 'Stripe') {
+          setIsPaymentChecked({
+            stripe: true,
+            paystack: false,
+          });
+        } else if (paymentGateways[0].name === 'Paystack') {
+          setIsPaymentChecked({
+            stripe: false,
+            paystack: true,
+          });
+        }
+        setPaymentGateway(paymentGateways);
+      })
       .catch(err => setFetchGatewayError(true))
       .finally(() => setFetchGatewayLoading(false));
   };
@@ -349,6 +366,8 @@ const PaymentScreenComponent = ({ navigation }) => {
     }
   };
 
+  const closePaystackWebview = () => setProcessPaystack(false);
+
   const paymentMethodHandler = email => {
     // Check if Stripe payment gateway has been selected then proceed
     isPaymentChecked.stripe && openPaymentSheet(email);
@@ -380,7 +399,11 @@ const PaymentScreenComponent = ({ navigation }) => {
               flexGrow: 1,
             }}>
             <SafeAreaView style={{ flex: 1 }}>
-              <View style={styles.container}>
+              <TouchableOpacity
+                style={styles.container}
+                onPress={closePaystackWebview}
+                activeOpacity={1}>
+                {/* <View style={styles.container}> */}
                 <View style={styles.headerWrapper}>
                   <TouchableOpacity
                     style={styles.iconCon}
@@ -473,7 +496,8 @@ const PaymentScreenComponent = ({ navigation }) => {
                     </View>
                   </View>
                 )}
-              </View>
+                {/* </View> */}
+              </TouchableOpacity>
             </SafeAreaView>
           </ScrollView>
         )}
