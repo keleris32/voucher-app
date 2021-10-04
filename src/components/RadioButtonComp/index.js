@@ -17,19 +17,11 @@ const RadioButtonComp = ({
     if (gateway === 'Stripe') {
       setIsPaymentChecked({
         stripe: true,
-        flutterwave: false,
-        paystack: false,
-      });
-    } else if (gateway === 'Flutterwave') {
-      setIsPaymentChecked({
-        stripe: false,
-        flutterwave: true,
         paystack: false,
       });
     } else if (gateway === 'Paystack') {
       setIsPaymentChecked({
         stripe: false,
-        flutterwave: false,
         paystack: true,
       });
     }
