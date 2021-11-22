@@ -6,10 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Value } from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
@@ -66,7 +63,9 @@ const AfrostreamComponent = ({ refreshComp, fetchError }) => {
                 <TouchableOpacity
                   activeOpacity={0.6}
                   onPress={() => {
-                    selectedOption(item), bs.current.snapTo(0);
+                    selectedOption(item);
+
+                    bs.current.snapTo(0);
                   }}>
                   <SubscriptionCard
                     name={item.name}
