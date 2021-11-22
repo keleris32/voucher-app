@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: wp('100%'),
-    height: hp('70%'),
+    height: hp('60%'),
     backgroundColor: COLORS.white,
     borderTopStartRadius: SIZES.largeTitle,
     borderTopEndRadius: SIZES.largeTitle,

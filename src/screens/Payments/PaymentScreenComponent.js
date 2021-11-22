@@ -399,15 +399,24 @@ const PaymentScreenComponent = ({ navigation }) => {
               flexGrow: 1,
             }}>
             <SafeAreaView style={{ flex: 1 }}>
-              <TouchableOpacity
-                style={styles.container}
-                onPress={closePaystackWebview}
-                activeOpacity={1}>
+              <View style={styles.container}>
+                {processPaystack && (
+                  <TouchableOpacity
+                    onPress={closePaystackWebview}
+                    activeOpacity={1}
+                    style={{
+                      width: wp('100%'),
+                      height: hp('100%'),
+                      position: 'absolute',
+                      backgroundColor: 'rgba(0,0,0,0.8)',
+                    }}
+                  />
+                )}
                 {/* <View style={styles.container}> */}
                 <View style={styles.headerWrapper}>
                   <TouchableOpacity
                     style={styles.iconCon}
-                    onPress={() => navigation.goBack()}>
+                    onPress={() => !processPaystack && navigation.goBack()}>
                     <Icon name="chevron-left" style={styles.leftArrowIcon} />
                   </TouchableOpacity>
                   <Text style={styles.screenTitle}>Checkout</Text>
@@ -497,7 +506,7 @@ const PaymentScreenComponent = ({ navigation }) => {
                   </View>
                 )}
                 {/* </View> */}
-              </TouchableOpacity>
+              </View>
             </SafeAreaView>
           </ScrollView>
         )}
