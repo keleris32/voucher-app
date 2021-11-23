@@ -360,6 +360,7 @@ const PaymentScreenComponent = ({ navigation }) => {
           text: 'OK',
           onPress: () => {
             setLoading(false);
+            navigation.goBack();
           },
         },
       ]);
