@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { decode } from 'html-entities';
 import NumberFormat from 'react-number-format';
 
-import { FONTS, SIZES, COLORS } from '../../constants';
+import { FONTS, COLORS } from '../../constants';
 
 const SubscriptionCard = props => {
   // Decode the HTML code gotten from data to it's appropraite symbol
@@ -43,11 +43,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: wp('5%'),
-    marginBottom: wp('10%'),
-    borderWidth: 1,
-    borderColor: COLORS.gray,
-    borderRadius: SIZES.base,
+    paddingHorizontal: wp('2.5%'),
+    paddingVertical: wp('5%'),
+    // marginBottom: wp('10%'),
+    // borderWidth: 1,
+    // borderColor: COLORS.gray,
+    // borderRadius: SIZES.base,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.gray,
   },
 
   title: {

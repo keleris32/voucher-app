@@ -1,22 +1,21 @@
-import React, { useContext, createRef } from 'react';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useContext, createRef, useState } from 'react';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Value } from 'react-native-reanimated';
 
 import { GlobalContext } from '../../context/Provider';
-import SubscriptionCard from './SubscriptionCard';
 import { SELECTED_AFROSTREAM_CARD } from '../../constants/actionTypes';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 import { COLORS } from '../../constants';
 import ErrorPageComponent from '../ErrorPageComponent';
+import SubscriptionPartnersComponent from './SubscriptionPartnersComponent';
 
 const AfrostreamComponent = ({ refreshComp, fetchError }) => {
+  const [isPlansAccordionActive, setIsPlansAccordionActive] = useState({
+    acomart: true,
+    otherPlan: false,
+  });
+
   // Afrostream global state variable
   const {
     getAfrostreamState: { afrostreamData, loading },
@@ -41,6 +40,8 @@ const AfrostreamComponent = ({ refreshComp, fetchError }) => {
 
   // ------------------------------------------------------- >
 
+  let convertedObj = Object.keys(afrostreamData);
+
   return (
     <>
       {fetchError ? (
@@ -56,26 +57,19 @@ const AfrostreamComponent = ({ refreshComp, fetchError }) => {
         <>
           <View style={styles.container}>
             <FlatList
-              keyExtractor={item => item.id}
-              data={afrostreamData}
+              keyExtractor={item => item}
+              data={convertedObj}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => {
-                    selectedOption(item);
-
-                    bs.current.snapTo(0);
-                  }}>
-                  <SubscriptionCard
-                    name={item.name}
-                    duration={item.duration_in_days}
-                    deviceLimit={item.device_limit}
-                    discountedPrice={item.discounted_charging_price}
-                    chargingPrice={item.charging_price}
-                    symbol={item.charging_currency_symbol}
-                  />
-                </TouchableOpacity>
+              renderItem={({ item, index }) => (
+                <SubscriptionPartnersComponent
+                  partner={item}
+                  plans={afrostreamData[item]}
+                  index={index}
+                  isPlansAccordionActive={isPlansAccordionActive}
+                  setIsPlansAccordionActive={setIsPlansAccordionActive}
+                  bs={bs}
+                  selectedPlan={selectedOption}
+                />
               )}
             />
           </View>

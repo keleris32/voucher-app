@@ -1,12 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { StyleSheet, Text, View, Alert, ActivityIndicator } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -174,7 +168,27 @@ const AfrostreamPanelData = ({ bs }) => {
                 {data.duration_in_days} {no_of_days}
               </Text>
             </View>
-            <View style={{ marginTop: wp('15%') }}>
+            {data.description && (
+              <View style={{ ...styles.description }}>
+                <Text style={{ ...FONTS.h4 }}>Description: </Text>
+                <Text
+                  style={{
+                    color: COLORS.acomartBlue2,
+                    paddingRight: wp('20%'),
+                    ...FONTS.body4,
+                  }}>
+                  {data.description}
+                </Text>
+              </View>
+            )}
+            <View style={{ marginTop: wp('12.5%') }}>
+              {data.description && (
+                <Text style={{ ...FONTS.body5 }}>
+                  (Please ensure to inform customers to update their Afrostream
+                  account phone number to that which is linked to their Tizeti
+                  account)
+                </Text>
+              )}
               <NumberFormat
                 value={data.discounted_charging_price}
                 displayType={'text'}
