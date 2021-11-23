@@ -73,9 +73,8 @@ const Home = () => {
   const getAfrostreamData = async () => {
     setFetchError(false);
     await axiosInstance
-      .get('retailer/subscription-plans')
+      .get('v2/retailer/subscription-plans')
       .then(res => {
-        console.log(JSON.stringify(res.data.data.subscription_plans, null, 2));
         getAfrostreamDispatch({
           type: GET_AFROSTREAM_DATA,
           payload: res.data.data.subscription_plans,
