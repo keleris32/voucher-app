@@ -17,9 +17,6 @@ import AfrocinemaPanelData from '../PanelData/AfrocinemaPanelData';
 import AfrostreamPanelData from '../PanelData/AfrostreamPanelData';
 import { GlobalContext } from '../../context/Provider';
 
-// get device screen size
-const { height, width } = Dimensions.get('window');
-
 const AnimatedBottomSheet = ({ bs, fall }) => {
   const {
     selectedCardState: { isAfrocinemaActive },
