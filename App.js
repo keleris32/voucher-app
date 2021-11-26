@@ -10,6 +10,7 @@ import GlobalProvider from './src/context/Provider';
 }
 
 const App = () => {
+  console.reportErrorsAsExceptions = false;
   return (
     <GlobalProvider>
       <AppNavContainer>
