@@ -73,7 +73,6 @@ export default AnimatedBottomSheet;
 const styles = StyleSheet.create({
   panel: {
     height: hp('100%'),
-    // backgroundColor: COLORS.backDrop,
   },
 
   contentContainer: {
