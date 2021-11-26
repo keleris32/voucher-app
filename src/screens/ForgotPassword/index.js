@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
 
   screenTitle: {
     // paddingVertical: 12.5,
+    paddingVertical: wp('1.25%'),
     ...FONTS.h1,
   },
 
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
 
   formContainer: {
-    width: wp('80%'),
+    width: wp('82.5%'),
   },
 
   backBtn: {
