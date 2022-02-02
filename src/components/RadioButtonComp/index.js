@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/MaterialIcons';
