@@ -30,6 +30,9 @@ import ErrorPageComponent from '../../components/ErrorPageComponent';
 import PaystackWebView from './Paystack/PaystackWebview';
 import { AfrocinemaFormData } from './Paystack/AfrocinemaFormData';
 import { AfrostreamFormData } from './Paystack/AfrostreamFormData';
+import { OpayAfrocinemaFormData } from './Opay/OpayAfrocinemaFormData';
+import { OpayAfrostreamFormData } from './Opay/OpayAfrostreamFormData';
+import OpayWebView from './Opay/OpayWebview';
 
 const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -42,11 +45,13 @@ const PaymentScreenComponent = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isPaymentChecked, setIsPaymentChecked] = useState({
     stripe: false,
+    opay: false,
     paystack: false,
   });
-  // const [isPaymentChecked, setIsPaymentChecked] = useState();
   const [processPaystack, setProcessPaystack] = useState(false);
+  const [processOpay, setProcessOpay] = useState(false);
   const [paystackAuthorizationUrl, setPaystackAuthorizationUrl] = useState('');
+  const [opayAuthorizationUrl, setOpayAuthorizationUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     id: '',
@@ -339,6 +344,73 @@ const PaymentScreenComponent = ({ navigation }) => {
     }
   };
 
+  const OpayPayment = async customerEmail => {
+    setLoading(true);
+
+    if (isAfrocinemaActive) {
+      // ----- Start of IF::> Afrocinema ---------->
+
+      const { opayFormData } = await OpayAfrocinemaFormData([
+        selectedAfrocinemaData.id,
+        selectedCountry.id,
+        customerEmail,
+      ]);
+
+      try {
+        let response = await axiosInstance.post(
+          'opay/get-payment-intent',
+          opayFormData,
+        );
+
+        setOpayAuthorizationUrl(
+          response.data.data.payment_intent.authorization_url,
+        );
+
+        setProcessOpay(true);
+      } catch (error) {
+        Alert.alert(
+          'Something went wrong',
+          'Please check your internet connection and try again later.',
+        );
+      } finally {
+        setLoading(false);
+      }
+
+      // ----- End of IF::> Afrocinema ---------->
+    } else {
+      // ----- Start of ELSE::> Afrostream ---------->
+
+      const { opayFormData } = await OpayAfrostreamFormData([
+        selectedAfrostreamData.id,
+        selectedCountry.id,
+        customerEmail,
+      ]);
+
+      try {
+        let response = await axiosInstance.post(
+          'opay/get-payment-intent',
+          opayFormData,
+        );
+
+        setOpayAuthorizationUrl(
+          response.data.data.payment_intent.authorization_url,
+        );
+
+        setProcessOpay(true);
+      } catch (error) {
+        console.log(JSON.stringify(error.response, null, 2));
+        Alert.alert(
+          'Something went wrong',
+          'Please check your internet connection and try again later.',
+        );
+      } finally {
+        setLoading(false);
+      }
+
+      // ----- End of ELSE::> Afrostream ---------->
+    }
+  };
+
   const openPaymentSheet = async prop => {
     // InitializePayment Fn
     await initializePayment(prop);
@@ -369,12 +441,17 @@ const PaymentScreenComponent = ({ navigation }) => {
 
   const closePaystackWebview = () => setProcessPaystack(false);
 
+  const closeOpayWebview = () => setProcessOpay(false);
+
   const paymentMethodHandler = email => {
     // Check if Stripe payment gateway has been selected then proceed
     isPaymentChecked.stripe && openPaymentSheet(email);
 
     // Check if Paystack payment gateway has been selected then proceed
     isPaymentChecked.paystack && PaystackPayment(email);
+
+    // Check if Opay payment gateway has been selected then proceed
+    isPaymentChecked.opay && OpayPayment(email);
   };
 
   useEffect(() => {
@@ -396,9 +473,7 @@ const PaymentScreenComponent = ({ navigation }) => {
           <ScrollView
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={true}
-            contentContainerStyle={{
-              flexGrow: 1,
-            }}>
+            contentContainerStyle={{ flexGrow: 1 }}>
             <SafeAreaView style={{ flex: 1 }}>
               <View style={styles.container}>
                 {processPaystack && (
@@ -413,11 +488,26 @@ const PaymentScreenComponent = ({ navigation }) => {
                     }}
                   />
                 )}
+
+                {processOpay && (
+                  <TouchableOpacity
+                    onPress={closeOpayWebview}
+                    activeOpacity={1}
+                    style={{
+                      width: wp('100%'),
+                      height: hp('100%'),
+                      position: 'absolute',
+                      backgroundColor: 'rgba(0,0,0,0.8)',
+                    }}
+                  />
+                )}
                 {/* <View style={styles.container}> */}
                 <View style={styles.headerWrapper}>
                   <TouchableOpacity
                     style={styles.iconCon}
-                    onPress={() => !processPaystack && navigation.goBack()}>
+                    onPress={() =>
+                      (!processPaystack || !processOpay) && navigation.goBack()
+                    }>
                     <Icon name="chevron-left" style={styles.leftArrowIcon} />
                   </TouchableOpacity>
                   <Text style={styles.screenTitle}>Checkout</Text>
@@ -517,6 +607,13 @@ const PaymentScreenComponent = ({ navigation }) => {
           authorization_url={paystackAuthorizationUrl}
           navigation={navigation}
           setProcessPaystack={setProcessPaystack}
+        />
+      )}
+      {processOpay && (
+        <OpayWebView
+          authorization_url={opayAuthorizationUrl}
+          navigation={navigation}
+          setProcessOpay={setProcessOpay}
         />
       )}
     </>
