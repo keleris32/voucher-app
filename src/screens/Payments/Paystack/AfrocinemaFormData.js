@@ -16,7 +16,5 @@ export const AfrocinemaFormData = async props => {
     EnvironmentVariables.PAYSTACK_CALLBACK_URL,
   );
 
-  //   console.log(JSON.stringify(paystackFormData, null, 2));
-
   return { paystackFormData };
 };
