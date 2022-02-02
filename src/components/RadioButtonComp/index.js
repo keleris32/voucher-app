@@ -17,12 +17,20 @@ const RadioButtonComp = ({
     if (gateway === 'Stripe') {
       setIsPaymentChecked({
         stripe: true,
+        opay: false,
         paystack: false,
       });
     } else if (gateway === 'Paystack') {
       setIsPaymentChecked({
         stripe: false,
+        opay: false,
         paystack: true,
+      });
+    } else if (gateway === 'Flutterwave') {
+      setIsPaymentChecked({
+        stripe: false,
+        opay: true,
+        paystack: false,
       });
     }
   };
@@ -31,7 +39,7 @@ const RadioButtonComp = ({
   if (data.name === 'Stripe') {
     icon = icons.stripe;
   } else if (data.name === 'Flutterwave') {
-    icon = icons.flutterwave;
+    icon = icons.opay;
   } else if (data.name === 'Paystack') {
     icon = icons.paystack;
   }
@@ -53,7 +61,7 @@ const RadioButtonComp = ({
               style={[
                 styles.paymentLogo,
                 {
-                  width: iconName === 'Stripe' ? wp('15%') : wp('35%'),
+                  width: iconName === 'Stripe' ? wp('15%') : wp('15%'),
                 },
               ]}
             />
@@ -72,7 +80,7 @@ const RadioButtonComp = ({
               style={[
                 styles.paymentLogo,
                 {
-                  width: iconName === 'Stripe' ? wp('15%') : wp('35%'),
+                  width: iconName === 'Stripe' ? wp('15%') : wp('15%'), //35 for paystack
                 },
               ]}
             />

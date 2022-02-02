@@ -8,6 +8,7 @@ import {
   PAYSTACK_PUBLIC_KEY,
   IMAGES_REFERER_HEADER_URL,
   PAYSTACK_CALLBACK_URL,
+  OPAY_CALLBACK_URL,
 } from '@env';
 
 const EnvironmentVariables = {
@@ -20,6 +21,7 @@ const EnvironmentVariables = {
   PAYSTACK_PUBLIC_KEY,
   IMAGES_REFERER_HEADER_URL,
   PAYSTACK_CALLBACK_URL,
+  OPAY_CALLBACK_URL,
 };
 
 export default EnvironmentVariables;
