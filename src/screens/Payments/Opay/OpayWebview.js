@@ -19,8 +19,6 @@ export default function OpayWebView({
   const onNavigationStateChange = state => {
     const { url } = state;
 
-    console.log(JSON.stringify(state, null, 2));
-
     if (url.includes(EnvironmentVariables.OPAY_CALLBACK_URL)) {
       setProcessOpay(false);
 
