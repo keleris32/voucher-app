@@ -14,23 +14,25 @@ const RadioButtonComp = ({
   const gatewayBool = Object.values(isPaymentChecked);
 
   const radioButtonHandler = gateway => {
+    // The payment gateways are arranged on the api by their "order_of_display"
+    // Stripe -> Flutterwave -> Paystack -> Opay
     if (gateway === 'Stripe') {
       setIsPaymentChecked({
         stripe: true,
-        opay: false,
         paystack: false,
+        opay: false,
       });
     } else if (gateway === 'Paystack') {
       setIsPaymentChecked({
         stripe: false,
-        opay: false,
         paystack: true,
+        opay: false,
       });
-    } else if (gateway === 'Flutterwave') {
+    } else if (gateway === 'Opay') {
       setIsPaymentChecked({
         stripe: false,
-        opay: true,
         paystack: false,
+        opay: true,
       });
     }
   };
@@ -38,10 +40,10 @@ const RadioButtonComp = ({
 
   if (data.name === 'Stripe') {
     icon = icons.stripe;
-  } else if (data.name === 'Flutterwave') {
-    icon = icons.opay;
   } else if (data.name === 'Paystack') {
     icon = icons.paystack;
+  } else if (data.name === 'Opay') {
+    icon = icons.opay;
   }
 
   const iconName = data.name;
@@ -61,7 +63,12 @@ const RadioButtonComp = ({
               style={[
                 styles.paymentLogo,
                 {
-                  width: iconName === 'Stripe' ? wp('15%') : wp('15%'),
+                  width:
+                    iconName === 'Stripe'
+                      ? wp('15%')
+                      : iconName === 'Opay'
+                      ? wp('15%')
+                      : wp('35%'),
                 },
               ]}
             />
@@ -80,7 +87,12 @@ const RadioButtonComp = ({
               style={[
                 styles.paymentLogo,
                 {
-                  width: iconName === 'Stripe' ? wp('15%') : wp('15%'), //35 for paystack
+                  width:
+                    iconName === 'Stripe'
+                      ? wp('15%')
+                      : iconName === 'Opay'
+                      ? wp('15%')
+                      : wp('35%'), //35 for paystack
                 },
               ]}
             />

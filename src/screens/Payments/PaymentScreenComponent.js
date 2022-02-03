@@ -16,7 +16,6 @@ import {
 } from 'react-native-responsive-screen';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Value } from 'react-native-reanimated';
 
 import { COLORS, FONTS } from '../../constants';
 import axiosInstance from '../../helpers/axiosInterceptor';
@@ -45,8 +44,8 @@ const PaymentScreenComponent = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isPaymentChecked, setIsPaymentChecked] = useState({
     stripe: false,
-    opay: false,
     paystack: false,
+    opay: false,
   });
   const [processPaystack, setProcessPaystack] = useState(false);
   const [processOpay, setProcessOpay] = useState(false);
@@ -73,14 +72,6 @@ const PaymentScreenComponent = ({ navigation }) => {
       selectedAfrostreamData,
     },
   } = useContext(GlobalContext);
-
-  // ------------------------------------------------------- >
-  // Animations
-
-  const bs = createRef();
-  const fall = new Value(1);
-
-  // ------------------------------------------------------- >
 
   const fetchPaymentGateways = async () => {
     setFetchGatewayLoading(true);
