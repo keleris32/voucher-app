@@ -37,6 +37,10 @@ const Transactions = () => {
     getTransactionsState: { transactionsData, loading },
   } = useContext(GlobalContext);
 
+  const filterBySuccessfulTransactions = transactions => {
+    return transactions.filter(transaction => transaction.status === 'success');
+  };
+
   // get transactions data from api
   const getTransactionsData = async () => {
     setFetchError(false);
@@ -46,7 +50,9 @@ const Transactions = () => {
     await axiosInstance
       .get('retailer/payment-transactions?include=model')
       .then(res => {
-        setFilteredData(res.data.data.payment_transactions);
+        setFilteredData(
+          filterBySuccessfulTransactions(res.data.data.payment_transactions),
+        );
         getTransactionsDispatch({
           type: GET_TRANSACTIONS,
           payload: res.data.data.payment_transactions,
