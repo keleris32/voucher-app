@@ -12,6 +12,8 @@ const TransactionsCard = props => {
   // Parse the meta data from string to JSON
   const metaObj = JSON.parse(props.meta);
 
+  console.log(props.price);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
