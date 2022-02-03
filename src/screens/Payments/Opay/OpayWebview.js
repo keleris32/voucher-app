@@ -24,7 +24,7 @@ export default function OpayWebView({
     if (url.includes(EnvironmentVariables.OPAY_CALLBACK_URL)) {
       setProcessOpay(false);
 
-      navigation.goBack();
+      // navigation.goBack();
 
       // Alert.alert('Success', 'Your order has been confirmed!', [
       //   {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: wp('100%'),
-    height: hp('80%'),
+    height: hp('75%'),
     backgroundColor: COLORS.white,
     borderTopStartRadius: SIZES.largeTitle,
     borderTopEndRadius: SIZES.largeTitle,
