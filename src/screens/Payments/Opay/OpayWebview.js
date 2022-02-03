@@ -19,17 +19,21 @@ export default function OpayWebView({
   const onNavigationStateChange = state => {
     const { url } = state;
 
+    console.log(JSON.stringify(state, null, 2));
+
     if (url.includes(EnvironmentVariables.OPAY_CALLBACK_URL)) {
       setProcessOpay(false);
 
-      Alert.alert('Success', 'Your order has been confirmed!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            navigation.goBack();
-          },
-        },
-      ]);
+      navigation.goBack();
+
+      // Alert.alert('Success', 'Your order has been confirmed!', [
+      //   {
+      //     text: 'OK',
+      //     onPress: () => {
+      //       navigation.goBack();
+      //     },
+      //   },
+      // ]);
     }
   };
 
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: wp('100%'),
-    height: hp('70%'),
+    height: hp('80%'),
     backgroundColor: COLORS.white,
     borderTopStartRadius: SIZES.largeTitle,
     borderTopEndRadius: SIZES.largeTitle,
