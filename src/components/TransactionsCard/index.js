@@ -38,9 +38,9 @@ const TransactionsCard = props => {
           </Text>
         </View>
         <View style={styles.description}>
-          <Text style={{ ...FONTS.h4 }}>Customer's number: </Text>
+          <Text style={{ ...FONTS.h4 }}>Customer's email: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-            {metaObj.customer_phone_number}
+            {metaObj.customer_email}
           </Text>
         </View>
       </View>
