@@ -48,10 +48,7 @@ const Documents = ({ navigation }) => {
     if (hasUploaded) {
       // FormData to send callback url with request.
       const data = new FormData();
-      data.append(
-        'callbackUrl',
-        EnvironmentVariables.VERIFICATION_CALLBACK_URL,
-      );
+      data.append('callbackUrl', EnvironmentVariables.EMAIL_CALLBACK_URL);
 
       // Send request to initiate verification
       await axiosInstance
