@@ -22,6 +22,7 @@ import { GlobalContext } from '../../context/Provider';
 import {
   GET_AFROCINEMA_DATA,
   GET_AFROSTREAM_DATA,
+  GET_LOCATION,
 } from '../../constants/actionTypes';
 import EnvironmentVariables from '../../config/env';
 
@@ -47,10 +48,28 @@ const Home = () => {
 
   // Global state for Afrocinema and Afrostream
   const {
+    getLocationDispatch,
     getAfrocinemaDispatch,
     getAfrostreamDispatch,
     getAfrostreamState: { loading },
   } = useContext(GlobalContext);
+
+  // Get location data from server and store in Global state
+  const getLocationData = async () => {
+    setFetchError(false);
+
+    await axiosInstance
+      .get('my-location')
+      .then(res => {
+        getLocationDispatch({
+          type: GET_LOCATION,
+          payload: res.data.data.location,
+        });
+      })
+      .catch(err => {
+        setFetchError(true);
+      });
+  };
 
   // Get afrocinema's data from server and store in Global state
   const getAfrocinemaData = async () => {
@@ -87,6 +106,7 @@ const Home = () => {
 
   // Call both functions on component mount
   useEffect(() => {
+    getLocationData();
     getAfrocinemaData();
     getAfrostreamData();
   }, [refresh]);
