@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from 'react';
+import React, { createContext, useReducer } from 'react';
 
 import authReducer from './reducers/authReducer';
 import authInitialState from './initialStates/authInitialState';
@@ -14,12 +14,20 @@ import getTransactions from './reducers/getTransactions';
 import getTransactionsInitialState from './initialStates/getTransactionsInitialState';
 import searchFilter from './reducers/searchFilter';
 import searchFilterInitialState from './initialStates/searchFilterInitialState';
+import getLocationReducer from './reducers/getLocationReducer';
+import getLocationInitialState from './initialStates/getLocationInitialState';
 
 export const GlobalContext = createContext({});
 
 const GlobalProvider = ({ children }) => {
   // Auth global state
   const [authState, authDispatch] = useReducer(authReducer, authInitialState);
+
+  // Location data global state
+  const [getLocationState, getLocationDispatch] = useReducer(
+    getLocationReducer,
+    getLocationInitialState,
+  );
 
   // Retailer's data global state
   const [getRetailerState, getRetailerDispatch] = useReducer(
@@ -74,6 +82,8 @@ const GlobalProvider = ({ children }) => {
         getTransactionsDispatch,
         searchState,
         searchDispatch,
+        getLocationState,
+        getLocationDispatch,
       }}>
       {children}
     </GlobalContext.Provider>
