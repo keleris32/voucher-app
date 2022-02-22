@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, createRef } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -47,6 +47,7 @@ const PaymentScreenComponent = ({ navigation }) => {
     paystack: false,
     opay: false,
   });
+  const [hasShownConversionAlert, setHasShownConversionAlert] = useState(false);
   const [processPaystack, setProcessPaystack] = useState(false);
   const [processOpay, setProcessOpay] = useState(false);
   const [paystackAuthorizationUrl, setPaystackAuthorizationUrl] = useState('');
@@ -71,6 +72,7 @@ const PaymentScreenComponent = ({ navigation }) => {
       selectedAfrocinemaData,
       selectedAfrostreamData,
     },
+    getLocationState: { locationData },
   } = useContext(GlobalContext);
 
   const fetchPaymentGateways = async () => {
@@ -441,8 +443,29 @@ const PaymentScreenComponent = ({ navigation }) => {
     // Check if Paystack payment gateway has been selected then proceed
     isPaymentChecked.paystack && PaystackPayment(email);
 
-    // Check if Opay payment gateway has been selected then proceed
-    isPaymentChecked.opay && OpayPayment(email);
+    if (locationData.country !== 'Nigeria' && !hasShownConversionAlert) {
+      if (!hasShownConversionAlert) {
+        isPaymentChecked.opay &&
+          Alert.alert(
+            '',
+            'The price would be subject to a naira (NGN) conversion',
+            [
+              {
+                text: 'Proceed',
+                onPress: () => {
+                  setHasShownConversionAlert(true);
+                  OpayPayment(email);
+                },
+              },
+            ],
+          );
+      } else {
+        isPaymentChecked.opay && OpayPayment(email);
+      }
+    } else {
+      // Check if Opay payment gateway has been selected then proceed
+      isPaymentChecked.opay && OpayPayment(email);
+    }
   };
 
   useEffect(() => {
