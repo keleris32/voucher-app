@@ -27,11 +27,13 @@ import { validationSchema } from './validationSchema';
 import ErrorMessage from '../../components/ErrorMessage';
 import ErrorPageComponent from '../../components/ErrorPageComponent';
 import PaystackWebView from './Paystack/PaystackWebview';
+import FlutterwaveWebView from './Flutterwave/FlutterwaveWebView';
 import { AfrocinemaFormData } from './Paystack/AfrocinemaFormData';
 import { AfrostreamFormData } from './Paystack/AfrostreamFormData';
 import { OpayAfrocinemaFormData } from './Opay/OpayAfrocinemaFormData';
 import { OpayAfrostreamFormData } from './Opay/OpayAfrostreamFormData';
 import OpayWebView from './Opay/OpayWebview';
+import { FlutterwaveInit } from 'flutterwave-react-native';
 
 const PaymentScreenComponent = ({ navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -44,14 +46,18 @@ const PaymentScreenComponent = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isPaymentChecked, setIsPaymentChecked] = useState({
     stripe: false,
+    flutterwave: false,
     paystack: false,
     opay: false,
   });
   const [hasShownConversionAlert, setHasShownConversionAlert] = useState(false);
   const [processPaystack, setProcessPaystack] = useState(false);
   const [processOpay, setProcessOpay] = useState(false);
+  const [processFlutterwave, setProcessFlutterwave] = useState(false);
   const [paystackAuthorizationUrl, setPaystackAuthorizationUrl] = useState('');
   const [opayAuthorizationUrl, setOpayAuthorizationUrl] = useState('');
+  const [flutterwaveAuthorizationUrl, setFlutterwaveAuthorizationUrl] =
+    useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     id: '',
@@ -74,6 +80,26 @@ const PaymentScreenComponent = ({ navigation }) => {
     },
     getLocationState: { locationData },
   } = useContext(GlobalContext);
+
+  const {
+    getRetailerState: { retailerData },
+  } = useContext(GlobalContext);
+
+  // ------------------------------------ >
+
+  // Transaction Ref for FLutterwave payment gateway
+  const generateTransactionRef = length => {
+    var a =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split(
+        '',
+      );
+    var b = [];
+    for (var i = 0; i < length; i++) {
+      var j = (Math.random() * (a.length - 1)).toFixed(0);
+      b[i] = a[j];
+    }
+    return b.join('');
+  };
 
   const fetchPaymentGateways = async () => {
     setFetchGatewayLoading(true);
@@ -199,7 +225,7 @@ const PaymentScreenComponent = ({ navigation }) => {
     return { customer, paymentIntent };
   };
 
-  // Initialize payment with payment Intent details retrieved from the server
+  // Initialize stripe payment with payment Intent details retrieved from the server
   const initializePayment = async prop => {
     // If selected product is an afrocinema_premier, then call fetchAfrocinemaPayment function
     if (isAfrocinemaActive) {
@@ -268,6 +294,35 @@ const PaymentScreenComponent = ({ navigation }) => {
       // END OF ELSE STATEMENT
       // ----------------------------------------------->
       // ----------------------------------------------->
+    }
+  };
+
+  // Open Stripe's payment Gateway
+  const openPaymentSheet = async prop => {
+    // InitializePayment Fn
+    await initializePayment(prop);
+
+    const { error } = await presentPaymentSheet({ clientSecret });
+
+    if (error) {
+      Alert.alert(error.code, error.message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+          },
+        },
+      ]);
+    } else {
+      Alert.alert('Success', 'Your order has been confirmed!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+            navigation.goBack();
+          },
+        },
+      ]);
     }
   };
 
@@ -391,7 +446,6 @@ const PaymentScreenComponent = ({ navigation }) => {
 
         setProcessOpay(true);
       } catch (error) {
-        console.log(JSON.stringify(error.response, null, 2));
         Alert.alert(
           'Something went wrong',
           'Please check your internet connection and try again later.',
@@ -404,31 +458,53 @@ const PaymentScreenComponent = ({ navigation }) => {
     }
   };
 
-  const openPaymentSheet = async prop => {
-    // InitializePayment Fn
-    await initializePayment(prop);
+  // Initialize Flutterwave payment gateway
+  const initializeFlutterwavePayment = async customerEmail => {
+    setLoading(true);
 
-    const { error } = await presentPaymentSheet({ clientSecret });
+    try {
+      const paymentLink = await FlutterwaveInit({
+        tx_ref: generateTransactionRef(11),
+        authorization: EnvironmentVariables.FLUTTERWAVE_PUBLIC_KEY,
+        amount: isAfrocinemaActive
+          ? selectedAfrocinemaData.premier.discounted_charging_price
+          : selectedAfrostreamData.discounted_charging_price,
+        currency: isAfrocinemaActive
+          ? selectedAfrocinemaData.premier.charging_currency
+          : selectedAfrostreamData.charging_currency,
+        payment_options: 'card',
+        meta: {
+          retailer_id: retailerData.id,
+          plan_id: isAfrocinemaActive
+            ? selectedAfrocinemaData.id
+            : selectedAfrostreamData.id,
+          cancel_subscription_url: 'https://myafrostream.tv/user',
+          payment_purpose: isAfrocinemaActive
+            ? 'afrocinema_premier'
+            : 'afrostream_subscription',
+          customer_country_id: selectedCountry.id,
+          customer_email: customerEmail,
+        },
+        customer: {
+          email: retailerData.email,
+          phone_number: retailerData.phone_number,
+          name: retailerData.first_name + ' ' + retailerData.last_name,
+        },
+        redirect_url: EnvironmentVariables.OPAY_CALLBACK_URL,
+      });
 
-    if (error) {
-      Alert.alert(error.code, error.message, [
-        {
-          text: 'OK',
-          onPress: () => {
-            setLoading(false);
-          },
-        },
-      ]);
-    } else {
-      Alert.alert('Success', 'Your order has been confirmed!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            setLoading(false);
-            navigation.goBack();
-          },
-        },
-      ]);
+      setFlutterwaveAuthorizationUrl(paymentLink);
+
+      setProcessFlutterwave(true);
+      console.log('Linkkk', paymentLink);
+    } catch (error) {
+      console.log('Errorrr', error.message);
+      Alert.alert(
+        'Something went wrong',
+        'Please check your internet connection and try again later.',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -436,9 +512,15 @@ const PaymentScreenComponent = ({ navigation }) => {
 
   const closeOpayWebview = () => setProcessOpay(false);
 
+  const closeFlutterwaveWebview = () => setProcessFlutterwave(false);
+
   const paymentMethodHandler = email => {
+    // let countryId = selectedCountry.id;
     // Check if Stripe payment gateway has been selected then proceed
     isPaymentChecked.stripe && openPaymentSheet(email);
+
+    // Check if Flutterwave payment gateway has been selected then proceed
+    isPaymentChecked.flutterwave && initializeFlutterwavePayment(email);
 
     // Check if Paystack payment gateway has been selected then proceed
     isPaymentChecked.paystack && PaystackPayment(email);
@@ -515,6 +597,20 @@ const PaymentScreenComponent = ({ navigation }) => {
                     }}
                   />
                 )}
+
+                {processFlutterwave && (
+                  <TouchableOpacity
+                    onPress={closeFlutterwaveWebview}
+                    activeOpacity={1}
+                    style={{
+                      width: wp('100%'),
+                      height: hp('100%'),
+                      position: 'absolute',
+                      backgroundColor: 'rgba(0,0,0,0.8)',
+                    }}
+                  />
+                )}
+
                 {/* <View style={styles.container}> */}
                 <View style={styles.headerWrapper}>
                   <TouchableOpacity
@@ -628,6 +724,14 @@ const PaymentScreenComponent = ({ navigation }) => {
           authorization_url={opayAuthorizationUrl}
           navigation={navigation}
           setProcessOpay={setProcessOpay}
+        />
+      )}
+
+      {processFlutterwave && (
+        <FlutterwaveWebView
+          authorization_url={flutterwaveAuthorizationUrl}
+          navigation={navigation}
+          setProcessFlutterwave={setProcessFlutterwave}
         />
       )}
     </>
