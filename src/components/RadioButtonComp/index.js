@@ -19,18 +19,28 @@ const RadioButtonComp = ({
     if (gateway === 'Stripe') {
       setIsPaymentChecked({
         stripe: true,
+        flutterwave: false,
+        paystack: false,
+        opay: false,
+      });
+    } else if (gateway === 'Flutterwave') {
+      setIsPaymentChecked({
+        stripe: false,
+        flutterwave: true,
         paystack: false,
         opay: false,
       });
     } else if (gateway === 'Paystack') {
       setIsPaymentChecked({
         stripe: false,
+        flutterwave: false,
         paystack: true,
         opay: false,
       });
     } else if (gateway === 'Opay') {
       setIsPaymentChecked({
         stripe: false,
+        flutterwave: false,
         paystack: false,
         opay: true,
       });
@@ -40,6 +50,8 @@ const RadioButtonComp = ({
 
   if (data.name === 'Stripe') {
     icon = icons.stripe;
+  } else if (data.name === 'Flutterwave') {
+    icon = icons.flutterwave;
   } else if (data.name === 'Paystack') {
     icon = icons.paystack;
   } else if (data.name === 'Opay') {
