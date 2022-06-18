@@ -153,19 +153,19 @@ const AfrostreamPanelData = ({ bs }) => {
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{data.name}</Text>
+            <Text style={styles.title}>{data?.name}</Text>
           </View>
           <View style={styles.detailsWrapper}>
             <View style={styles.description}>
               <Text style={{ ...FONTS.h4 }}>Device Limit: </Text>
               <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                {data.device_limit}
+                {data?.device_limit}
               </Text>
             </View>
             <View style={styles.description}>
               <Text style={{ ...FONTS.h4 }}>Duration: </Text>
               <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                {data.duration_in_days} {no_of_days}
+                {data?.duration_in_days} {no_of_days}
               </Text>
             </View>
             {data.description && (
@@ -190,7 +190,7 @@ const AfrostreamPanelData = ({ bs }) => {
                 </Text>
               )}
               <NumberFormat
-                value={data.discounted_charging_price}
+                value={data?.discounted_charging_price}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={decodedSymbol}

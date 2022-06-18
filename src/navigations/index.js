@@ -61,6 +61,7 @@ const AppNavContainer = () => {
   // If the authState changes, the useEffect hook will call the getRetailer fn to check local storage inorder find out if the retailer is still authenticated.
   useEffect(() => {
     getRetailerData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   // Hide Splash Screen after App has loaded

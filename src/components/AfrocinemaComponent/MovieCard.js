@@ -9,14 +9,14 @@ import EnvironmentVariables from '../../config/env';
 
 const MovieCard = props => {
   // Decode the HTML code gotten from data to it's appropraite symbol
-  const decodedSymbol = decode(props.symbol);
+  const decodedSymbol = decode(props?.symbol);
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Image
           source={{
-            uri: props.image,
+            uri: props?.image,
             headers: {
               Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
             },
@@ -25,22 +25,22 @@ const MovieCard = props => {
         />
         <View style={styles.descriptionWrapper}>
           <Text style={styles.title} numberOfLines={1}>
-            {props.title}
+            {props?.title}
           </Text>
-          <Text style={styles.pg}>PG: {props.parentalGuidance}</Text>
+          <Text style={styles.pg}>PG: {props?.parentalGuidance}</Text>
         </View>
       </View>
 
       <View>
         <NumberFormat
-          value={props.discountedPrice}
+          value={props?.discountedPrice}
           displayType={'text'}
           thousandSeparator={true}
           prefix={decodedSymbol}
           renderText={value => <Text style={styles.price}>{value}</Text>}
         />
         <NumberFormat
-          value={props.chargingPrice}
+          value={props?.chargingPrice}
           displayType={'text'}
           thousandSeparator={true}
           prefix={decodedSymbol}

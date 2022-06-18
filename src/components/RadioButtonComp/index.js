@@ -19,28 +19,30 @@ const RadioButtonComp = ({
     if (gateway === 'Stripe') {
       setIsPaymentChecked({
         stripe: true,
-        flutterwave: false,
+        // flutterwave: false,
         paystack: false,
         opay: false,
       });
-    } else if (gateway === 'Flutterwave') {
+    }
+    // } else if (gateway === 'Flutterwave') {
+    //   setIsPaymentChecked({
+    //     stripe: false,
+    //     flutterwave: true,
+    //     paystack: false,
+    //     opay: false,
+    //   });
+    // }
+    else if (gateway === 'Paystack') {
       setIsPaymentChecked({
         stripe: false,
-        flutterwave: true,
-        paystack: false,
-        opay: false,
-      });
-    } else if (gateway === 'Paystack') {
-      setIsPaymentChecked({
-        stripe: false,
-        flutterwave: false,
+        // flutterwave: false,
         paystack: true,
         opay: false,
       });
     } else if (gateway === 'Opay') {
       setIsPaymentChecked({
         stripe: false,
-        flutterwave: false,
+        // flutterwave: false,
         paystack: false,
         opay: true,
       });

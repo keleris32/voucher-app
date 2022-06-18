@@ -3,14 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { format, parseISO } from 'date-fns';
 
-import { COLORS, SIZES, FONTS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 const TransactionsCard = props => {
   // format the date (e.g from 08/04/2021 20:46 => Aug 4th, 2021 20:46PM)
-  const formattedDate = format(parseISO(props.date), 'MMM do, yyy HH:mm a');
+  const formattedDate = format(parseISO(props?.date), 'MMM do, yyy HH:mm a');
 
   // Parse the meta data from string to JSON
-  const metaObj = JSON.parse(props.meta);
+  const metaObj = JSON.parse(props?.meta);
 
   return (
     <View style={styles.container}>
@@ -19,7 +19,7 @@ const TransactionsCard = props => {
           {formattedDate}
         </Text>
         <Text style={{ ...FONTS.h4, color: COLORS.acomartBlue2 }}>
-          {props.currency.toUpperCase()} ({props.price})
+          {props?.currency.toUpperCase()} ({props.price})
         </Text>
       </View>
       <View style={styles.descriptionWrapper}>
@@ -27,20 +27,20 @@ const TransactionsCard = props => {
           <Text style={{ ...FONTS.h4 }}>Title: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
             {props.purpose === 'afrocinema_premier'
-              ? props.model.title
-              : props.model.name}
+              ? props?.model?.title
+              : props?.model?.name}
           </Text>
         </View>
         <View style={styles.description}>
           <Text style={{ ...FONTS.h4 }}>Payment purpose: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-            {props.purpose}
+            {props?.purpose}
           </Text>
         </View>
         <View style={styles.description}>
           <Text style={{ ...FONTS.h4 }}>Customer's email: </Text>
           <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-            {metaObj.customer_email}
+            {metaObj?.customer_email}
           </Text>
         </View>
       </View>

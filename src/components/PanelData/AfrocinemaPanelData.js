@@ -159,7 +159,7 @@ const AfrocinemaPanelData = ({ bs }) => {
           <View style={styles.wrapper}>
             <Image
               source={{
-                uri: data.featured_image,
+                uri: data?.featured_image,
                 headers: {
                   Referer: EnvironmentVariables.IMAGES_REFERER_HEADER_URL,
                 },
@@ -167,22 +167,22 @@ const AfrocinemaPanelData = ({ bs }) => {
               style={styles.image}
             />
             <View style={styles.titleWrapper}>
-              <Text style={styles.title}>{data.title}</Text>
+              <Text style={styles.title}>{data?.title}</Text>
             </View>
             <View style={styles.detailsWrapper}>
               <View style={styles.synopsisContainer}>
                 <Text style={styles.synopsis}>
                   <Text style={{ ...FONTS.h4 }}>Synopsis: </Text>
-                  {data.synopsis}
+                  {data?.synopsis}
                 </Text>
               </View>
               <View style={styles.descriptionWrapper}>
                 <View style={styles.description}>
                   <Text style={{ ...FONTS.h4 }}>Release year: </Text>
                   <Text style={{ color: COLORS.black, ...FONTS.body4 }}>
-                    {data.year_of_release} (
+                    {data?.year_of_release} (
                     <Text style={{ color: COLORS.acomartBlue2 }}>
-                      {data.territory_of_origin}
+                      {data?.territory_of_origin}
                     </Text>
                     )
                   </Text>
@@ -190,19 +190,19 @@ const AfrocinemaPanelData = ({ bs }) => {
                 <View style={styles.description}>
                   <Text style={{ ...FONTS.h4 }}>Director: </Text>
                   <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                    {data.director}
+                    {data?.director}
                   </Text>
                 </View>
                 <View style={styles.description}>
                   <Text style={{ ...FONTS.h4 }}>Language: </Text>
                   <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                    {data.language}
+                    {data?.language}
                   </Text>
                 </View>
                 <View style={styles.description}>
                   <Text style={{ ...FONTS.h4 }}>PG: </Text>
                   <Text style={{ color: COLORS.acomartBlue2, ...FONTS.body4 }}>
-                    {data.parental_guidance_age}
+                    {data?.parental_guidance_age}
                   </Text>
                 </View>
               </View>

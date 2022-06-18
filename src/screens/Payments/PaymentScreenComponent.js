@@ -46,7 +46,7 @@ const PaymentScreenComponent = ({ navigation }) => {
   const [fetchError, setFetchError] = useState(false);
   const [isPaymentChecked, setIsPaymentChecked] = useState({
     stripe: false,
-    flutterwave: false,
+    // flutterwave: false,
     paystack: false,
     opay: false,
   });
@@ -115,12 +115,32 @@ const PaymentScreenComponent = ({ navigation }) => {
         if (paymentGateways[0].name === 'Stripe') {
           setIsPaymentChecked({
             stripe: true,
+            // flutterwave: false,
             paystack: false,
+            opay: false,
           });
-        } else if (paymentGateways[0].name === 'Paystack') {
+        }
+        // else if (paymentGateways[0].name === 'Flutterwave') {
+        //   setIsPaymentChecked({
+        //     stripe: false,
+        //     flutterwave: true,
+        //     paystack: false,
+        //     opay: false,
+        //   });
+        // }
+        else if (paymentGateways[0].name === 'Paystack') {
           setIsPaymentChecked({
             stripe: false,
+            // flutterwave: false,
             paystack: true,
+            opay: false,
+          });
+        } else if (paymentGateways[0].name === 'Opay') {
+          setIsPaymentChecked({
+            stripe: false,
+            // flutterwave: false,
+            paystack: false,
+            opay: true,
           });
         }
         setPaymentGateway(paymentGateways);

@@ -49,7 +49,7 @@ const SubscriptionPartnersComponent = props => {
       {plansBool[index] === true && (
         <View style={styles.body}>
           {plans.map(plan => (
-            <View key={plan.id}>
+            <View key={plan?.id}>
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
@@ -58,12 +58,12 @@ const SubscriptionPartnersComponent = props => {
                   bs.current.snapTo(0);
                 }}>
                 <SubscriptionCard
-                  name={plan.name}
-                  duration={plan.duration_in_days}
-                  deviceLimit={plan.device_limit}
-                  discountedPrice={plan.discounted_charging_price}
-                  chargingPrice={plan.charging_price}
-                  symbol={plan.charging_currency_symbol}
+                  name={plan?.name}
+                  duration={plan?.duration_in_days}
+                  deviceLimit={plan?.device_limit}
+                  discountedPrice={plan?.discounted_charging_price}
+                  chargingPrice={plan?.charging_price}
+                  symbol={plan?.charging_currency_symbol}
                 />
               </TouchableOpacity>
             </View>

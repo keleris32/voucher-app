@@ -8,24 +8,24 @@ import { FONTS, COLORS } from '../../constants';
 
 const SubscriptionCard = props => {
   // Decode the HTML code gotten from data to it's appropraite symbol
-  const decodedSymbol = decode(props.symbol);
+  const decodedSymbol = decode(props?.symbol);
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Text style={styles.title}>{props.name}</Text>
-        <Text style={styles.device}>Device limit: {props.deviceLimit}</Text>
+        <Text style={styles.title}>{props?.name}</Text>
+        <Text style={styles.device}>Device limit: {props?.deviceLimit}</Text>
       </View>
       <View>
         <NumberFormat
-          value={props.discountedPrice}
+          value={props?.discountedPrice}
           displayType={'text'}
           thousandSeparator={true}
           prefix={decodedSymbol}
           renderText={value => <Text style={styles.price}>{value}</Text>}
         />
         <NumberFormat
-          value={props.chargingPrice}
+          value={props?.chargingPrice}
           displayType={'text'}
           thousandSeparator={true}
           prefix={decodedSymbol}

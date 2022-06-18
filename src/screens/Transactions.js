@@ -119,7 +119,7 @@ const Transactions = () => {
             <SearchBar
               searchValue={searchValue}
               searchFilterFunction={searchFilterFunction}
-              placeholder="Search phone numbers"
+              placeholder="Search email"
             />
             {filteredData.length === 0 && (
               <View style={{ marginVertical: wp('5%') }}>
@@ -136,13 +136,13 @@ const Transactions = () => {
               showsVerticalScrollIndicator={true}
               renderItem={({ item }) => (
                 <TransactionsCard
-                  date={item.is_successful_at}
-                  currency={item.currency}
-                  price={item.amount}
-                  reference={item.transaction_reference}
-                  purpose={item.payment_purpose}
-                  meta={item.meta}
-                  model={item.model}
+                  date={item?.is_successful_at}
+                  currency={item?.currency}
+                  price={item?.amount}
+                  reference={item?.transaction_reference}
+                  purpose={item?.payment_purpose}
+                  meta={item?.meta}
+                  model={item?.model}
                 />
               )}
             />

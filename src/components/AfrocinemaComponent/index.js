@@ -16,7 +16,7 @@ import { SELECTED_AFROCINEMA_CARD } from '../../constants/actionTypes';
 import SearchBar from './SearchBar';
 import AnimatedBottomSheet from '../AnimatedBottomSheet';
 import ErrorPageComponent from '../ErrorPageComponent';
-import { FONTS } from '../../constants';
+import { FONTS, COLORS } from '../../constants';
 
 const AfrocinemaComponent = ({
   filteredData,
@@ -101,7 +101,7 @@ const AfrocinemaComponent = ({
             )}
             <FlatList
               data={filteredData}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item?.id}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -110,12 +110,12 @@ const AfrocinemaComponent = ({
                     selectedOption(item), bs.current.snapTo(0);
                   }}>
                   <MovieCard
-                    title={item.title}
-                    image={item.featured_image}
-                    parentalGuidance={item.parental_guidance_age}
-                    discountedPrice={item.premier.discounted_charging_price}
-                    chargingPrice={item.premier.charging_price}
-                    symbol={item.premier.charging_currency_symbol}
+                    title={item?.title}
+                    image={item?.featured_image}
+                    parentalGuidance={item?.parental_guidance_age}
+                    discountedPrice={item?.premier?.discounted_charging_price}
+                    chargingPrice={item?.premier?.charging_price}
+                    symbol={item?.premier?.charging_currency_symbol}
                   />
                 </TouchableOpacity>
               )}
